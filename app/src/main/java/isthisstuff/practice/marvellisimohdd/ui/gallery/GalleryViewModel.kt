@@ -1,10 +1,10 @@
-package isthisstuff.practice.marvellisimohdd.ui.find
+package isthisstuff.practice.marvellisimohdd.ui.gallery
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class FindViewModel : ViewModel() {
+class GalleryViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is find Fragment"
