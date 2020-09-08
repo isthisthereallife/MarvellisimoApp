@@ -1,4 +1,4 @@
-package isthisstuff.practice.marvellisimohdd.ui.gallery
+package isthisstuff.practice.marvellisimohdd.ui.characters
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,18 +10,17 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import isthisstuff.practice.marvellisimohdd.R
 
-class GalleryFragment : Fragment() {
+class CharactersFragment : Fragment() {
 
-    private lateinit var galleryViewModel: GalleryViewModel
+    private lateinit var charactersViewModel: CharactersViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        galleryViewModel =
-                ViewModelProviders.of(this).get(GalleryViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_gallery, container, false)
+        charactersViewModel = ViewModelProviders.of(this).get(CharactersViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_characters, container, false)
         return root
     }
 }

@@ -8,6 +8,7 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_characters">Characters</string>
+    <string name="menu_series">Series</string>
+    <string name="detailed_page_bio_text">This text is a placeholder and if you see this then it means something has gone terribly wrong. \n\n You are not supposed to be able to view a detailed page detailing nothing in particular. \n\nPlease report this bug to Daniel and he will fix it ASAP. \n\n\n LOREM IPSUM \n\nLOREM IPSUM\n\nThis text is a placeholder and if you see this then it means something has gone terribly wrong. \n\n You are not supposed to be able to view a detailed page detailing nothing in particular. \n\nPlease report this bug to Daniel and he will fix it ASAP.\n\nThis text is a placeholder and if you see this then it means something has gone terribly wrong. \n\n You are not supposed to be able to view a detailed page detailing nothing in particular. \n\nPlease report this bug to Daniel and he will fix it ASAP. \n\n\n LOREM IPSUM \n\nLOREM IPSUM\n\nThis text is a placeholder and if you see this then it means something has gone terribly wrong. \n\n You are not supposed to be able to view a detailed page detailing nothing in particular. \n\nPlease report this bug to Daniel and he will fix it ASAP. \n\n https://example.com \n\nEND OF MESSAGE</string>
 </resources>
