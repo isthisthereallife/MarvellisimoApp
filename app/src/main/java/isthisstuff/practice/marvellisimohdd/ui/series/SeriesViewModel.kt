@@ -1,10 +1,10 @@
-package isthisstuff.practice.marvellisimohdd.ui.slideshow
+package isthisstuff.practice.marvellisimohdd.ui.series
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class SlideshowViewModel : ViewModel() {
+class SeriesViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is slideshow Fragment"

@@ -13,15 +13,15 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="isthisstuff.practice.marvellisimohdd.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:name="isthisstuff.practice.marvellisimohdd.ui.characters.CharactersFragment"
+        android:label="@string/menu_characters"
+        tools:layout="@layout/fragment_characters" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="isthisstuff.practice.marvellisimohdd.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:name="isthisstuff.practice.marvellisimohdd.ui.series.SeriesFragment"
+        android:label="@string/menu_series"
+        tools:layout="@layout/fragment_series" />
     <fragment
         android:id="@+id/nav_det"
         android:name="isthisstuff.practice.marvellisimohdd.ui.details.DetailsFragment"
