@@ -22,4 +22,9 @@
         android:name="isthisstuff.practice.marvellisimohdd.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/nav_det"
+        android:name="isthisstuff.practice.marvellisimohdd.ui.details.DetailsFragment"
+        android:label="EN SIDA"
+        tools:layout="@layout/fragment_details" />
 </navigation>
