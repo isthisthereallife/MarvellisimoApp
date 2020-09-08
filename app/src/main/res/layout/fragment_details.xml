@@ -54,18 +54,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutDetailsTop"
 
+
+
         >
 
 
 
         <TextView
+
             android:id="@+id/text_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:text="@string/detailed_page_bio_text"
-
-
+            android:autoLink="web"
             android:textAlignment="center"
             android:textColor="@color/primaryTextColor"
             android:textSize="20sp" />
