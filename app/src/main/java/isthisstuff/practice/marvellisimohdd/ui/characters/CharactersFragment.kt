@@ -22,7 +22,7 @@ class CharactersFragment : Fragment() {
         charactersViewModel =
                 ViewModelProviders.of(this).get(CharactersViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_characters, container, false)
-        val textView: TextView = root.findViewById(R.id.text_gallery)
+        val textView: TextView = root.findViewById(R.id.text_characters)
         charactersViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })

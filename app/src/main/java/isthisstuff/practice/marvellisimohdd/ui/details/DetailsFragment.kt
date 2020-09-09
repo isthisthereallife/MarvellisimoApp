@@ -21,7 +21,7 @@ class DetailsFragment : Fragment() {
         detailsViewModel = ViewModelProviders.of(this).get(DetailsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_details, container, false)
         val textView: TextView = root.findViewById(R.id.text_details)
-        detailsViewModel.text.observe(viewLifecycleOwner, Observer { textView.text = it })
+//        detailsViewModel.text.observe(viewLifecycleOwner, Observer { textView.text = it })
 
         /* TODO begripa varför denna kod inte verkar köras, nånsin!!!!
                 sedan,
