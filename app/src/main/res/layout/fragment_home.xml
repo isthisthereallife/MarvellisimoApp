@@ -5,7 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="visible"
-    tools:context=".ui.home.HomeFragment">
+    tools:context=".ui.home.HomeFragment"
+    android:background="@color/primaryColor"
+    android:id="@+id/splash_screen">
+
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
