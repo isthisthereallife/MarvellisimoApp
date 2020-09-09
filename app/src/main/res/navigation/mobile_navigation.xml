@@ -22,9 +22,4 @@
         android:name="isthisstuff.practice.marvellisimohdd.ui.series.SeriesFragment"
         android:label="@string/menu_series"
         tools:layout="@layout/fragment_series" />
-    <fragment
-        android:id="@+id/nav_det"
-        android:name="isthisstuff.practice.marvellisimohdd.ui.details.DetailsFragment"
-        android:label="EN SIDA"
-        tools:layout="@layout/fragment_details" />
 </navigation>
