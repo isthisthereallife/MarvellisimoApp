@@ -1,5 +1,6 @@
 package isthisstuff.practice.marvellisimohdd
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -13,6 +14,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import isthisstuff.practice.marvellisimohdd.ui.details.DetailsActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,8 +27,8 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
-        fab.setOnClickListener { view ->
-            setContentView(R.layout.fragment_details)
+        fab.setOnClickListener {
+            startActivity(Intent(this,DetailsActivity::class.java))
         }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)

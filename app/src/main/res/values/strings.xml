@@ -11,4 +11,13 @@
     <string name="menu_characters">Characters</string>
     <string name="menu_series">Series</string>
     <string name="detailed_page_bio_text">This text is a placeholder and if you see this then it means something has gone terribly wrong. \n\n You are not supposed to be able to view a detailed page detailing nothing in particular. \n\nPlease report this bug to Daniel and he will fix it ASAP. \n\n\n LOREM IPSUM \n\nLOREM IPSUM\n\nThis text is a placeholder and if you see this then it means something has gone terribly wrong. \n\n You are not supposed to be able to view a detailed page detailing nothing in particular. \n\nPlease report this bug to Daniel and he will fix it ASAP.\n\nThis text is a placeholder and if you see this then it means something has gone terribly wrong. \n\n You are not supposed to be able to view a detailed page detailing nothing in particular. \n\nPlease report this bug to Daniel and he will fix it ASAP. \n\n\n LOREM IPSUM \n\nLOREM IPSUM\n\nThis text is a placeholder and if you see this then it means something has gone terribly wrong. \n\n You are not supposed to be able to view a detailed page detailing nothing in particular. \n\nPlease report this bug to Daniel and he will fix it ASAP. \n\n https://example.com \n\nEND OF MESSAGE</string>
+    <string name="title_activity_details">DetailsActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>
