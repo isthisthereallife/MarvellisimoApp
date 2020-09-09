@@ -2,6 +2,7 @@ package isthisstuff.practice.marvellisimohdd.ui.details
 
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.Toast
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -25,10 +26,12 @@ class DetailsActivity : AppCompatActivity() {
                 "Filled" -> {
                     star.setImageResource(R.drawable.ic_baseline_star_border_24)
                     star.setTag("Bordered")
+                    Toast.makeText(this,"Removed from favourites",Toast.LENGTH_SHORT).show()
                 }
                 else -> {
                     star.setImageResource(R.drawable.ic_baseline_star_filled_24)
                     star.setTag("Filled")
+                    Toast.makeText(this,"Added to favourites",Toast.LENGTH_SHORT).show()
                 }
             }
         }
