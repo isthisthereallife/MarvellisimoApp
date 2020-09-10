@@ -5,5 +5,8 @@ class User (_username: String){
     var username = _username
     var favouriteSeries = mutableListOf<String>()
     var favouriteCharacters = mutableListOf<String>()
+    private lateinit var viewModel: UserViewModel
+
+
 
 }

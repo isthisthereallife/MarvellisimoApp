@@ -26,10 +26,18 @@ class MainActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
+
+        //**** Start of thing to be removed eventually
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener {
+
+            // detta intent startar DetailsActivity
+            // detta Intent ska (i den färdiga appen) skickas vid klick på en specifik Gubbe i characters-fragmentet
+            // när vi skickar detta intent därifrån så vill vi skicka med info om vad som klickats på, så vi vet vad som ska visas på detaljsidan
             startActivity(Intent(this,DetailsActivity::class.java))
         }
+        //**** End of thing to remove
+
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
