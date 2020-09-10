@@ -9,17 +9,18 @@ import isthisstuff.practice.marvellisimohdd.R
 
 class DetailsActivity : AppCompatActivity() {
 
+    lateinit var star : ImageView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-
-        val star : ImageView = findViewById(R.id.details_favstar)
-        star.setOnClickListener({changeStar(star)})
+        star = findViewById(R.id.details_favstar)
+        star.setOnClickListener{ changeStar() }
     }
 
-    private fun changeStar(star: ImageView?) {
+    private fun changeStar() {
         if (star != null) {
             when (star.tag) {
                 "Filled" -> {
