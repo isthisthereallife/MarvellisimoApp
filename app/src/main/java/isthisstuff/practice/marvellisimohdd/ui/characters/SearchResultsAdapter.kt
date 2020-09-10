@@ -2,12 +2,13 @@ package isthisstuff.practice.marvellisimohdd.ui.characters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import isthisstuff.practice.marvellisimohdd.R
-import isthisstuff.practice.marvellisimohdd.TextItemViewHolder
+import isthisstuff.practice.marvellisimohdd.MyViewHolder
 
-class SearchResultsAdapter: RecyclerView.Adapter<TextItemViewHolder>() {
+class SearchResultsAdapter: RecyclerView.Adapter<MyViewHolder>() {
     var data = listOf<String>()
         set(value) {
             field = value
@@ -15,14 +16,14 @@ class SearchResultsAdapter: RecyclerView.Adapter<TextItemViewHolder>() {
         }
     override fun getItemCount() = data.size
 
-    override fun onBindViewHolder(holder: TextItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         var item = data[position]
-        holder.textView.text = item
+        holder.view.findViewById<TextView>(R.id.title_text).text = item
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        var view = layoutInflater.inflate(R.layout.search_item_view, parent, false) as TextView
-        return TextItemViewHolder(view)
+        var view = layoutInflater.inflate(R.layout.search_item_view, parent, false) as LinearLayout
+        return MyViewHolder(view)
     }
 }
