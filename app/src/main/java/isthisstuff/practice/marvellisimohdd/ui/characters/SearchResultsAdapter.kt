@@ -9,7 +9,7 @@ import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.MyViewHolder
 
 class SearchResultsAdapter: RecyclerView.Adapter<MyViewHolder>() {
-    var data = listOf<String>()
+    var data:List<String> = listOf<String>()
         set(value) {
             field = value
             notifyDataSetChanged()

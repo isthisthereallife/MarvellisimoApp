@@ -30,8 +30,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/search_button"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:scrollbars="vertical"
-        android:background="@color/secondaryLightColor"/>
+        android:scrollbars="vertical" />
 
     <EditText
         android:layout_width="match_parent"
