@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener {
             startActivity(Intent(this,DetailsActivity::class.java))
         }
+
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
