@@ -8,12 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.MyViewHolder
 
-class SearchResultsAdapter: RecyclerView.Adapter<MyViewHolder>() {
-    var data:List<String> = listOf<String>()
+class SearchResultsAdapter : RecyclerView.Adapter<MyViewHolder>() {
+    var data: List<String> = listOf<String>()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
+
     override fun getItemCount() = data.size
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {

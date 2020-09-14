@@ -35,8 +35,11 @@ class CharactersViewModel : ViewModel() {
         itemsList.value = itemsList.value?.plus("Extra ${itemsList.value?.size?.plus(1)}")
     }
 
-    fun getData(){
+    fun getData() {
 // med Android tråd-management
+
+
+        //TODO spara ner datan
         service.getAllCharacters()
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
@@ -46,14 +49,67 @@ class CharactersViewModel : ViewModel() {
                 else {
                     Log.d("__", "I got a CharacterDataWrapper $result")
                     var i = 0
-                    while (i<19){
-                        Log.d("NTHOESNUSNOHUE",result.data.results[i].name.toString().plus(": "+result.data.results[i].description))
+                    while (i < 19) {
+                        Log.d(
+                            "Get all characters",
+                            result.data.results[i].name.toString()
+                                .plus(": " + result.data.results[i].description)
+                        )
                         i++
                     }
 
                 }
             }
 
+
+
+
+        service.getContains()
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { result, err ->
+                if (err?.message != null)
+                    Log.d("__", "Error getAllCharacters " + err.message)
+                else {
+                    Log.d("__", "I got a CharacterDataWrapper $result")
+                    var i = 0
+                    while (i < 19) {
+                        Log.d(
+                            "CONTAINS",
+                            result.data.results[i].name.toString()
+                                .plus(": " + result.data.results[i].description)
+                        )
+                        i++
+                    }
+
+                }
+            }
+
+        Log.d(
+            "#%%#%#%#%#%#%#%%#%#%#%#%%##%#%",
+            "_-----------------------------------------------------------------------------"
+        )
+
+        service.getStartsWith()
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { result, err ->
+                if (err?.message != null)
+                    Log.d("__", "Error getAllCharacters " + err.message)
+                else {
+                    Log.d("__", "I got a CharacterDataWrapper $result")
+                    var i = 0
+                    while (i < 19) {
+                        Log.d(
+                            "STARTS WITH",
+                            result.data.results[i].name.toString()
+                                .plus(": " + result.data.results[i].description)
+                        )
+                        i++
+                    }
+
+                }
+            }
 
 
     }

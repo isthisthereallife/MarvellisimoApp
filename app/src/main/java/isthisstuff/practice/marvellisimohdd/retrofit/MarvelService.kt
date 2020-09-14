@@ -13,6 +13,9 @@ const val apiKey = "b86c9b29de66b43245e33fa2c4be3784"
 const val ts = "1"
 const val privateKey = "a517e2142e39da03e49f617637f61a8eda5bddcc"
 
+const val query = "%sp"
+const val query2 = "sp"
+
 const val MARVEL_API_BASE_URL = "https://gateway.marvel.com/v1/public/"
 val HASH = (ts + privateKey + apiKey).md5()
 
@@ -20,6 +23,12 @@ val HASH = (ts + privateKey + apiKey).md5()
 interface MarvelService {
     @GET("characters?ts=$ts&apikey=$apiKey")
     fun getAllCharacters(@Query("hash") hash: String = HASH): Single<CharacterDataWrapper>
+
+    @GET("characters?ts=$ts&apikey=$apiKey&nameStartsWith=$query")
+    fun getContains(@Query("hash") hash: String = HASH): Single<CharacterDataWrapper>
+
+    @GET("characters?ts=$ts&apikey=$apiKey&nameStartsWith=$query2")
+    fun getStartsWith(@Query("hash") hash: String = HASH): Single<CharacterDataWrapper>
 
 
 }

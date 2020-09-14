@@ -19,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class CharactersFragment : Fragment() {
     private val charactersViewModel: CharactersViewModel by viewModels()
-    private var adapter:SearchResultsAdapter = SearchResultsAdapter()
+    private var adapter: SearchResultsAdapter = SearchResultsAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,7 +37,7 @@ class CharactersFragment : Fragment() {
 
             addItem()
 
-             }
+        }
 
         return root
     }
@@ -47,7 +47,6 @@ class CharactersFragment : Fragment() {
         charactersViewModel.getData()
 
     }
-
 
 
 }
