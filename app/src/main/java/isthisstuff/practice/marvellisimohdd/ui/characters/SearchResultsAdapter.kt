@@ -27,3 +27,4 @@ class SearchResultsAdapter: RecyclerView.Adapter<MyViewHolder>() {
         return MyViewHolder(view)
     }
 }
+
