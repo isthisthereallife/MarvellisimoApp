@@ -47,7 +47,7 @@ class CharactersViewModel : ViewModel() {
                     Log.d("__", "I got a CharacterDataWrapper $result")
                     var i = 0
                     while (i<19){
-                        Log.d("NTHOESNUSNOHUE",result.data.results[i].name.toString())
+                        Log.d("NTHOESNUSNOHUE",result.data.results[i].name.toString().plus(": "+result.data.results[i].description))
                         i++
                     }
 
