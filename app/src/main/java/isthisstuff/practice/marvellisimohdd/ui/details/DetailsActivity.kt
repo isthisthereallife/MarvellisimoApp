@@ -2,15 +2,22 @@ package isthisstuff.practice.marvellisimohdd.ui.details
 
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
+import com.squareup.picasso.Picasso
 import isthisstuff.practice.marvellisimohdd.R
+import isthisstuff.practice.marvellisimohdd.entities.MarvelCharacter
+import isthisstuff.practice.marvellisimohdd.entities.Thumbnail
 
 class DetailsActivity : AppCompatActivity() {
 
-    lateinit var star : ImageView
+    private lateinit var star : ImageView
+    private lateinit var item:MarvelCharacter
+    private var thumbnail:String? = "https://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
+    private var info:String? = "There was a description here, it is gone now"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,6 +26,22 @@ class DetailsActivity : AppCompatActivity() {
 
         star = findViewById(R.id.details_favstar)
         star.setOnClickListener{ changeStar() }
+
+        /*
+        val bundle:Bundle ?= intent.extras
+        if(bundle!=null)
+            thumbnail = bundle.getString("thumbnail")
+
+         */
+
+        item = (intent.getSerializableExtra("item") as MarvelCharacter)
+
+        if(item.description.isNotBlank())
+        info = item.description
+        thumbnail = item.thumbnail.path+"."+item.thumbnail.extension
+
+        findViewById<TextView>(R.id.text_details).text = info
+        Picasso.get().load(thumbnail).into(findViewById<ImageView>(R.id.imageView2))
     }
 
     private fun changeStar() {

@@ -1,5 +1,7 @@
 package isthisstuff.practice.marvellisimohdd.entities
 
+import java.io.Serializable
+
 data class CharacterDataWrapper(
     val code: Int,
     val status: String,
@@ -18,9 +20,9 @@ data class MarvelCharacter(
     val name: String,
     val description: String,
     val thumbnail: Thumbnail
-)
+):Serializable
 
-data class Thumbnail(val path: String, val extension: String)
+data class Thumbnail(val path: String, val extension: String):Serializable
 
 
 

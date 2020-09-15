@@ -2,6 +2,7 @@ package isthisstuff.practice.marvellisimohdd.ui.characters
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -51,6 +52,7 @@ class SearchResultsAdapter(private val fragment: CharactersFragment) : RecyclerV
             "klickade på view: $view \n och this: $this \n och this.data:${this.data[position]}"
         )
         val intent = Intent(fragment.context, DetailsActivity::class.java)
+        intent.putExtra("item", this.data[position])
         fragment.context?.startActivity(intent)
     }
 
