@@ -4,18 +4,15 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import com.squareup.picasso.Picasso
 import isthisstuff.practice.marvellisimohdd.R
-import isthisstuff.practice.marvellisimohdd.entities.MarvelCharacter
-import isthisstuff.practice.marvellisimohdd.entities.Thumbnail
+import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 
 class DetailsActivity : AppCompatActivity() {
 
     private lateinit var star : ImageView
-    private lateinit var item:MarvelCharacter
+    private lateinit var item:MarvelObject
     private var thumbnail:String? = "https://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
     private var info:String? = "There was a description here, it is gone now"
 
@@ -34,7 +31,7 @@ class DetailsActivity : AppCompatActivity() {
 
          */
 
-        item = (intent.getSerializableExtra("item") as MarvelCharacter)
+        item = (intent.getSerializableExtra("item") as MarvelObject)
 
         if(item.description.isNotBlank())
         info = item.description.replace("ï¿½","'")

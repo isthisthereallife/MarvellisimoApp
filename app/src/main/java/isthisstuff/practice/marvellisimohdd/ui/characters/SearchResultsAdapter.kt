@@ -1,8 +1,6 @@
 package isthisstuff.practice.marvellisimohdd.ui.characters
 
-import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,13 +8,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import isthisstuff.practice.marvellisimohdd.MainActivity
 import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.MyViewHolder
-import isthisstuff.practice.marvellisimohdd.entities.MarvelCharacter
+import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.ui.details.DetailsActivity
 
 class SearchResultsAdapter(private val fragment: CharactersFragment) : RecyclerView.Adapter<MyViewHolder>() {
@@ -24,7 +20,7 @@ class SearchResultsAdapter(private val fragment: CharactersFragment) : RecyclerV
     lateinit var itemInfoView: TextView
     lateinit var itemThumbnail: ImageView
 
-    var data: List<MarvelCharacter> = mutableListOf()
+    var data: List<MarvelObject> = mutableListOf()
         set(value) {
             field = value
             notifyDataSetChanged()

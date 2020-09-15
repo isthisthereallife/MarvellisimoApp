@@ -11,11 +11,11 @@ data class CharacterDataWrapper(
 data class CharacterDataContainer(
     val total: Int,
     val count: Int,
-    val results: List<MarvelCharacter>
+    val results: List<MarvelObject>
 )
 
 //TODO add thumbnail
-data class MarvelCharacter(
+data class MarvelObject(
     val id: Int,
     val name: String,
     val description: String,

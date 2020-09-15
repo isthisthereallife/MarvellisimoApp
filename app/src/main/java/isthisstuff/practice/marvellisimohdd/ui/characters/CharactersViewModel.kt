@@ -2,13 +2,11 @@ package isthisstuff.practice.marvellisimohdd.ui.characters
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import isthisstuff.practice.marvellisimohdd.entities.CharacterDataWrapper
-import isthisstuff.practice.marvellisimohdd.entities.MarvelCharacter
+import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.retrofit.MARVEL_API_BASE_URL
 import isthisstuff.practice.marvellisimohdd.retrofit.MarvelService
 import okhttp3.OkHttpClient
@@ -18,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class CharactersViewModel : ViewModel() {
 
-    var itemsList = MutableLiveData<List<MarvelCharacter>>()
+    var itemsList = MutableLiveData<List<MarvelObject>>()
     private val builder = OkHttpClient.Builder()
     private val okHttpClient = builder.build()
     val service: MarvelService = Retrofit.Builder()
