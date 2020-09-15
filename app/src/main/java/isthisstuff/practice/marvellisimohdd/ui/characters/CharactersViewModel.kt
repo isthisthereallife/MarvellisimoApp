@@ -1,11 +1,14 @@
 package isthisstuff.practice.marvellisimohdd.ui.characters
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import isthisstuff.practice.marvellisimohdd.entities.CharacterDataWrapper
+import isthisstuff.practice.marvellisimohdd.entities.MarvelCharacter
 import isthisstuff.practice.marvellisimohdd.retrofit.MARVEL_API_BASE_URL
 import isthisstuff.practice.marvellisimohdd.retrofit.MarvelService
 import okhttp3.OkHttpClient
@@ -15,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class CharactersViewModel : ViewModel() {
 
-    var itemsList = MutableLiveData<List<String>>()
+    var itemsList = MutableLiveData<List<MarvelCharacter>>()
     private val builder = OkHttpClient.Builder()
     private val okHttpClient = builder.build()
     val service: MarvelService = Retrofit.Builder()
@@ -26,70 +29,16 @@ class CharactersViewModel : ViewModel() {
         .build()
         .create(MarvelService::class.java)
 
-
     init {
-        itemsList.value = listOf("Test 1", "Test 2")
-    }
-
-    fun addItem() {
-        itemsList.value = itemsList.value?.plus("Extra ${itemsList.value?.size?.plus(1)}")
+        itemsList.value= listOf()
     }
 
     fun getData() {
-// med Android tråd-management
-
-
         //TODO spara ner datan
-        service.getAllCharacters()
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { result, err ->
-                if (err?.message != null)
-                    Log.d("__", "Error getAllCharacters " + err.message)
-                else {
-                    Log.d("__", "I got a CharacterDataWrapper $result")
-                    var i = 0
-                    while (i < 19) {
-                        Log.d(
-                            "Get all characters",
-                            result.data.results[i].name.toString()
-                                .plus(": " + result.data.results[i].description)
-                        )
-                        i++
-                    }
+        getContains()
+    }
 
-                }
-            }
-
-
-
-
-        service.getContains()
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { result, err ->
-                if (err?.message != null)
-                    Log.d("__", "Error getAllCharacters " + err.message)
-                else {
-                    Log.d("__", "I got a CharacterDataWrapper $result")
-                    var i = 0
-                    while (i < 19) {
-                        Log.d(
-                            "CONTAINS",
-                            result.data.results[i].name.toString()
-                                .plus(": " + result.data.results[i].description)
-                        )
-                        i++
-                    }
-
-                }
-            }
-
-        Log.d(
-            "#%%#%#%#%#%#%#%%#%#%#%#%%##%#%",
-            "_-----------------------------------------------------------------------------"
-        )
-
+    fun getStartsWith() {
         service.getStartsWith()
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
@@ -110,8 +59,47 @@ class CharactersViewModel : ViewModel() {
 
                 }
             }
+    }
 
+    fun getAllCharacters() {
+        service.getAllCharacters()
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { result, err ->
+                if (err?.message != null)
+                    Log.d("__", "Error getAllCharacters " + err.message)
+                else {
+                    Log.d("__", "I got a CharacterDataWrapper $result")
+                    var i = 0
+                    while (i < 19) {
+                        Log.d(
+                            "Get all characters",
+                            result.data.results[i].name.toString()
+                                .plus(": " + result.data.results[i].description)
+                        )
+                        i++
+                    }
 
+                }
+            }
+    }
+
+    @SuppressLint("CheckResult")
+    fun getContains() {
+        service.getContains()
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { result, err ->
+                if (err?.message != null)
+                    Log.d("__", "Error getAllCharacters " + err.message)
+                else {
+                    Log.d("__", "I got a CharacterDataWrapper $result")
+
+                    result.data.results.forEach {
+                        itemsList.value = itemsList.value?.plus(it)
+                    }
+                }
+            }
     }
 
 

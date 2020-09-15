@@ -7,9 +7,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.MyViewHolder
+import isthisstuff.practice.marvellisimohdd.entities.MarvelCharacter
 
 class SearchResultsAdapter : RecyclerView.Adapter<MyViewHolder>() {
-    var data: List<String> = listOf<String>()
+    var data: List<MarvelCharacter> = mutableListOf()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -19,7 +20,8 @@ class SearchResultsAdapter : RecyclerView.Adapter<MyViewHolder>() {
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         var item = data[position]
-        holder.view.findViewById<TextView>(R.id.title_text).text = item
+        holder.view.findViewById<TextView>(R.id.title_text).text = item.name
+        holder.view.findViewById<TextView>(R.id.info_text).text = item.description
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
