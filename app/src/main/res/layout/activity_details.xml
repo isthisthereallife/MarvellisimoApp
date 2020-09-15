@@ -17,11 +17,13 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:minHeight="100dp" />
+            android:layout_gravity="center"
+            android:minHeight="100dp"
+            android:src="@drawable/ic_baseline_arrow_back_24"/>
 
         <ImageView
             android:id="@+id/imageView2"
@@ -48,14 +50,21 @@
 
             android:src="@drawable/ic_baseline_star_border_24" />
     </LinearLayout>
-        <TextView
-            android:id="@+id/details_name"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayoutDetailsTop"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            tools:text="TEMPLATE TITLE"
-            />
+
+    <TextView
+        android:id="@+id/details_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/marvel_bold"
+        android:gravity="center_horizontal"
+        android:textAllCaps="true"
+        android:textColor="@color/secondaryTextColor"
+        android:textColorHighlight="@color/primaryLightColor"
+        android:textSize="30sp"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutDetailsTop"
+        tools:text="TEMPLATE TITLE"
+        android:paddingHorizontal="8dp"
+        android:paddingBottom="8dp"/>
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -77,8 +86,9 @@
             android:autoLink="web"
             android:text="@string/detailed_page_bio_text"
             android:textAlignment="center"
-            android:textColor="@color/primaryTextColor"
-            android:textSize="20sp" />
+            android:textColor="@color/secondaryTextColor"
+            android:textSize="20sp"
+            android:paddingHorizontal="16dp"/>
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
