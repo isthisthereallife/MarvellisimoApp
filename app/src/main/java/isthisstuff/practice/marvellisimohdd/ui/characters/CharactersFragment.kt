@@ -26,6 +26,7 @@ class CharactersFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         charactersViewModel.itemsList.observe(viewLifecycleOwner, Observer {
             adapter.data = it
         })
@@ -33,20 +34,13 @@ class CharactersFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_characters, container, false)
 
         root.rootView.findViewById<RecyclerView>(R.id.search_results).adapter = adapter
-        root.rootView.findViewById<ImageButton>(R.id.search_button).setOnClickListener {
-
-            addItem()
-
-        }
+        root.rootView.findViewById<ImageButton>(R.id.search_button).setOnClickListener { performSearch() }
 
         return root
     }
 
-    fun addItem() {
-        //charactersViewModel.addItem()
+    fun performSearch() {
         charactersViewModel.getData()
-
+        println(adapter.data)
     }
-
-
 }

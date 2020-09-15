@@ -9,7 +9,7 @@ data class CharacterDataWrapper(
 data class CharacterDataContainer(
     val total: Int,
     val count: Int,
-    val results: Array<MarvelCharacter>
+    val results: List<MarvelCharacter>
 )
 
 //TODO add thumbnail
