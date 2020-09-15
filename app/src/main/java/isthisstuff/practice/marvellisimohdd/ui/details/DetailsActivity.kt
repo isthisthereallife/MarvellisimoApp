@@ -37,7 +37,7 @@ class DetailsActivity : AppCompatActivity() {
         item = (intent.getSerializableExtra("item") as MarvelCharacter)
 
         if(item.description.isNotBlank())
-        info = item.description
+        info = item.description.replace("ï¿½","'")
         thumbnail = item.thumbnail.path+"."+item.thumbnail.extension
 
         findViewById<TextView>(R.id.text_details).text = info
