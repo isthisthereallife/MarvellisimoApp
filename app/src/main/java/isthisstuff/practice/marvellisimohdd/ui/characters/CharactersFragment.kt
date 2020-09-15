@@ -15,7 +15,7 @@ import isthisstuff.practice.marvellisimohdd.R
 
 class CharactersFragment : Fragment() {
     private val charactersViewModel: CharactersViewModel by viewModels()
-    private var adapter: SearchResultsAdapter = SearchResultsAdapter()
+    private var adapter: SearchResultsAdapter = SearchResultsAdapter(this)
 
     override fun onCreateView(
         inflater: LayoutInflater,

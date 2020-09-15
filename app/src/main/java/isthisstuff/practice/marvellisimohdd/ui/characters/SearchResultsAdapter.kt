@@ -1,5 +1,7 @@
 package isthisstuff.practice.marvellisimohdd.ui.characters
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -7,16 +9,20 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import isthisstuff.practice.marvellisimohdd.MainActivity
 import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.MyViewHolder
 import isthisstuff.practice.marvellisimohdd.entities.MarvelCharacter
+import isthisstuff.practice.marvellisimohdd.ui.details.DetailsActivity
 
-class SearchResultsAdapter : RecyclerView.Adapter<MyViewHolder>() {
+class SearchResultsAdapter(private val fragment: CharactersFragment) : RecyclerView.Adapter<MyViewHolder>() {
     lateinit var itemNameView: TextView
     lateinit var itemInfoView: TextView
     lateinit var itemThumbnail: ImageView
+
     var data: List<MarvelCharacter> = mutableListOf()
         set(value) {
             field = value
@@ -25,7 +31,6 @@ class SearchResultsAdapter : RecyclerView.Adapter<MyViewHolder>() {
 
     init {
         //TODO lägg findViewById-grejjerna häri
-
     }
 
     override fun getItemCount() = data.size
@@ -37,16 +42,16 @@ class SearchResultsAdapter : RecyclerView.Adapter<MyViewHolder>() {
         Picasso.get().load(item.thumbnail.path + "." + item.thumbnail.extension)
             .into(holder.view.findViewById<ImageView>(R.id.search_results_image))
         holder.view.findViewById<LinearLayout>(R.id.search_result_item)
-            .setOnClickListener { searchResultClicked(it, position) }
+            .setOnClickListener { openDetails(it, position) }
     }
 
-    fun searchResultClicked(view: View, position: Int) {
+    fun openDetails(view: View, position: Int) {
         Log.d(
             "searchResultClicked",
             "klickade på view: $view \n och this: $this \n och this.data:${this.data[position]}"
         )
-
-
+        val intent = Intent(fragment.context, DetailsActivity::class.java)
+        fragment.context?.startActivity(intent)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -60,9 +65,7 @@ class SearchResultsAdapter : RecyclerView.Adapter<MyViewHolder>() {
             .centerCrop()
             .into(R.id.search_results_image)
             .setIndicatorsEnabled(true)
-
     }
-
 */
 }
 
