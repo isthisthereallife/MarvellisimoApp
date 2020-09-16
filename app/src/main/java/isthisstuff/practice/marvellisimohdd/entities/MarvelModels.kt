@@ -19,10 +19,14 @@ data class MarvelObject(
     val id: Int,
     val name: String,
     val description: String,
-    val thumbnail: Thumbnail
-):Serializable
+    val thumbnail: Thumbnail,
+    val resourceURI: String,
+    val urls: List<Urls>
+) : Serializable
 
-data class Thumbnail(val path: String, val extension: String):Serializable
+data class Thumbnail(val path: String, val extension: String) : Serializable
+
+data class Urls(val type: String, val url: String) : Serializable
 
 
 

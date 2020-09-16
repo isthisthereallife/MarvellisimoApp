@@ -1,6 +1,7 @@
 package isthisstuff.practice.marvellisimohdd.ui.details
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -16,7 +17,8 @@ class DetailsActivity : AppCompatActivity() {
     private var thumbnail: String? =
         "https://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
     private var info: String? = "*NO DESCRIPTION AVAILABLE*"
-    private var name : String? = "Name goes here."
+    private var name: String? = "Name goes here."
+    private var url_details: String? = "https://Marvel.com"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,12 +42,16 @@ class DetailsActivity : AppCompatActivity() {
         thumbnail = item.thumbnail.path + "." + item.thumbnail.extension
 
 
-        if(item.name.isNotBlank())
-            name  = item.name.replace("ï¿½", "'")
+        if (item.name.isNotBlank())
+            name = item.name.replace("ï¿½", "'")
+
+        if (item.urls[0].url.isNotBlank())
+            url_details = item.urls[0].type + ": " + item.urls[0].url
 
 
         findViewById<TextView>(R.id.details_name).text = name
         findViewById<TextView>(R.id.text_details).text = info
+        findViewById<TextView>(R.id.details_text_view_urls).text = url_details
         Picasso.get().load(thumbnail).into(findViewById<ImageView>(R.id.imageView2))
     }
 
