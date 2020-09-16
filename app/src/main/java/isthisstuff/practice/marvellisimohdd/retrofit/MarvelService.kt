@@ -1,9 +1,7 @@
 package isthisstuff.practice.marvellisimohdd.retrofit
 
-import android.os.Message
-import android.util.Log
 import io.reactivex.Single
-import isthisstuff.practice.marvellisimohdd.entities.CharacterDataWrapper
+import isthisstuff.practice.marvellisimohdd.entities.MarvelDataWrapper
 import retrofit2.http.GET
 import retrofit2.http.Query
 import java.security.MessageDigest
@@ -19,13 +17,16 @@ val HASH = (ts + privateKey + apiKey).md5()
 
 interface MarvelService {
     @GET("characters?ts=$ts&apikey=$apiKey")
-    fun getAllCharacters(@Query("hash") hash: String = HASH): Single<CharacterDataWrapper>
+    fun getAllCharacters(@Query("hash") hash: String = HASH): Single<MarvelDataWrapper>
 
     @GET("characters?ts=$ts&apikey=$apiKey")
-    fun getContains(@Query("hash") hash: String = HASH, @Query("nameStartsWith") query:String): Single<CharacterDataWrapper>
+    fun getCharacterContains(@Query("hash") hash: String = HASH, @Query("nameStartsWith") query:String): Single<MarvelDataWrapper>
 
     @GET("characters?ts=$ts&apikey=$apiKey&nameStartsWith=sp")
-    fun getStartsWith(@Query("hash") hash: String = HASH): Single<CharacterDataWrapper>
+    fun getStartsWith(@Query("hash") hash: String = HASH): Single<MarvelDataWrapper>
+
+    @GET("series?ts=$ts&apikey=$apiKey")
+    fun getSeriesContains(@Query("hash") hash: String = HASH, @Query("titleStartsWith") query:String): Single<MarvelDataWrapper>
 }
 
 fun String.md5(): String {

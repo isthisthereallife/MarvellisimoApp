@@ -36,62 +36,17 @@ class CharactersViewModel : ViewModel() {
         getContains(query)
     }
 
-    fun getStartsWith() {
-        service.getStartsWith()
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { result, err ->
-                if (err?.message != null)
-                    Log.d("__", "Error getAllCharacters " + err.message)
-                else {
-                    Log.d("__", "I got a CharacterDataWrapper $result")
-                    var i = 0
-                    while (i < 19) {
-                        Log.d(
-                            "STARTS WITH",
-                            result.data.results[i].name.toString()
-                                .plus(": " + result.data.results[i].description)
-                        )
-                        i++
-                    }
-
-                }
-            }
-    }
-
-    fun getAllCharacters() {
-        service.getAllCharacters()
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { result, err ->
-                if (err?.message != null)
-                    Log.d("__", "Error getAllCharacters " + err.message)
-                else {
-                    Log.d("__", "I got a CharacterDataWrapper $result")
-                    var i = 0
-                    while (i < 19) {
-                        Log.d(
-                            "Get all characters",
-                            result.data.results[i].name.toString()
-                                .plus(": " + result.data.results[i].description)
-                        )
-                        i++
-                    }
-
-                }
-            }
-    }
-
     @SuppressLint("CheckResult")
     fun getContains(query: String) {
-        service.getContains(query = query)
+        itemsList.value = listOf()
+        service.getCharacterContains(query = query)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { result, err ->
                 if (err?.message != null)
-                    Log.d("__", "Error getAllCharacters " + err.message)
+                    Log.d("__", "Error getAll " + err.message)
                 else {
-                    Log.d("__", "I got a CharacterDataWrapper $result")
+                    Log.d("__", "I got a DataWrapper $result")
 
                     result.data.results.forEach {
                         itemsList.value = itemsList.value?.plus(it)
@@ -99,13 +54,4 @@ class CharactersViewModel : ViewModel() {
                 }
             }
     }
-
-
-    /*
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is character stuffs"
-    }
-    val text: LiveData<String> = _text
-
-     */
 }

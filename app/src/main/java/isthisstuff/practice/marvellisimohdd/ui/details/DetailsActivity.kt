@@ -37,14 +37,19 @@ class DetailsActivity : AppCompatActivity() {
 
         item = (intent.getSerializableExtra("item") as MarvelObject)
 
-        if (item.description.isNotBlank())
-            info = item.description.replace("ï¿½", "'")
+        if(item.description!=null) {
+            if (item.description.toString().isNotBlank())
+                info = item.description.toString().replace("ï¿½", "'")
+        }
+
         thumbnail = item.thumbnail.path + "." + item.thumbnail.extension
 
-
-        if (item.name.isNotBlank())
-            name = item.name.replace("ï¿½", "'")
-        else name = item.title.replace("ï¿½", "'")
+        if(item.name!=null) {
+            if (item.name.toString().isNotBlank())
+                name = item.name.toString().replace("ï¿½", "'")
+        } else {
+            name = item.title?.replace("ï¿½", "'")
+        }
 
         if (item.urls[0].url.isNotBlank())
             url_details = item.urls[0].type + ": " + item.urls[0].url

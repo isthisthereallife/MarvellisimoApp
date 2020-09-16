@@ -1,4 +1,4 @@
-package isthisstuff.practice.marvellisimohdd.ui.characters
+package isthisstuff.practice.marvellisimohdd.ui.adapter
 
 import android.content.Intent
 import android.util.Log
@@ -35,7 +35,13 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         var item = data[position]
-        holder.view.findViewById<TextView>(R.id.title_text).text = item.name
+
+        if(item.name!=null) {
+            holder.view.findViewById<TextView>(R.id.title_text).text = item.name
+        } else {
+            holder.view.findViewById<TextView>(R.id.title_text).text = item.title
+        }
+
         holder.view.findViewById<TextView>(R.id.info_text).text = item.description
         Picasso.get().load(item.thumbnail.path + "." + item.thumbnail.extension)
             .into(holder.view.findViewById<ImageView>(R.id.search_results_image))

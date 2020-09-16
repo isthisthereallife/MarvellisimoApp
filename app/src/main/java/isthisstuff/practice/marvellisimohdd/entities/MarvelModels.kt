@@ -2,13 +2,13 @@ package isthisstuff.practice.marvellisimohdd.entities
 
 import java.io.Serializable
 
-data class CharacterDataWrapper(
+data class MarvelDataWrapper(
     val code: Int,
     val status: String,
-    val data: CharacterDataContainer
+    val data: MarvelDataContainer
 )
 
-data class CharacterDataContainer(
+data class MarvelDataContainer(
     val total: Int,
     val count: Int,
     val results: List<MarvelObject>
@@ -17,9 +17,9 @@ data class CharacterDataContainer(
 //TODO add thumbnail
 data class MarvelObject(
     val id: Int,
-    val name: String,
-    val title: String,
-    val description: String,
+    val name: String?,
+    val title: String?,
+    val description: String?,
     val thumbnail: Thumbnail,
     val resourceURI: String,
     val urls: List<Urls>
