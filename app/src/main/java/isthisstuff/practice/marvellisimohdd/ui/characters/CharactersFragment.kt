@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
@@ -31,14 +32,13 @@ class CharactersFragment : Fragment() {
 
         root.rootView.findViewById<RecyclerView>(R.id.search_results).adapter = adapter
         root.rootView.findViewById<ImageButton>(R.id.search_button)
-            .setOnClickListener { performSearch() }
+            .setOnClickListener { performSearch("%"+root.rootView.findViewById<EditText>(R.id.search_field).text.toString()) }
 
         return root
     }
 
-    fun performSearch() {
-        charactersViewModel.getData()
-        println(adapter.data)
+    fun performSearch(query:String) {
+        charactersViewModel.getData(query)
     }
 
 

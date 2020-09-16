@@ -31,9 +31,9 @@ class CharactersViewModel : ViewModel() {
         itemsList.value= listOf()
     }
 
-    fun getData() {
+    fun getData(query:String) {
         //TODO spara ner datan
-        getContains()
+        getContains(query)
     }
 
     fun getStartsWith() {
@@ -83,8 +83,8 @@ class CharactersViewModel : ViewModel() {
     }
 
     @SuppressLint("CheckResult")
-    fun getContains() {
-        service.getContains()
+    fun getContains(query: String) {
+        service.getContains(query = query)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { result, err ->
