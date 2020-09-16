@@ -18,6 +18,7 @@ data class CharacterDataContainer(
 data class MarvelObject(
     val id: Int,
     val name: String,
+    val title: String,
     val description: String,
     val thumbnail: Thumbnail,
     val resourceURI: String,

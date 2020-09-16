@@ -44,6 +44,7 @@ class DetailsActivity : AppCompatActivity() {
 
         if (item.name.isNotBlank())
             name = item.name.replace("ï¿½", "'")
+        else name = item.title.replace("ï¿½", "'")
 
         if (item.urls[0].url.isNotBlank())
             url_details = item.urls[0].type + ": " + item.urls[0].url
