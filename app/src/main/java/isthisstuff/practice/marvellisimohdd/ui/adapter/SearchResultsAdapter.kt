@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import isthisstuff.practice.marvellisimohdd.R
@@ -15,7 +16,7 @@ import isthisstuff.practice.marvellisimohdd.MyViewHolder
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.ui.details.DetailsActivity
 
-class SearchResultsAdapter(private val fragment: CharactersFragment) : RecyclerView.Adapter<MyViewHolder>() {
+class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapter<MyViewHolder>() {
     lateinit var itemNameView: TextView
     lateinit var itemInfoView: TextView
     lateinit var itemThumbnail: ImageView
