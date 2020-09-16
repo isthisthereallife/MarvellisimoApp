@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "853362495568",
+    "firebase_url": "https://marvellisimohdd.firebaseio.com",
+    "project_id": "marvellisimohdd",
+    "storage_bucket": "marvellisimohdd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:853362495568:android:0fb6bffa7627bd04ba0155",
+        "android_client_info": {
+          "package_name": "isthisstuff.practice.marvellisimohdd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "853362495568-ft1p8igmjlo8im63h7p0pdjuo6a5mjdm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiiVRwIbFqNP5--hdijDts10TbwNwHLBc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "853362495568-ft1p8igmjlo8im63h7p0pdjuo6a5mjdm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
