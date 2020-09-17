@@ -28,12 +28,12 @@ class DetailsActivity : AppCompatActivity() {
         star = findViewById(R.id.details_favstar)
         star.setOnClickListener { changeStar() }
 
-        /*
-        val bundle:Bundle ?= intent.extras
-        if(bundle!=null)
-            thumbnail = bundle.getString("thumbnail")
 
-         */
+
+        //TODO klipp ut till funktioner
+
+
+
 
         item = (intent.getSerializableExtra("item") as MarvelObject)
 
@@ -54,7 +54,7 @@ class DetailsActivity : AppCompatActivity() {
         if (item.urls[0].url.isNotBlank())
             url_details = item.urls[0].type + ": " + item.urls[0].url
 
-
+        findViewById<ImageView>(R.id.details_arrow_back).setOnClickListener { finish() }
         findViewById<TextView>(R.id.details_name).text = name
         findViewById<TextView>(R.id.text_details).text = info
         findViewById<TextView>(R.id.details_text_view_urls).text = url_details
