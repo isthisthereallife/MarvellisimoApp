@@ -1,5 +1,7 @@
 package isthisstuff.practice.marvellisimohdd.ui.details
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
@@ -25,39 +27,48 @@ class DetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_details)
         setSupportActionBar(findViewById(R.id.toolbar))
 
+        //TODO borde vi lägga alla findViewById här uppe? //mvhmagnus
+        val urlTextView: TextView = findViewById<TextView>(R.id.details_text_view_url)
+
+
         star = findViewById(R.id.details_favstar)
         star.setOnClickListener { changeStar() }
-
 
 
         //TODO klipp ut till funktioner
 
 
-
-
         item = (intent.getSerializableExtra("item") as MarvelObject)
 
-        if(item.description!=null) {
+        if (item.description != null) {
             if (item.description.toString().isNotBlank())
                 info = item.description.toString().replace("ï¿½", "'")
         }
 
         thumbnail = item.thumbnail.path + "." + item.thumbnail.extension
 
-        if(item.name!=null) {
+        if (item.name != null) {
             if (item.name.toString().isNotBlank())
                 name = item.name.toString().replace("ï¿½", "'")
         } else {
             name = item.title?.replace("ï¿½", "'")
         }
+        if (item.urls[0].url.isNotBlank()) {
+            url_details = item.urls[0].type
+            urlTextView.setOnClickListener {
+                startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(item.urls[0].url)
+                    )
+                )
+            }
+            urlTextView.text = url_details
 
-        if (item.urls[0].url.isNotBlank())
-            url_details = item.urls[0].type + ": " + item.urls[0].url
-
+        }
         findViewById<ImageView>(R.id.details_arrow_back).setOnClickListener { finish() }
         findViewById<TextView>(R.id.details_name).text = name
         findViewById<TextView>(R.id.text_details).text = info
-        findViewById<TextView>(R.id.details_text_view_urls).text = url_details
         Picasso.get().load(thumbnail).into(findViewById<ImageView>(R.id.imageView2))
     }
 
@@ -67,12 +78,12 @@ class DetailsActivity : AppCompatActivity() {
                 "Filled" -> {
                     star.setImageResource(R.drawable.ic_baseline_star_border_24)
                     star.setTag("Bordered")
-                    Toast.makeText(this, "Removed from favourites", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Removed $name from favourites", Toast.LENGTH_SHORT).show()
                 }
                 else -> {
                     star.setImageResource(R.drawable.ic_baseline_star_filled_24)
                     star.setTag("Filled")
-                    Toast.makeText(this, "Added to favourites", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Added $name to favourites", Toast.LENGTH_SHORT).show()
                 }
             }
         }
