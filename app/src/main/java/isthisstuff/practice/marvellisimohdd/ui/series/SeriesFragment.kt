@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
 import isthisstuff.practice.marvellisimohdd.R
+import isthisstuff.practice.marvellisimohdd.hideKeyboard
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 import isthisstuff.practice.marvellisimohdd.ui.adapter.SearchResultsAdapter
 
@@ -35,6 +37,14 @@ class SeriesFragment : Fragment() {
         root.rootView.findViewById<RecyclerView>(R.id.search_results_series).adapter = adapter
         root.rootView.findViewById<ImageButton>(R.id.search_button_series)
             .setOnClickListener { performSearch("%"+root.rootView.findViewById<EditText>(R.id.search_field_series).text.toString()) }
+
+        root.rootView.findViewById<EditText>(R.id.search_field_series).setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                performSearch(root.rootView.findViewById<EditText>(R.id.search_field_series).text.toString())
+                hideKeyboard()
+                true
+            } else false
+        }
 
         return root
     }

@@ -1,5 +1,6 @@
 package isthisstuff.practice.marvellisimohdd.ui.adapter
 
+import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
