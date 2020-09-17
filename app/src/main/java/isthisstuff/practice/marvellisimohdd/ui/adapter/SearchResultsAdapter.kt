@@ -63,7 +63,7 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
         holder.view.findViewById<LinearLayout>(R.id.search_result_item)
             .setOnClickListener { openDetails(it, position) }
 
-        if(position==19) {
+        if(position==offset+19) {
             println("NU HAR VI NÅTT SLUTET, SÄG ADJÖ TILL NÄRA OCH KÄRA")
             offset += 20
             marvelViewModel.getData(marvelDatatype, query, offset)
