@@ -14,10 +14,12 @@ import com.squareup.picasso.Picasso
 import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.MyViewHolder
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
-import isthisstuff.practice.marvellisimohdd.ui.characters.CharactersFragment
+import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
+import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 import isthisstuff.practice.marvellisimohdd.ui.details.DetailsActivity
 
 class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapter<MyViewHolder>() {
+
     lateinit var itemNameView: TextView
     lateinit var itemInfoView: TextView
     lateinit var itemThumbnail: ImageView
@@ -28,8 +30,20 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
             notifyDataSetChanged()
         }
 
+    lateinit var marvelViewModel: MarvelViewModel
+    lateinit var marvelDatatype: MarvelDatatypes
+    lateinit var query: String
+    var offset: Int = 0
+
     init {
         //TODO lägg findViewById-grejjerna häri
+    }
+
+    fun saveRequestData(marvelViewModel: MarvelViewModel, marvelDatatype:MarvelDatatypes, query:String, offset:Int) {
+        this.marvelViewModel = marvelViewModel
+        this.marvelDatatype = marvelDatatype
+        this.query = query
+        this.offset = offset
     }
 
     override fun getItemCount() = data.size
@@ -51,7 +65,8 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
 
         if(position==19) {
             println("NU HAR VI NÅTT SLUTET, SÄG ADJÖ TILL NÄRA OCH KÄRA")
-
+            offset += 20
+            marvelViewModel.getData(marvelDatatype, query, offset)
         }
     }
 
@@ -70,14 +85,6 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
         var view = layoutInflater.inflate(R.layout.search_item_view, parent, false) as LinearLayout
         return MyViewHolder(view)
     }
-/*
-    fun picassoImg(thumbnail: Thumbnail): Uri? {
-        return Picasso.get().load(thumbnail.path+thumbnail.extension).resize(50,50)
-            .centerCrop()
-            .into(R.id.search_results_image)
-            .setIndicatorsEnabled(true)
-    }
-*/
 }
 
 

@@ -40,7 +40,6 @@ class MarvelViewModel:ViewModel() {
 
     @SuppressLint("CheckResult")
     fun getCharactersContains(query: String, offset:Int) {
-        itemsList.value = listOf()
         service.getCharacterContains(query = "%$query", offset = offset)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
@@ -59,7 +58,6 @@ class MarvelViewModel:ViewModel() {
 
     @SuppressLint("CheckResult")
     fun getSeriesContains(query: String, offset:Int) {
-        itemsList.value = listOf()
         service.getSeriesContains(query = "%$query", offset = offset)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
@@ -74,5 +72,9 @@ class MarvelViewModel:ViewModel() {
                     }
                 }
             }
+    }
+
+    fun clearSearchData() {
+        itemsList.value = listOf()
     }
 }

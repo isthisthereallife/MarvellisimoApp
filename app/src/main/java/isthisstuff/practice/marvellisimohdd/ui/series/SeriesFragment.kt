@@ -40,6 +40,8 @@ class SeriesFragment : Fragment() {
     }
 
     private fun performSearch(query:String, offset:Int = 0) {
+        marvelViewModel.clearSearchData()
         marvelViewModel.getData(MarvelDatatypes.SERIES, query, offset)
+        adapter.saveRequestData(marvelViewModel, MarvelDatatypes.SERIES, query, offset)
     }
 }

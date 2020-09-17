@@ -16,7 +16,7 @@ import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 import isthisstuff.practice.marvellisimohdd.ui.adapter.SearchResultsAdapter
 
 class CharactersFragment : Fragment() {
-    private val marvelViewModel: MarvelViewModel by viewModels()
+    val marvelViewModel: MarvelViewModel by viewModels()
     private var adapter: SearchResultsAdapter = SearchResultsAdapter(this)
 
     override fun onCreateView(
@@ -24,7 +24,6 @@ class CharactersFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         marvelViewModel.itemsList.observe(viewLifecycleOwner, Observer {
             adapter.data = it
         })
@@ -39,6 +38,8 @@ class CharactersFragment : Fragment() {
     }
 
     private fun performSearch(query:String, offset:Int = 0) {
+        marvelViewModel.clearSearchData()
         marvelViewModel.getData(MarvelDatatypes.CHARACTERS, query, offset)
+        adapter.saveRequestData(marvelViewModel, MarvelDatatypes.CHARACTERS, query, offset)
     }
 }
