@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso
 import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.MyViewHolder
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
+import isthisstuff.practice.marvellisimohdd.ui.characters.CharactersFragment
 import isthisstuff.practice.marvellisimohdd.ui.details.DetailsActivity
 
 class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapter<MyViewHolder>() {
@@ -47,6 +48,11 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
             .into(holder.view.findViewById<ImageView>(R.id.search_results_image))
         holder.view.findViewById<LinearLayout>(R.id.search_result_item)
             .setOnClickListener { openDetails(it, position) }
+
+        if(position==19) {
+            println("NU HAR VI NÅTT SLUTET, SÄG ADJÖ TILL NÄRA OCH KÄRA")
+
+        }
     }
 
     fun openDetails(view: View, position: Int) {

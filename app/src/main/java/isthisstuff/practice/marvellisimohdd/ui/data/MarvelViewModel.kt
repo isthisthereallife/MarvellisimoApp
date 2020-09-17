@@ -1,4 +1,4 @@
-package isthisstuff.practice.marvellisimohdd.ui.series
+package isthisstuff.practice.marvellisimohdd.ui.data
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -14,8 +14,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-class SeriesViewModel : ViewModel() {
-
+class MarvelViewModel:ViewModel() {
     var itemsList = MutableLiveData<List<MarvelObject>>()
     private val builder = OkHttpClient.Builder()
     private val okHttpClient = builder.build()
@@ -31,15 +30,37 @@ class SeriesViewModel : ViewModel() {
         itemsList.value= listOf()
     }
 
-    fun getData(query:String) {
+    fun getData(marvelDatatype: MarvelDatatypes, query:String, offset: Int) {
         //TODO spara ner datan
-        getContains(query)
+        when (marvelDatatype) {
+            MarvelDatatypes.CHARACTERS -> getCharactersContains(query, offset)
+            MarvelDatatypes.SERIES -> getSeriesContains(query, offset)
+        }
     }
 
     @SuppressLint("CheckResult")
-    fun getContains(query: String) {
+    fun getCharactersContains(query: String, offset:Int) {
         itemsList.value = listOf()
-        service.getSeriesContains(query = query)
+        service.getCharacterContains(query = "%$query", offset = offset)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { result, err ->
+                if (err?.message != null)
+                    Log.d("__", "Error getAll " + err.message)
+                else {
+                    Log.d("__", "I got a DataWrapper $result")
+
+                    result.data.results.forEach {
+                        itemsList.value = itemsList.value?.plus(it)
+                    }
+                }
+            }
+    }
+
+    @SuppressLint("CheckResult")
+    fun getSeriesContains(query: String, offset:Int) {
+        itemsList.value = listOf()
+        service.getSeriesContains(query = "%$query", offset = offset)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { result, err ->

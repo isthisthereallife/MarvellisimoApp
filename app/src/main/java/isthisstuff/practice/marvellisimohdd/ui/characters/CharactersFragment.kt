@@ -10,11 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
 import isthisstuff.practice.marvellisimohdd.R
+import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 import isthisstuff.practice.marvellisimohdd.ui.adapter.SearchResultsAdapter
 
 class CharactersFragment : Fragment() {
-    private val charactersViewModel: CharactersViewModel by viewModels()
+    private val marvelViewModel: MarvelViewModel by viewModels()
     private var adapter: SearchResultsAdapter = SearchResultsAdapter(this)
 
     override fun onCreateView(
@@ -23,7 +25,7 @@ class CharactersFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        charactersViewModel.itemsList.observe(viewLifecycleOwner, Observer {
+        marvelViewModel.itemsList.observe(viewLifecycleOwner, Observer {
             adapter.data = it
         })
 
@@ -31,14 +33,12 @@ class CharactersFragment : Fragment() {
 
         root.rootView.findViewById<RecyclerView>(R.id.search_results_characters).adapter = adapter
         root.rootView.findViewById<ImageButton>(R.id.search_button_characters)
-            .setOnClickListener { performSearch("%"+root.rootView.findViewById<EditText>(R.id.search_field_characters).text.toString()) }
+            .setOnClickListener { performSearch(root.rootView.findViewById<EditText>(R.id.search_field_characters).text.toString()) }
 
         return root
     }
 
-    fun performSearch(query:String) {
-        charactersViewModel.getData(query)
+    private fun performSearch(query:String, offset:Int = 0) {
+        marvelViewModel.getData(MarvelDatatypes.CHARACTERS, query, offset)
     }
-
-
 }

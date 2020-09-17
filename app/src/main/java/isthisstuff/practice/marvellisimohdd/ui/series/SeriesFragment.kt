@@ -6,18 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
+import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
 import isthisstuff.practice.marvellisimohdd.R
+import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 import isthisstuff.practice.marvellisimohdd.ui.adapter.SearchResultsAdapter
 
 class SeriesFragment : Fragment() {
 
-    private val seriesViewModel: SeriesViewModel by viewModels()
+    private val marvelViewModel: MarvelViewModel by viewModels()
     private var adapter:SearchResultsAdapter = SearchResultsAdapter(this)
 
     override fun onCreateView(
@@ -26,7 +26,7 @@ class SeriesFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
 
-        seriesViewModel.itemsList.observe(viewLifecycleOwner, Observer {
+        marvelViewModel.itemsList.observe(viewLifecycleOwner, Observer {
             adapter.data = it
         })
 
@@ -39,7 +39,7 @@ class SeriesFragment : Fragment() {
         return root
     }
 
-    fun performSearch(query:String) {
-        seriesViewModel.getData(query)
+    private fun performSearch(query:String, offset:Int = 0) {
+        marvelViewModel.getData(MarvelDatatypes.SERIES, query, offset)
     }
 }

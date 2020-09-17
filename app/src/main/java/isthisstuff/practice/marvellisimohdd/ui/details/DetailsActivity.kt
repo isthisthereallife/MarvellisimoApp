@@ -64,7 +64,6 @@ class DetailsActivity : AppCompatActivity() {
                 )
             }
             urlTextView.text = url_details
-
         }
         findViewById<ImageView>(R.id.details_arrow_back).setOnClickListener { finish() }
         findViewById<TextView>(R.id.details_name).text = name
