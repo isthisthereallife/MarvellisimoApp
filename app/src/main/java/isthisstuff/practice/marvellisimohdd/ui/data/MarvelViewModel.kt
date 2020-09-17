@@ -30,17 +30,17 @@ class MarvelViewModel:ViewModel() {
         itemsList.value= listOf()
     }
 
-    fun getData(marvelDatatype: MarvelDatatypes, query:String, offset: Int) {
+    fun getData(_marvelDatatype: MarvelDatatypes, _query:String, _offset: Int) {
         //TODO spara ner datan
-        when (marvelDatatype) {
-            MarvelDatatypes.CHARACTERS -> getCharactersContains(query, offset)
-            MarvelDatatypes.SERIES -> getSeriesContains(query, offset)
+        when (_marvelDatatype) {
+            MarvelDatatypes.CHARACTERS -> getCharactersContains(_query, _offset)
+            MarvelDatatypes.SERIES -> getSeriesContains(_query, _offset)
         }
     }
 
     @SuppressLint("CheckResult")
-    fun getCharactersContains(query: String, offset:Int) {
-        service.getCharacterContains(query = "%$query", offset = offset)
+    fun getCharactersContains(_query: String, _offset:Int) {
+        service.getCharacterContains(query = "%$_query", offset = _offset)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { result, err ->
@@ -57,8 +57,8 @@ class MarvelViewModel:ViewModel() {
     }
 
     @SuppressLint("CheckResult")
-    fun getSeriesContains(query: String, offset:Int) {
-        service.getSeriesContains(query = "%$query", offset = offset)
+    fun getSeriesContains(_query: String, _offset:Int) {
+        service.getSeriesContains(query = "%$_query", offset = _offset)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { result, err ->
