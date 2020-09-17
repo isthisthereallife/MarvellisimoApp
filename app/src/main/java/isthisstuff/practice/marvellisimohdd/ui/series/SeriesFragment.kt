@@ -19,6 +19,7 @@ import isthisstuff.practice.marvellisimohdd.ui.adapter.SearchResultsAdapter
 
 class SeriesFragment : Fragment() {
 
+    lateinit var root:View
     private val marvelViewModel: MarvelViewModel by viewModels()
     private var adapter:SearchResultsAdapter = SearchResultsAdapter(this)
 
@@ -32,7 +33,7 @@ class SeriesFragment : Fragment() {
             adapter.data = it
         })
 
-        val root = inflater.inflate(R.layout.fragment_series, container, false)
+        root = inflater.inflate(R.layout.fragment_series, container, false)
 
         root.rootView.findViewById<RecyclerView>(R.id.search_results_series).adapter = adapter
         root.rootView.findViewById<ImageButton>(R.id.search_button_series)
@@ -41,7 +42,6 @@ class SeriesFragment : Fragment() {
         root.rootView.findViewById<EditText>(R.id.search_field_series).setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 performSearch(root.rootView.findViewById<EditText>(R.id.search_field_series).text.toString())
-                hideKeyboard()
                 true
             } else false
         }
@@ -50,6 +50,8 @@ class SeriesFragment : Fragment() {
     }
 
     private fun performSearch(query:String, offset:Int = 0) {
+        root.rootView.findViewById<EditText>(R.id.search_field_series).clearFocus()
+        hideKeyboard()
         marvelViewModel.clearSearchData()
         marvelViewModel.getData(MarvelDatatypes.SERIES, query, offset)
         adapter.saveRequestData(marvelViewModel, MarvelDatatypes.SERIES, query, offset)

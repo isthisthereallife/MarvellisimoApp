@@ -19,6 +19,7 @@ import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 
 
 class CharactersFragment : Fragment() {
+    lateinit var root:View
     val marvelViewModel: MarvelViewModel by viewModels()
     private var adapter: SearchResultsAdapter = SearchResultsAdapter(this)
 
@@ -31,7 +32,7 @@ class CharactersFragment : Fragment() {
             adapter.data = it
         })
 
-        val root = inflater.inflate(R.layout.fragment_characters, container, false)
+        root = inflater.inflate(R.layout.fragment_characters, container, false)
 
         root.rootView.findViewById<RecyclerView>(R.id.search_results_characters).adapter = adapter
         root.rootView.findViewById<ImageButton>(R.id.search_button_characters)
@@ -40,7 +41,6 @@ class CharactersFragment : Fragment() {
         root.rootView.findViewById<EditText>(R.id.search_field_characters).setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 performSearch(root.rootView.findViewById<EditText>(R.id.search_field_characters).text.toString())
-                hideKeyboard()
                 true
             } else false
         }
@@ -49,6 +49,8 @@ class CharactersFragment : Fragment() {
     }
 
     private fun performSearch(query: String, offset: Int = 0) {
+        root.rootView.findViewById<EditText>(R.id.search_field_characters).clearFocus()
+        hideKeyboard()
         marvelViewModel.clearSearchData()
         marvelViewModel.getData(MarvelDatatypes.CHARACTERS, query, offset)
         adapter.saveRequestData(marvelViewModel, MarvelDatatypes.CHARACTERS, query, offset)

@@ -25,7 +25,7 @@
             android:id="@+id/title_text"
             android:text="title text"
             android:textStyle="bold"
-            android:textColor="@color/primaryDarkColor"
+            android:textColor="@color/secondaryTextColor"
             android:textSize="20sp"
             android:layout_margin="5dp"/>
 
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/info_text"
             android:text="Lite Information"
-            android:textColor="@color/primaryLightColor"
+            android:textColor="@color/secondaryTextColor"
             android:textSize="18sp"
             android:layout_margin="5dp"/>
 
