@@ -1,12 +1,9 @@
 package isthisstuff.practice.marvellisimohdd
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -20,6 +17,7 @@ import androidx.appcompat.widget.Toolbar
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import isthisstuff.practice.marvellisimohdd.entities.UserViewModel
 class MainActivity : AppCompatActivity() {
     val userViewModel: UserViewModel by viewModels()
@@ -50,7 +48,13 @@ class MainActivity : AppCompatActivity() {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         findViewById<LinearLayout>(R.id.signIn).setOnClickListener { login() }
+        updateLoginDisplay()
         return true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateLoginDisplay()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -59,31 +63,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun login() {
-        super.onStart()
         val fb = FirebaseApp.initializeApp(this)
-
         val mAuth = FirebaseAuth.getInstance()
-
-        var currentUser = mAuth.getCurrentUser()
-
-        //om är null, vi har inte loggat in
+        val currentUser = mAuth.currentUser
         if (currentUser == null) {
-
             val intent = AuthUI.getInstance().createSignInIntentBuilder().build()
-            startActivityForResult(intent, 1).also {
-                changeLogin()
-            }
+            startActivityForResult(intent, 1)
         }
-
     }
+
     override fun onDestroy() {
         super.onDestroy()
         FirebaseAuth.getInstance().signOut()
-        Toast.makeText(this,"onDestroy", Toast.LENGTH_LONG).show()
-
     }
-    fun changeLogin(){
-        findViewById<TextView>(R.id.nameUser).text = FirebaseAuth.getInstance().currentUser?.displayName
-        findViewById<TextView>(R.id.emailUser).text = FirebaseAuth.getInstance().currentUser?.email
+
+    fun updateLoginDisplay(){
+        if(FirebaseAuth.getInstance().currentUser!=null) {
+            findViewById<TextView>(R.id.nameUser).text = FirebaseAuth.getInstance().currentUser?.displayName
+            findViewById<TextView>(R.id.emailUser).text = FirebaseAuth.getInstance().currentUser?.email
+        }
     }
 }
