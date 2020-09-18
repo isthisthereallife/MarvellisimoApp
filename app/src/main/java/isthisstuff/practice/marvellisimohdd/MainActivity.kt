@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.Menu
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.viewModels
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -26,8 +25,8 @@ import isthisstuff.practice.marvellisimohdd.database.User
 
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var realm :Realm
-    private var meny : Unit? = null
+    private lateinit var realm: Realm
+    private var meny: Unit? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +36,6 @@ class MainActivity : AppCompatActivity() {
 
         //REALM
         realm = Realm.getDefaultInstance()
-
 
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
@@ -55,11 +53,12 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-    private fun saveUser(){
+
+    private fun saveUser() {
 
         realm.beginTransaction()
         val user1 = User()
-        user1.id = FirebaseAuth.getInstance().currentUser?.email
+        user1.email = FirebaseAuth.getInstance().currentUser?.email
         user1.name = FirebaseAuth.getInstance().currentUser?.displayName
         user1.favorites = RealmList<MarvelRealmObject>()
 
@@ -67,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         realm.commitTransaction()
 
         val result = realm.where<User>().findAll()
-        Log.d("HÄMTAT EN USER!!!!",result.toString())
+        Log.d("HÄMTAT EN USER!!!!", result.toString())
 
     }
 
@@ -83,7 +82,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (meny != null)
-        updateLoginDisplay()
+            updateLoginDisplay()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -107,10 +106,12 @@ class MainActivity : AppCompatActivity() {
         realm.close()
     }
 
-    private fun updateLoginDisplay(){
-        if(FirebaseAuth.getInstance().currentUser!=null) {
-            findViewById<TextView>(R.id.nameUser).text = FirebaseAuth.getInstance().currentUser?.displayName
-            findViewById<TextView>(R.id.emailUser).text = FirebaseAuth.getInstance().currentUser?.email
+    private fun updateLoginDisplay() {
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            findViewById<TextView>(R.id.nameUser).text =
+                FirebaseAuth.getInstance().currentUser?.displayName
+            findViewById<TextView>(R.id.emailUser).text =
+                FirebaseAuth.getInstance().currentUser?.email
         }
     }
 

@@ -14,14 +14,12 @@ data class MarvelDataContainer(
     val results: List<MarvelObject>
 )
 
-//TODO add thumbnail
 data class MarvelObject(
     val id: Int,
     val name: String?,
     val title: String?,
     val description: String?,
     val thumbnail: Thumbnail,
-    val resourceURI: String,
     val urls: List<Urls>
 ) : Serializable
 

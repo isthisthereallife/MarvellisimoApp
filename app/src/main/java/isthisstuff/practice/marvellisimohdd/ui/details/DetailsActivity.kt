@@ -28,7 +28,7 @@ class DetailsActivity : AppCompatActivity() {
     private var name: String? = "Name goes here."
     private var url_details: String? = "https://Marvel.com"
     private lateinit var realm: Realm
-    private lateinit var activeUser: RealmResults<User>
+    private lateinit var activeUser: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +43,7 @@ class DetailsActivity : AppCompatActivity() {
 
 
         //hämta in user1 från databasen
-        activeUser = realm.where<User>().findAll()
+        activeUser = realm.where<User>().findFirst()!!
 
         star = findViewById(R.id.details_favstar)
         star.setOnClickListener { changeStar() }
@@ -101,8 +101,8 @@ class DetailsActivity : AppCompatActivity() {
                     var newObject = MarvelRealmObject()
                     newObject.name = item.name //se upp!!!!! series Title
                     newObject.id = item.id
-                    activeUser[0]?.favorites?.add(newObject)
-                    val a = activeUser[0]!!
+                    activeUser?.favorites?.add(newObject)
+                    val a = activeUser!!
                     realm.copyToRealmOrUpdate(a)
                     realm.commitTransaction()
 
