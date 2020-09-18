@@ -4,23 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.series.SeriesFragment">
-
-    <!--
-    <TextView
-        android:id="@+id/text_series"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    -->
+    tools:context=".ui.series.SeriesFragment"
+    android:background="@drawable/gradient">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_results_series"
@@ -30,7 +15,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/search_button_series"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        android:background="#00000000"/>
 
     <EditText
         android:id="@+id/search_field_series"
@@ -44,12 +30,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias=".95"
         android:inputType="text"
-        android:imeOptions="actionDone"/>
+        android:imeOptions="actionDone"
+        android:textColor="@color/secondaryTextColor"/>
 
     <ImageButton
         android:id="@+id/search_button_series"
-        android:layout_width="wrap_content"
+        style="@android:style/Widget.ImageButton"
+        android:layout_width="48dp"
         android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
+        android:scaleType="center"
         android:src="?android:attr/actionModeWebSearchDrawable"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
