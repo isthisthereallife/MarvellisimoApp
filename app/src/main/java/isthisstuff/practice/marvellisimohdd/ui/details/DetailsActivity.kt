@@ -10,8 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.squareup.picasso.Picasso
 import io.realm.Realm
-import io.realm.RealmObject
-import io.realm.RealmResults
 import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
@@ -26,7 +24,7 @@ class DetailsActivity : AppCompatActivity() {
         "https://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
     private var info: String? = "*NO DESCRIPTION AVAILABLE*"
     private var name: String? = "Name goes here."
-    private var url_details: String? = "https://Marvel.com"
+    private var urlDetails: String? = "https://Marvel.com"
     private lateinit var realm: Realm
     private lateinit var activeUser: User
 
@@ -70,7 +68,7 @@ class DetailsActivity : AppCompatActivity() {
             name = item.title?.replace("ï¿½", "'")
         }
         if (item.urls[0].url.isNotBlank()) {
-            url_details = item.urls[0].type
+            urlDetails = item.urls[0].type
             urlTextView.setOnClickListener {
                 startActivity(
                     Intent(
@@ -79,7 +77,7 @@ class DetailsActivity : AppCompatActivity() {
                     )
                 )
             }
-            urlTextView.text = url_details
+            urlTextView.text = urlDetails
         }
         findViewById<ImageView>(R.id.details_arrow_back).setOnClickListener { finish() }
         findViewById<TextView>(R.id.details_name).text = name

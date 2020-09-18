@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:autoLink="web"
                 android:padding="16dp"
-                android:text="HÄR ÄR DEn"
+                android:text="@string/details_urls"
                 android:textAlignment="center"
                 android:textColor="@android:color/holo_blue_dark" />
         </LinearLayout>
