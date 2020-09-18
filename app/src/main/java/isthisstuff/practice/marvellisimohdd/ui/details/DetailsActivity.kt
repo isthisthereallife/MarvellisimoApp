@@ -56,7 +56,9 @@ class DetailsActivity : AppCompatActivity() {
 
         if (item.description != null) {
             if (item.description.toString().isNotBlank())
-                info = item.description.toString().replace("ï¿½", "'")
+                info = item.description.toString()
+                    .replace("ï¿½", "'")
+                    .replace("â€™", "'")
         }
 
         thumbnail = item.thumbnail.path + "." + item.thumbnail.extension
@@ -95,7 +97,7 @@ class DetailsActivity : AppCompatActivity() {
                 }
                 else -> {
                     //spara ner
-                    Log.d("ACTIVE USER INNAN: ",activeUser.toString())
+                    Log.d("ACTIVE USER INNAN: ", activeUser.toString())
 
                     realm.beginTransaction()
                     var newObject = MarvelRealmObject()
@@ -106,9 +108,9 @@ class DetailsActivity : AppCompatActivity() {
                     realm.copyToRealmOrUpdate(a)
                     realm.commitTransaction()
 
-                    Log.d("EFTER LAGT TILL","hämtat alla: "+ realm.where<User>().findAll())
+                    Log.d("EFTER LAGT TILL", "hämtat alla: " + realm.where<User>().findAll())
 
-                    Log.d("ACTIVE USER EFTER: ",activeUser.toString())
+                    Log.d("ACTIVE USER EFTER: ", activeUser.toString())
 
 
 
