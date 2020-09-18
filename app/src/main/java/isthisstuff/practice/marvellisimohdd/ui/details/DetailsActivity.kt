@@ -9,7 +9,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.squareup.picasso.Picasso
+import io.realm.Realm
+import io.realm.RealmObject
+import io.realm.RealmResults
+import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.R
+import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
+import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 
 class DetailsActivity : AppCompatActivity() {
@@ -21,15 +27,23 @@ class DetailsActivity : AppCompatActivity() {
     private var info: String? = "*NO DESCRIPTION AVAILABLE*"
     private var name: String? = "Name goes here."
     private var url_details: String? = "https://Marvel.com"
+    private lateinit var realm: Realm
+    private lateinit var activeUser: RealmResults<User>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
         setSupportActionBar(findViewById(R.id.toolbar))
 
+        //REALM
+        realm = Realm.getDefaultInstance()
+
         //TODO borde vi lägga alla findViewById här uppe? //mvhmagnus
         val urlTextView: TextView = findViewById<TextView>(R.id.details_text_view_url)
 
+
+        //hämta in user1 från databasen
+        activeUser = realm.where<User>().findAll()
 
         star = findViewById(R.id.details_favstar)
         star.setOnClickListener { changeStar() }
@@ -80,6 +94,24 @@ class DetailsActivity : AppCompatActivity() {
                     Toast.makeText(this, "Removed $name from favourites", Toast.LENGTH_SHORT).show()
                 }
                 else -> {
+                    //spara ner
+                    Log.d("ACTIVE USER INNAN: ",activeUser.toString())
+
+                    realm.beginTransaction()
+                    var newObject = MarvelRealmObject()
+                    newObject.name = item.name //se upp!!!!! series Title
+                    newObject.id = item.id
+                    activeUser[0]?.favorites?.add(newObject)
+                    val a = activeUser[0]!!
+                    realm.copyToRealmOrUpdate(a)
+                    realm.commitTransaction()
+
+                    Log.d("EFTER LAGT TILL","hämtat alla: "+ realm.where<User>().findAll())
+
+                    Log.d("ACTIVE USER EFTER: ",activeUser.toString())
+
+
+
                     star.setImageResource(R.drawable.ic_baseline_star_filled_24)
                     star.setTag("Filled")
                     Toast.makeText(this, "Added $name to favourites", Toast.LENGTH_SHORT).show()

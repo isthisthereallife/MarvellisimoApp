@@ -1,6 +1,7 @@
 package isthisstuff.practice.marvellisimohdd
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -17,18 +18,27 @@ import androidx.appcompat.widget.Toolbar
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import isthisstuff.practice.marvellisimohdd.entities.UserViewModel
+import io.realm.Realm
+import io.realm.RealmList
+import io.realm.kotlin.where
+import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
+import isthisstuff.practice.marvellisimohdd.database.User
+
 class MainActivity : AppCompatActivity() {
-    val userViewModel: UserViewModel by viewModels()
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var realm :Realm
+    private var meny : Unit? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        //val activeUser = User("testuser")
+
+        //REALM
+        realm = Realm.getDefaultInstance()
+
+
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
@@ -42,18 +52,37 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+
+    }
+    private fun saveUser(){
+
+        realm.beginTransaction()
+        val user1 = User()
+        user1.id = FirebaseAuth.getInstance().currentUser?.email
+        user1.name = FirebaseAuth.getInstance().currentUser?.displayName
+        user1.favorites = RealmList<MarvelRealmObject>()
+
+        realm.copyToRealmOrUpdate(user1)
+        realm.commitTransaction()
+
+        val result = realm.where<User>().findAll()
+        Log.d("HÄMTAT EN USER!!!!",result.toString())
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
+        meny = menuInflater.inflate(R.menu.main, menu)
         findViewById<LinearLayout>(R.id.signIn).setOnClickListener { login() }
         updateLoginDisplay()
+        saveUser()
         return true
     }
 
     override fun onResume() {
         super.onResume()
+        if (meny != null)
         updateLoginDisplay()
     }
 
@@ -62,8 +91,8 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    fun login() {
-        val fb = FirebaseApp.initializeApp(this)
+    private fun login() {
+        FirebaseApp.initializeApp(this)
         val mAuth = FirebaseAuth.getInstance()
         val currentUser = mAuth.currentUser
         if (currentUser == null) {
@@ -75,12 +104,14 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         FirebaseAuth.getInstance().signOut()
+        realm.close()
     }
 
-    fun updateLoginDisplay(){
+    private fun updateLoginDisplay(){
         if(FirebaseAuth.getInstance().currentUser!=null) {
             findViewById<TextView>(R.id.nameUser).text = FirebaseAuth.getInstance().currentUser?.displayName
             findViewById<TextView>(R.id.emailUser).text = FirebaseAuth.getInstance().currentUser?.email
         }
     }
+
 }
