@@ -3,14 +3,12 @@ package isthisstuff.practice.marvellisimohdd.database
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.entities.Thumbnail
 import isthisstuff.practice.marvellisimohdd.entities.Urls
-import java.io.Serializable
 
 open class User : RealmObject() {
     @PrimaryKey
-    var id : String? = null
+    var email : String? = null
     var name: String? = null
     var favorites: RealmList<MarvelRealmObject> = RealmList()
 
@@ -20,7 +18,13 @@ open class MarvelRealmObject : RealmObject() {
     @PrimaryKey
     var id: Int? = null
     var name: String? = null
+    val title: String? = null
+    val description: String? = null
+    val thumbnail: Thumbnail? = null
+    val urls: List<Urls>? = null
 }
+
+
 
 
 
