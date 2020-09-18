@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
 
     fun login() {
         super.onStart()
-        //val fb = FirebaseApp.initializeApp(this)
+        val fb = FirebaseApp.initializeApp(this)
 
         val mAuth = FirebaseAuth.getInstance()
 
