@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 
         val mAuth = FirebaseAuth.getInstance()
 
-        val currentUser = mAuth.getCurrentUser()
+        var currentUser = mAuth.getCurrentUser()
 
         //om är null, vi har inte loggat in
         if (currentUser == null) {
