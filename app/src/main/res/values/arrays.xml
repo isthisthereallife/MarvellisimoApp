@@ -1,12 +1,26 @@
 <resources>
-    <!-- Reply Preference -->
-    <string-array name="reply_entries">
-        <item>Reply</item>
-        <item>Reply to all</item>
+    <!-- Type of search reference -->
+    <string-array name="type_of_search_name">
+        <item>Starts with</item>
+        <item>Contains</item>
+        <item>Exact match</item>
     </string-array>
 
-    <string-array name="reply_values">
-        <item>reply</item>
-        <item>reply_all</item>
+    <string-array name="type_of_search_value">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <!-- Size of query reference -->
+    <string-array name="size_of_query_name">
+        <item>20 Items</item>
+        <item>50 Items</item>
+        <item>100 Items</item>
+    </string-array>
+    <string-array name="size_of_query_value">
+        <item>20</item>
+        <item>50</item>
+        <item>100</item>
     </string-array>
 </resources>

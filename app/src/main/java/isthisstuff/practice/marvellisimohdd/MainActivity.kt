@@ -1,8 +1,10 @@
 package isthisstuff.practice.marvellisimohdd
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.android.material.navigation.NavigationView
@@ -22,6 +24,7 @@ import io.realm.RealmList
 import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.User
+import isthisstuff.practice.marvellisimohdd.ui.settings.MySettingsActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -52,6 +55,30 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
 
+
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        meny = menuInflater.inflate(R.menu.main, menu)
+        //TODO detta ligger fel, detta angår inte OptionsMenu!
+        findViewById<LinearLayout>(R.id.signIn).setOnClickListener { login() }
+        updateLoginDisplay()
+        saveUser()
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean{
+        val id = item.itemId
+        Log.d("onOptionsItemSelected: ","CLICKED ITEM ${item.title}")
+        if (id == R.id.action_settings){
+            //kicka settings-aktiviteten
+            startActivity(Intent(this@MainActivity,MySettingsActivity::class.java))
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun saveUser() {
@@ -68,15 +95,6 @@ class MainActivity : AppCompatActivity() {
         val result = realm.where<User>().findAll()
         Log.d("HÄMTAT EN USER!!!!", result.toString())
 
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        meny = menuInflater.inflate(R.menu.main, menu)
-        findViewById<LinearLayout>(R.id.signIn).setOnClickListener { login() }
-        updateLoginDisplay()
-        saveUser()
-        return true
     }
 
     override fun onResume() {
