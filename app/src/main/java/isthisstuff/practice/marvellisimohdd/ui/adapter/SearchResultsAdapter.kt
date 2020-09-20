@@ -1,6 +1,5 @@
 package isthisstuff.practice.marvellisimohdd.ui.adapter
 
-import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
@@ -65,7 +64,9 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
         val item = data[position]
 
         //spara till cache kanske? kollar och gör /M
-        checkIfSaveResultToCacheAndIfSoSaveResultToCache(item)
+        //men tänk om detta redan kommer från cachen?? hmmmm /M
+
+        saveSearchResultToCache(item, checkIfSaveToCache())
 
         if (item.name != null) {
             holder.view.findViewById<TextView>(R.id.title_text).text = item.name
@@ -100,51 +101,59 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.search_item_view, parent, false) as LinearLayout
         realm = Realm.getDefaultInstance()
+        saveQueryToCache(query, checkIfSaveToCache())
+
         return MyViewHolder(view)
     }
 
-    private fun saveSearchQueryToCache(_query : String){
-        val searchQuery = SearchQueryRealmObject()
-        if (_query!=null){
-            searchQuery.query = _query
+    fun checkIfSaveToCache(): Boolean {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.fragment.context)
+        val saveToCacheBoolean = sharedPreferences.getBoolean("cache", false)
+        Log.d("Preferensen som heter cache har detta värde", saveToCacheBoolean.toString())
+        return saveToCacheBoolean
+    }
+
+    private fun saveQueryToCache(query: String, cachingActivated: Boolean = false) {
+        if (cachingActivated) {
+            val searchQuery = SearchQueryRealmObject()
+
+            searchQuery.query = query
             realm.beginTransaction()
             realm.copyToRealmOrUpdate(searchQuery)
             realm.commitTransaction()
-            Log.d("Search query saved to cache","Query: ${searchQuery.query}")
+            Log.d("Search query saved to cache", "Query: ${searchQuery.query}")
+            Log.d("Queries currently in cache",realm.where<SearchQueryRealmObject>().findAll().toString())
         }
     }
 
-    private fun checkIfSaveResultToCacheAndIfSoSaveResultToCache(marvelObject : MarvelObject){
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.fragment.context)
-        //vet inte varför jag skriver false här, men det funkar, så det får stå kvar /M
-        val saveToCache = sharedPreferences.getBoolean("cache",false)
-        Log.d("Preferensen som heter cache har detta värde", "Värde: $saveToCache")
-        if(saveToCache){
-            saveSearchResultToCache(marvelObject)
+    private fun saveSearchResultToCache(marvelObject: MarvelObject, cachingActivated: Boolean) {
+        if (cachingActivated) {
+            //borde vi spara ner en kopia av bilderna också? /M
+            val marvelRealmObject = MarvelRealmObject()
+            marvelRealmObject.id = marvelObject.id
+            marvelRealmObject.name = marvelObject.name
+            marvelRealmObject.title = marvelObject.title
+            marvelRealmObject.description = marvelObject.description
+            marvelRealmObject.thumbnail?.path = marvelObject.thumbnail.path
+            marvelRealmObject.thumbnail?.extension = marvelObject.thumbnail.extension
+            marvelObject.urls.forEach {
+                val urlsRealmObject = UrlsRealmObject()
+                urlsRealmObject.type = it.type
+                urlsRealmObject.url = it.url
+                marvelRealmObject.urls?.add(urlsRealmObject)
+            }
+            realm.beginTransaction()
+            realm.copyToRealmOrUpdate(marvelRealmObject)
+            realm.commitTransaction()
+            Log.d(
+                "ONE OBJECT ?SAVED? (if not saved before!)",
+                "OBJECT NAME: ${marvelRealmObject.name}"
+            )
+            Log.d(
+                "NUMBER OF CACHED MARVELOBJOKTS",
+                realm.where<MarvelRealmObject>().findAll().size.toString()
+            )
         }
-    }
-    private fun saveSearchResultToCache(marvelObject: MarvelObject) {
-        val marvelRealmObject = MarvelRealmObject()
-        marvelRealmObject.id = marvelObject.id
-        marvelRealmObject.name = marvelObject.name
-        marvelRealmObject.title = marvelObject.title
-        marvelRealmObject.description = marvelObject.description
-        marvelRealmObject.thumbnail?.path = marvelObject.thumbnail.path
-        marvelRealmObject.thumbnail?.extension = marvelObject.thumbnail.extension
-        marvelObject.urls.forEach {
-            val urlsRealmObject = UrlsRealmObject()
-            urlsRealmObject.type = it.type
-            urlsRealmObject.url = it.url
-            marvelRealmObject.urls?.add(urlsRealmObject)
-        }
-        realm.beginTransaction()
-        realm.copyToRealmOrUpdate(marvelRealmObject)
-        realm.commitTransaction()
-        Log.d("ONE OBJECT ?SAVED? (if not saved before!)", "OBJECT NAME: ${marvelRealmObject.name}")
-        Log.d(
-            "NUMBER OF CACHED MARVELOBJOKTS",
-            realm.where<MarvelRealmObject>().findAll().size.toString()
-        )
     }
 }
 

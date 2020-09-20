@@ -9,12 +9,13 @@ import io.reactivex.schedulers.Schedulers
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.retrofit.MARVEL_API_BASE_URL
 import isthisstuff.practice.marvellisimohdd.retrofit.MarvelService
+import isthisstuff.practice.marvellisimohdd.ui.adapter.SearchResultsAdapter
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MarvelViewModel:ViewModel() {
+class MarvelViewModel : ViewModel() {
     var itemsList = MutableLiveData<List<MarvelObject>>()
     private val builder = OkHttpClient.Builder()
     private val okHttpClient = builder.build()
@@ -27,19 +28,20 @@ class MarvelViewModel:ViewModel() {
         .create(MarvelService::class.java)
 
     init {
-        itemsList.value= listOf()
+        itemsList.value = listOf()
     }
 
-    fun getData(_marvelDatatype: MarvelDatatypes, _query:String, _offset: Int) {
-        //TODO spara ner datan
+    fun getData(_marvelDatatype: MarvelDatatypes, _query: String, _offset: Int) {
+
         when (_marvelDatatype) {
             MarvelDatatypes.CHARACTERS -> getCharactersContains(_query, _offset)
             MarvelDatatypes.SERIES -> getSeriesContains(_query, _offset)
         }
     }
 
+
     @SuppressLint("CheckResult")
-    fun getCharactersContains(_query: String, _offset:Int) {
+    fun getCharactersContains(_query: String, _offset: Int) {
         service.getCharacterContains(query = "%$_query", offset = _offset)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
@@ -57,7 +59,7 @@ class MarvelViewModel:ViewModel() {
     }
 
     @SuppressLint("CheckResult")
-    fun getSeriesContains(_query: String, _offset:Int) {
+    fun getSeriesContains(_query: String, _offset: Int) {
         service.getSeriesContains(query = "%$_query", offset = _offset)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())

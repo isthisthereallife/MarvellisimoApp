@@ -122,6 +122,7 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         FirebaseAuth.getInstance().signOut()
         realm.close()
+        Log.d("onDestroy","FirebaseAuth signed out, realm closed")
     }
 
     private fun updateLoginDisplay() {
