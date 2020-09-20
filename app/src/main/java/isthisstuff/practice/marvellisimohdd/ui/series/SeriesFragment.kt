@@ -39,7 +39,7 @@ class SeriesFragment : Fragment() {
 
         root.rootView.findViewById<RecyclerView>(R.id.search_results_series).adapter = adapter
         root.rootView.findViewById<ImageButton>(R.id.search_button_series)
-            .setOnClickListener { performSearch("%" + root.rootView.findViewById<EditText>(R.id.search_field_series).text.toString()) }
+            .setOnClickListener { performSearch(+ root.rootView.findViewById<EditText>(R.id.search_field_series).text.toString()) }
 
         root.rootView.findViewById<EditText>(R.id.search_field_series)
             .setOnEditorActionListener { v, actionId, event ->
