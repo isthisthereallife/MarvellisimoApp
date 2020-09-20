@@ -48,6 +48,8 @@ class CharactersFragment : Fragment() {
                 } else false
             }
 
+        //för att det inte ska se så tomt ut
+        performSearch("a",0)
         return root
     }
 

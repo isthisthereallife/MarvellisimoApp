@@ -16,14 +16,6 @@ val HASH = (ts + privateKey + apiKey).md5()
 
 
 interface MarvelService {
-    /*
-    @GET("characters?ts=$ts&apikey=$apiKey")
-    fun getAllCharacters(@Query("hash") hash: String = HASH): Single<MarvelDataWrapper>
-
-    @GET("characters?ts=$ts&apikey=$apiKey&nameStartsWith=sp")
-    fun getStartsWith(@Query("hash") hash: String = HASH): Single<MarvelDataWrapper>
-     */
-
     @GET("characters?ts=$ts&apikey=$apiKey")
     fun getCharacterContains(
         @Query("hash") hash: String = HASH,
