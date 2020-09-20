@@ -40,6 +40,7 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
     lateinit var marvelViewModel: MarvelViewModel
     lateinit var marvelDatatype: MarvelDatatypes
     lateinit var query: String
+    lateinit var preferredSearchMethod: String
     var offset: Int = 0
 
     init {
@@ -50,12 +51,14 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
         marvelViewModel: MarvelViewModel,
         marvelDatatype: MarvelDatatypes,
         query: String,
-        offset: Int
+        offset: Int,
+        preferredSearchMethod: String
     ) {
         this.marvelViewModel = marvelViewModel
         this.marvelDatatype = marvelDatatype
         this.query = query
         this.offset = offset
+        this.preferredSearchMethod = preferredSearchMethod
     }
 
     override fun getItemCount() = data.size
@@ -81,9 +84,10 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
             .setOnClickListener { openDetails(it, position) }
 
         if (position == offset + 10) {
+
             offset += 20
             Log.d("RecyclerView", "Reached the end. Position: $position \t Offset: $offset")
-            marvelViewModel.getData(marvelDatatype, query, offset)
+            marvelViewModel.getData(marvelDatatype, query, offset, preferredSearchMethod)
         }
     }
 
@@ -106,7 +110,7 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
         return MyViewHolder(view)
     }
 
-    fun checkIfSaveToCache(): Boolean {
+    private fun checkIfSaveToCache(): Boolean {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.fragment.context)
         val saveToCacheBoolean = sharedPreferences.getBoolean("cache", false)
         Log.d("Preferensen som heter cache har detta värde", saveToCacheBoolean.toString())
@@ -122,26 +126,17 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
             realm.copyToRealmOrUpdate(searchQuery)
             realm.commitTransaction()
             Log.d("Search query saved to cache", "Query: ${searchQuery.query}")
-            Log.d("Queries currently in cache",realm.where<SearchQueryRealmObject>().findAll().toString())
+            Log.d(
+                "Queries currently in cache",
+                realm.where<SearchQueryRealmObject>().findAll().toString()
+            )
         }
     }
 
     private fun saveSearchResultToCache(marvelObject: MarvelObject, cachingActivated: Boolean) {
         if (cachingActivated) {
             //borde vi spara ner en kopia av bilderna också? /M
-            val marvelRealmObject = MarvelRealmObject()
-            marvelRealmObject.id = marvelObject.id
-            marvelRealmObject.name = marvelObject.name
-            marvelRealmObject.title = marvelObject.title
-            marvelRealmObject.description = marvelObject.description
-            marvelRealmObject.thumbnail?.path = marvelObject.thumbnail.path
-            marvelRealmObject.thumbnail?.extension = marvelObject.thumbnail.extension
-            marvelObject.urls.forEach {
-                val urlsRealmObject = UrlsRealmObject()
-                urlsRealmObject.type = it.type
-                urlsRealmObject.url = it.url
-                marvelRealmObject.urls?.add(urlsRealmObject)
-            }
+            val marvelRealmObject = convertMarvelObjectToMarvelRealmObject(marvelObject)
             realm.beginTransaction()
             realm.copyToRealmOrUpdate(marvelRealmObject)
             realm.commitTransaction()
@@ -154,6 +149,24 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
                 realm.where<MarvelRealmObject>().findAll().size.toString()
             )
         }
+    }
+
+    private fun convertMarvelObjectToMarvelRealmObject(marvelObject: MarvelObject): MarvelRealmObject {
+
+        val marvelRealmObject = MarvelRealmObject()
+        marvelRealmObject.id = marvelObject.id
+        marvelRealmObject.name = marvelObject.name
+        marvelRealmObject.title = marvelObject.title
+        marvelRealmObject.description = marvelObject.description
+        marvelRealmObject.thumbnail?.path = marvelObject.thumbnail.path
+        marvelRealmObject.thumbnail?.extension = marvelObject.thumbnail.extension
+        marvelObject.urls.forEach {
+            val urlsRealmObject = UrlsRealmObject()
+            urlsRealmObject.type = it.type
+            urlsRealmObject.url = it.url
+            marvelRealmObject.urls?.add(urlsRealmObject)
+        }
+        return marvelRealmObject
     }
 }
 

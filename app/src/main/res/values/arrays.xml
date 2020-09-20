@@ -7,9 +7,9 @@
     </string-array>
 
     <string-array name="type_of_search_value">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
+        <item>startsWith</item>
+        <item>contains</item>
+        <item>strict</item>
     </string-array>
 
     <!-- Size of query reference -->

@@ -25,10 +25,47 @@ interface MarvelService {
      */
 
     @GET("characters?ts=$ts&apikey=$apiKey")
-    fun getCharacterContains(@Query("hash") hash: String = HASH, @Query("nameStartsWith") query:String, @Query("offset") offset:Int = 0): Single<MarvelDataWrapper>
+    fun getCharacterContains(
+        @Query("hash") hash: String = HASH,
+        @Query("nameStartsWith") query: String,
+        @Query("offset") offset: Int = 0
+    ): Single<MarvelDataWrapper>
 
     @GET("series?ts=$ts&apikey=$apiKey")
-    fun getSeriesContains(@Query("hash") hash: String = HASH, @Query("titleStartsWith") query:String, @Query("offset") offset: Int = 0): Single<MarvelDataWrapper>
+    fun getSeriesContains(
+        @Query("hash") hash: String = HASH,
+        @Query("titleStartsWith") query: String,
+        @Query("offset") offset: Int = 0
+    ): Single<MarvelDataWrapper>
+
+    @GET("characters?ts=$ts&apikey=$apiKey")
+    fun getCharacterStartsWith(
+        @Query("hash") hash: String = HASH,
+        @Query("nameStartsWith") query: String,
+        @Query("offset") offset: Int = 0
+    ): Single<MarvelDataWrapper>
+
+    @GET("series?ts=$ts&apikey=$apiKey")
+    fun getSeriesStartsWith(
+        @Query("hash") hash: String = HASH,
+        @Query("titleStartsWith") query: String,
+        @Query("offset") offset: Int = 0
+    ): Single<MarvelDataWrapper>
+
+    @GET("characters?ts=$ts&apikey=$apiKey")
+    fun getCharacterStrict(
+        @Query("hash") hash: String = HASH,
+        @Query("name") query: String,
+        @Query("offset") offset: Int = 0
+    ): Single<MarvelDataWrapper>
+
+    @GET("series?ts=$ts&apikey=$apiKey")
+    fun getSeriesStrict(
+        @Query("hash") hash: String = HASH,
+        @Query("title") query: String,
+        @Query("offset") offset: Int = 0
+    ): Single<MarvelDataWrapper>
+
 }
 
 fun String.md5(): String {

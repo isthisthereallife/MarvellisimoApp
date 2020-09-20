@@ -31,12 +31,35 @@ class MarvelViewModel : ViewModel() {
         itemsList.value = listOf()
     }
 
-    fun getData(_marvelDatatype: MarvelDatatypes, _query: String, _offset: Int) {
+    fun getData(
+        _marvelDatatype: MarvelDatatypes,
+        _query: String,
+        _offset: Int,
+        preferredSearchMethod: String?
+    ) {
+        when (preferredSearchMethod) {
+            "contains" -> {
+                when (_marvelDatatype) {
+                    MarvelDatatypes.CHARACTERS -> getCharactersContains(_query, _offset)
+                    MarvelDatatypes.SERIES -> getSeriesContains(_query, _offset)
+                }
+            }
+            "startsWith" -> {
+                when (_marvelDatatype) {
+                    MarvelDatatypes.CHARACTERS -> getCharactersStartsWith(_query, _offset)
+                    MarvelDatatypes.SERIES -> getSeriesStartsWith(_query, _offset)
+                }
+            }
+            "strict" -> {
+                when (_marvelDatatype) {
+                    MarvelDatatypes.CHARACTERS -> getCharactersStrict(_query, _offset)
+                    MarvelDatatypes.SERIES -> getSeriesStrict(_query, _offset)
+                }
+            }
 
-        when (_marvelDatatype) {
-            MarvelDatatypes.CHARACTERS -> getCharactersContains(_query, _offset)
-            MarvelDatatypes.SERIES -> getSeriesContains(_query, _offset)
         }
+
+
     }
 
 
@@ -59,8 +82,80 @@ class MarvelViewModel : ViewModel() {
     }
 
     @SuppressLint("CheckResult")
+    fun getCharactersStartsWith(_query: String, _offset: Int) {
+        service.getCharacterStartsWith(query = _query, offset = _offset)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { result, err ->
+                if (err?.message != null)
+                    Log.d("__", "Error getAll " + err.message)
+                else {
+                    Log.d("__", "I got a DataWrapper $result")
+
+                    result.data.results.forEach {
+                        itemsList.value = itemsList.value?.plus(it)
+                    }
+                }
+            }
+    }
+
+    @SuppressLint("CheckResult")
+    fun getCharactersStrict(_query: String, _offset: Int) {
+        service.getCharacterStrict(query = _query, offset = _offset)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { result, err ->
+                if (err?.message != null)
+                    Log.d("__", "Error getAll " + err.message)
+                else {
+                    Log.d("__", "I got a DataWrapper $result")
+
+                    result.data.results.forEach {
+                        itemsList.value = itemsList.value?.plus(it)
+                    }
+                }
+            }
+    }
+
+    @SuppressLint("CheckResult")
     fun getSeriesContains(_query: String, _offset: Int) {
         service.getSeriesContains(query = "%$_query", offset = _offset)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { result, err ->
+                if (err?.message != null)
+                    Log.d("__", "Error getAll " + err.message)
+                else {
+                    Log.d("__", "I got a DataWrapper $result")
+
+                    result.data.results.forEach {
+                        itemsList.value = itemsList.value?.plus(it)
+                    }
+                }
+            }
+    }
+
+    @SuppressLint("CheckResult")
+    fun getSeriesStartsWith(_query: String, _offset: Int) {
+        service.getSeriesStartsWith(query = _query, offset = _offset)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { result, err ->
+                if (err?.message != null)
+                    Log.d("__", "Error getAll " + err.message)
+                else {
+                    Log.d("__", "I got a DataWrapper $result")
+
+                    result.data.results.forEach {
+                        itemsList.value = itemsList.value?.plus(it)
+                    }
+                }
+            }
+    }
+
+    @SuppressLint("CheckResult")
+    fun getSeriesStrict(_query: String, _offset: Int) {
+        service.getSeriesStrict(query = _query, offset = _offset)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { result, err ->
