@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import io.realm.Realm
@@ -17,6 +18,7 @@ import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.MyViewHolder
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
+import isthisstuff.practice.marvellisimohdd.database.SearchQueryRealmObject
 import isthisstuff.practice.marvellisimohdd.database.UrlsRealmObject
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
@@ -42,7 +44,7 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
     var offset: Int = 0
 
     init {
-        //TODO lägg findViewById-grejjerna häri
+        //TODO lägg findViewById-grejjerna häri? /M
     }
 
     fun saveRequestData(
@@ -61,8 +63,10 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val item = data[position]
-        //spara till Realm
-        saveSearchResultToCache(item)
+
+        //spara till cache kanske? kollar och gör /M
+        checkIfSaveResultToCacheAndIfSoSaveResultToCache(item)
+
         if (item.name != null) {
             holder.view.findViewById<TextView>(R.id.title_text).text = item.name
         } else {
@@ -82,7 +86,7 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
         }
     }
 
-    fun openDetails(view: View, position: Int) {
+    private fun openDetails(view: View, position: Int) {
         Log.d(
             "searchResultClicked",
             "klickade på view: $view \n och this: $this \n och this.data:${this.data[position]}"
@@ -99,6 +103,26 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
         return MyViewHolder(view)
     }
 
+    private fun saveSearchQueryToCache(_query : String){
+        val searchQuery = SearchQueryRealmObject()
+        if (_query!=null){
+            searchQuery.query = _query
+            realm.beginTransaction()
+            realm.copyToRealmOrUpdate(searchQuery)
+            realm.commitTransaction()
+            Log.d("Search query saved to cache","Query: ${searchQuery.query}")
+        }
+    }
+
+    private fun checkIfSaveResultToCacheAndIfSoSaveResultToCache(marvelObject : MarvelObject){
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.fragment.context)
+        //vet inte varför jag skriver false här, men det funkar, så det får stå kvar /M
+        val saveToCache = sharedPreferences.getBoolean("cache",false)
+        Log.d("Preferensen som heter cache har detta värde", "Värde: $saveToCache")
+        if(saveToCache){
+            saveSearchResultToCache(marvelObject)
+        }
+    }
     private fun saveSearchResultToCache(marvelObject: MarvelObject) {
         val marvelRealmObject = MarvelRealmObject()
         marvelRealmObject.id = marvelObject.id

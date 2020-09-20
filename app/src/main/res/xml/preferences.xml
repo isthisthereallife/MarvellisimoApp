@@ -17,12 +17,12 @@
             app:key="list_search_mode"
             app:title="Search mode"
             app:defaultValue="2"
-            app:summary="How the search is performed"/>
-
+            app:summary="Edit search mode"/>
+<!--
         <SwitchPreferenceCompat
             app:key="inclusive_search"
             app:title="Enable generous searching" />
-
+-->
     </PreferenceCategory>
 
 
@@ -30,9 +30,10 @@
 
         <SwitchPreferenceCompat
             app:key="cache"
-            app:summaryOff="No save to cache. App will not work in offline mode"
-            app:summaryOn="Saving queries to cache"
-            app:title="Save to cache" />
+            app:summaryOff="Not saving to cache. App will not work in offline mode"
+            app:summaryOn="Saving your queries and results to cache"
+            app:title="Save to cache"
+            app:defaultValue="false"/>
 
 
     </PreferenceCategory>

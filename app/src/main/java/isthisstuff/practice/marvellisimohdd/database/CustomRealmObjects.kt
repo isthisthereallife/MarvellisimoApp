@@ -38,6 +38,12 @@ open class UrlsRealmObject : RealmObject() {
     var type: String? = null
 }
 
+open class SearchQueryRealmObject : RealmObject(){
+    @PrimaryKey
+    var query : String? = null
+}
+
+
 /*
 User
 
