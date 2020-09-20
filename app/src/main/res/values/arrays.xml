@@ -1,0 +1,26 @@
+<resources>
+    <!-- Type of search reference -->
+    <string-array name="type_of_search_name">
+        <item>Starts with</item>
+        <item>Contains</item>
+        <item>Exact match</item>
+    </string-array>
+
+    <string-array name="type_of_search_value">
+        <item>startsWith</item>
+        <item>contains</item>
+        <item>strict</item>
+    </string-array>
+
+    <!-- Size of query reference -->
+    <string-array name="size_of_query_name">
+        <item>20 Items</item>
+        <item>50 Items</item>
+        <item>100 Items</item>
+    </string-array>
+    <string-array name="size_of_query_value">
+        <item>20</item>
+        <item>50</item>
+        <item>100</item>
+    </string-array>
+</resources>

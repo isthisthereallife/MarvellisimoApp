@@ -23,9 +23,6 @@ open class MarvelRealmObject : RealmObject() {
     var urls: RealmList<UrlsRealmObject>? = RealmList()
 }
 
-//JAG VILL INTE SPARA THUMBNAIL MEN JAG MÅSTE TYDLIGEN
-
-
 open class ThumbnailRealmObject : RealmObject() {
     @PrimaryKey
     var path: String? = null
@@ -37,6 +34,12 @@ open class UrlsRealmObject : RealmObject() {
     var url: String? = null
     var type: String? = null
 }
+
+open class SearchQueryRealmObject : RealmObject(){
+    @PrimaryKey
+    var query : String? = null
+}
+
 
 /*
 User
