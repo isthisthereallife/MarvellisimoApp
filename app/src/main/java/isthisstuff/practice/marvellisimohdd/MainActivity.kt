@@ -28,8 +28,9 @@ import isthisstuff.practice.marvellisimohdd.ui.settings.MySettingsActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var realm: Realm
-    private var meny: Unit? = null
+
+    private val realm: Realm = Realm.getDefaultInstance()
+    private var menuInflated: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,13 +38,10 @@ class MainActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        //REALM
-        realm = Realm.getDefaultInstance()
-
-
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
+        //val navHeader = findViewById<>()
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as a top level destination.
         appBarConfiguration = AppBarConfiguration(
@@ -53,20 +51,14 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-
-
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        meny = menuInflater.inflate(R.menu.main, menu)
-        //TODO detta ligger fel, detta angår inte OptionsMenu!
+        menuInflater.inflate(R.menu.main, menu)
+        menuInflated = true
         findViewById<LinearLayout>(R.id.signIn).setOnClickListener { login() }
         updateLoginDisplay()
-        saveUser()
-
         return true
     }
 
@@ -82,25 +74,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun saveUser() {
-
         realm.beginTransaction()
-        val user1 = User()
-        user1.email = FirebaseAuth.getInstance().currentUser?.email
-        user1.name = FirebaseAuth.getInstance().currentUser?.displayName
-        user1.favorites = RealmList<MarvelRealmObject>()
+        val newUser = User()
+        newUser.email = FirebaseAuth.getInstance().currentUser?.email
+        newUser.name = FirebaseAuth.getInstance().currentUser?.displayName
+        newUser.favorites = RealmList<MarvelRealmObject>()
 
-        realm.copyToRealmOrUpdate(user1)
+        realm.copyToRealmOrUpdate(newUser)
         realm.commitTransaction()
 
-        val result = realm.where<User>().findAll()
-        Log.d("HÄMTAT EN USER!!!!", result.toString())
-
+        val user = realm.where<User>().findFirst()
+        println("Saved new user: ${user!!.name}")
     }
 
     override fun onResume() {
         super.onResume()
-        if (meny != null)
+        if (menuInflated) {
+            val user = realm.where<User>().findFirst()
+            if(user==null) {
+                saveUser()
+            }
             updateLoginDisplay()
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
