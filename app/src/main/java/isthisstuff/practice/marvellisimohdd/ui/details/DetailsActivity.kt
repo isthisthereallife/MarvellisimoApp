@@ -3,6 +3,8 @@ package isthisstuff.practice.marvellisimohdd.ui.details
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -18,11 +20,13 @@ import isthisstuff.practice.marvellisimohdd.convertMarvelObjectToMarvelRealmObje
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
+import isthisstuff.practice.marvellisimohdd.ui.series.SeriesFragment
 
 class DetailsActivity : AppCompatActivity() {
 
     private val realm: Realm = Realm.getDefaultInstance()
     private lateinit var item: MarvelObject
+
 
     private lateinit var detailsName:TextView
     private lateinit var detailsImage:ImageView
@@ -135,6 +139,11 @@ class DetailsActivity : AppCompatActivity() {
                     )
                 )
             }
+        }
+
+        val button = findViewById<Button>(R.id.button_series)
+        button.setOnClickListener{
+            Toast.makeText(this.applicationContext, "Redirect", Toast.LENGTH_SHORT).show()
         }
 
         detailsName.text = name
