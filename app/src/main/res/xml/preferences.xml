@@ -18,11 +18,7 @@
             app:key="list_search_mode"
             app:summary="Edit search mode"
             app:title="Search mode" />
-        <!--
-                <SwitchPreferenceCompat
-                    app:key="inclusive_search"
-                    app:title="Enable generous searching" />
-        -->
+
     </PreferenceCategory>
 
 
