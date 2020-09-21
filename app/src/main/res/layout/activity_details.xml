@@ -5,18 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryColor"
-    tools:context=".ui.details.DetailsActivity"
-
-
-    >
+    tools:context=".ui.details.DetailsActivity">
 
     <LinearLayout
+
         android:id="@+id/linearLayoutDetailsTop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+
             android:id="@+id/details_arrow_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,6 +26,7 @@
             android:src="@drawable/ic_baseline_arrow_back_24" />
 
         <ImageView
+
             android:background="@drawable/round_outline"
             android:id="@+id/imageView2"
             android:layout_width="192dp"
@@ -43,6 +43,7 @@
             tools:src="@tools:sample/avatars" />
 
         <ImageView
+
             android:id="@+id/details_favstar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -50,11 +51,12 @@
             android:paddingEnd="20dp"
             android:maxHeight="100dp"
             android:minHeight="100dp"
-
             android:src="@drawable/ic_baseline_star_border_24" />
+
     </LinearLayout>
 
     <TextView
+
         android:id="@+id/details_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -70,6 +72,7 @@
         tools:text="TEMPLATE TITLE" />
 
     <ScrollView
+
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -81,6 +84,7 @@
         >
 
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -88,7 +92,7 @@
             <TextView
 
                 android:id="@+id/text_details"
-                android:layout_width="match_parent"
+                android:layout_width="400dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:autoLink="web"
@@ -99,17 +103,35 @@
                 android:textSize="20sp" />
 
             <TextView
+
                 android:id="@+id/details_text_view_url"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="300dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
                 android:autoLink="web"
                 android:padding="16dp"
                 android:text="@string/details_urls"
                 tools:text="Details"
                 android:textSize="30sp"
                 android:textAlignment="center"
-                android:textColor="@android:color/holo_blue_dark" />
+                android:textColor="@color/secondaryTextColor"
+                android:background="@drawable/rounded_top_button"/>
+
+            <Button
+
+                android:id="@+id/button_series"
+                android:layout_width="300dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:textSize="20sp"
+                android:text="See series from this character"
+                android:textColor="@color/secondaryTextColor"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_bottom_button" />
+
+
         </LinearLayout>
+
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

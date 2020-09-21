@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -15,6 +16,7 @@ import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
+import isthisstuff.practice.marvellisimohdd.ui.series.SeriesFragment
 
 class DetailsActivity : AppCompatActivity() {
 
@@ -24,6 +26,7 @@ class DetailsActivity : AppCompatActivity() {
         "https://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
     private var info: String? = "*NO DESCRIPTION AVAILABLE*"
     private var name: String? = "Name goes here."
+    private lateinit var series: List<MarvelObject>
     private var urlDetails: String? = "https://Marvel.com"
     private lateinit var realm: Realm
     private lateinit var activeUser: User
@@ -79,10 +82,16 @@ class DetailsActivity : AppCompatActivity() {
             }
             urlTextView.text = urlDetails
         }
+
         findViewById<ImageView>(R.id.details_arrow_back).setOnClickListener { finish() }
         findViewById<TextView>(R.id.details_name).text = name
         findViewById<TextView>(R.id.text_details).text = info
         Picasso.get().load(thumbnail).into(findViewById<ImageView>(R.id.imageView2))
+
+        val button = findViewById<Button>(R.id.button_series)
+        button.setOnClickListener{
+            Toast.makeText(this.applicationContext, "Redirect", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun changeStar() {
