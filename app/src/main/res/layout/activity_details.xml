@@ -91,7 +91,7 @@
 
             <TextView
 
-                android:id="@+id/text_details"
+                android:id="@+id/details_text"
                 android:layout_width="400dp"
 
                 android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
 
             <TextView
 
-                android:id="@+id/details_text_view_url"
+                android:id="@+id/details_link_more"
                 android:layout_width="300dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
