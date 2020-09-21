@@ -62,6 +62,10 @@ class MainActivity : AppCompatActivity() {
         })
         //end of FIREBASE cloud messaging
 
+        //PURGE all null users
+        realm.executeTransaction {
+            realm.where<User>().isNull("email").findAll().deleteAllFromRealm()
+        }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)

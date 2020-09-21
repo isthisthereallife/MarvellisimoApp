@@ -25,7 +25,7 @@
     <PreferenceCategory app:title="Cache Preferences">
 
         <SwitchPreferenceCompat
-            app:defaultValue="false"
+            app:defaultValue="true"
             app:key="cache"
             app:summaryOff="Not saving to cache. App will not work in offline mode"
             app:summaryOn="Saving your queries and results to cache"

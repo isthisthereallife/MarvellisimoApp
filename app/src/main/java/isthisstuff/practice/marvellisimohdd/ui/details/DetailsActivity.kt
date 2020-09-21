@@ -3,6 +3,7 @@ package isthisstuff.practice.marvellisimohdd.ui.details
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -60,8 +61,11 @@ class DetailsActivity : AppCompatActivity() {
         detailsFavStar.setOnClickListener { setFavorite() }
         detailsBackArrow.setOnClickListener { finish() }
 
+        Log.d("DetailsActivity innan activeUser - null check","activeUser=$activeUser")
         if(activeUser!=null) {
             dbUser = realm.where<User>().equalTo("email", activeUser!!.email).findFirst()
+            Log.d("PRINTAR ALLA USERS I DATABASEN",realm.where<User>().findAll().toString())
+            Log.d("DetailsActivity innan loopa dbUsers favoriter","dbUser=$dbUser")
 
             for(x in dbUser!!.favorites) {
                 if(x.id == item.id) {
@@ -143,4 +147,6 @@ class DetailsActivity : AppCompatActivity() {
         thumbnail = item.thumbnail.path + "." + item.thumbnail.extension
         Picasso.get().load(thumbnail).into(detailsImage)
     }
+
+
 }
