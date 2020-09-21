@@ -69,7 +69,7 @@ val result = realm.where<User>()
 
 
 DELETE
-gör en sökning och appenda :deleteAllFromRealm() på resultatet
+gör en sökning och appenda .deleteAllFromRealm() på resultatet
 
 
 

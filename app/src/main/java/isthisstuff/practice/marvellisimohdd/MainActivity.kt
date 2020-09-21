@@ -1,5 +1,6 @@
 package isthisstuff.practice.marvellisimohdd
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -17,19 +19,28 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.firebase.ui.auth.AuthUI
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.firebase.messaging.RemoteMessage
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.User
+import isthisstuff.practice.marvellisimohdd.firebase.MyFirebaseMessagingService
 import isthisstuff.practice.marvellisimohdd.ui.settings.MySettingsActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var realm: Realm
     private var meny: Unit? = null
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +51,19 @@ class MainActivity : AppCompatActivity() {
         //REALM
         realm = Realm.getDefaultInstance()
 
+        //FIREBASE cloud messaging
+        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener(OnCompleteListener { task ->
+            if(!task.isSuccessful){
+                Log.w("FAILURE! Tried to get a FirebaseInstanceID.getInstance().instanceID", "getInstanceID failed", task.exception)
+                return@OnCompleteListener
+            }
+            val token = task.result?.token
+
+            val msg = getString(R.string.msg_token_fmt,token)
+            Log.d("Got a token","Token is: $msg")
+            Toast.makeText(baseContext,"is there anything here?: $msg",Toast.LENGTH_SHORT).show()
+        })
+        //end of FIREBASE cloud messaging
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
@@ -69,6 +93,7 @@ class MainActivity : AppCompatActivity() {
 
         return true
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean{
         val id = item.itemId
