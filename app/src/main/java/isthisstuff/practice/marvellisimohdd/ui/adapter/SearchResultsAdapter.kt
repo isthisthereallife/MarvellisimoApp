@@ -16,6 +16,7 @@ import io.realm.Realm
 import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.MyViewHolder
+import isthisstuff.practice.marvellisimohdd.convertMarvelObjectToMarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.SearchQueryRealmObject
 import isthisstuff.practice.marvellisimohdd.database.UrlsRealmObject
@@ -149,24 +150,6 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
                 realm.where<MarvelRealmObject>().findAll().size.toString()
             )
         }
-    }
-
-    private fun convertMarvelObjectToMarvelRealmObject(marvelObject: MarvelObject): MarvelRealmObject {
-
-        val marvelRealmObject = MarvelRealmObject()
-        marvelRealmObject.id = marvelObject.id
-        marvelRealmObject.name = marvelObject.name
-        marvelRealmObject.title = marvelObject.title
-        marvelRealmObject.description = marvelObject.description
-        marvelRealmObject.thumbnail?.path = marvelObject.thumbnail.path
-        marvelRealmObject.thumbnail?.extension = marvelObject.thumbnail.extension
-        marvelObject.urls.forEach {
-            val urlsRealmObject = UrlsRealmObject()
-            urlsRealmObject.type = it.type
-            urlsRealmObject.url = it.url
-            marvelRealmObject.urls?.add(urlsRealmObject)
-        }
-        return marvelRealmObject
     }
 }
 
