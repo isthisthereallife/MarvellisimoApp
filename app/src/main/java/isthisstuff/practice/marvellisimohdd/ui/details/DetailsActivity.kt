@@ -12,19 +12,16 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import io.realm.Realm
-import io.realm.RealmObject
 import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.convertMarvelObjectToMarvelRealmObject
-import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.ui.series.SeriesFragment
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+
 
 class DetailsActivity : AppCompatActivity() {
 
@@ -38,6 +35,8 @@ class DetailsActivity : AppCompatActivity() {
     private lateinit var detailsLinkMore:TextView
     private lateinit var detailsFavStar:ImageView
     private lateinit var detailsBackArrow:ImageView
+    private lateinit var detailsSeries:Button
+    private lateinit var detailsMessage:Button
 
     private var name: String = "Name goes here."
     private var description: String = "*NO DESCRIPTION AVAILABLE*"
@@ -60,6 +59,9 @@ class DetailsActivity : AppCompatActivity() {
         detailsLinkMore = findViewById<TextView>(R.id.details_link_more)
         detailsFavStar = findViewById<ImageView>(R.id.details_favstar)
         detailsBackArrow = findViewById<ImageView>(R.id.details_arrow_back)
+        detailsSeries = findViewById<Button>(R.id.button_series)
+        detailsMessage = findViewById<Button>(R.id.button_message)
+
 
         item = (intent.getSerializableExtra("item") as MarvelObject)
 
@@ -67,12 +69,14 @@ class DetailsActivity : AppCompatActivity() {
 
         detailsFavStar.setOnClickListener { setFavorite() }
         detailsBackArrow.setOnClickListener { finish() }
+        detailsSeries.setOnClickListener { showCharacterSeries() }
+        detailsMessage.setOnClickListener { sendToFriend(item) }
 
-        Log.d("DetailsActivity innan activeUser - null check","activeUser=$activeUser")
+        Log.d("DetailsActivity innan activeUser - null check", "activeUser=$activeUser")
         if(activeUser!=null) {
             dbUser = realm.where<User>().equalTo("email", activeUser!!.email).findFirst()
-            Log.d("PRINTAR ALLA USERS I DATABASEN",realm.where<User>().findAll().toString())
-            Log.d("DetailsActivity innan loopa dbUsers favoriter","dbUser=$dbUser")
+            Log.d("PRINTAR ALLA USERS I DATABASEN", realm.where<User>().findAll().toString())
+            Log.d("DetailsActivity innan loopa dbUsers favoriter", "dbUser=$dbUser")
 
             for(x in dbUser!!.favorites) {
                 if(x.id == item.id) {
@@ -95,7 +99,9 @@ class DetailsActivity : AppCompatActivity() {
                             dbUser!!.favorites.remove(x)
                             realm.copyToRealmOrUpdate(dbUser)
                         }
-                        println(realm.where<User>().equalTo("email", activeUser!!.email).findFirst())
+                        println(
+                            realm.where<User>().equalTo("email", activeUser!!.email).findFirst()
+                        )
                         break
                     }
                 }
@@ -107,7 +113,7 @@ class DetailsActivity : AppCompatActivity() {
                 favorite = true
 
                 realm.executeTransaction {
-                    var newFavorite = convertMarvelObjectToMarvelRealmObject(item)
+                    val newFavorite = convertMarvelObjectToMarvelRealmObject(item)
                     dbUser!!.favorites.add(newFavorite)
                     realm.copyToRealmOrUpdate(dbUser)
                 }
@@ -148,17 +154,6 @@ class DetailsActivity : AppCompatActivity() {
             }
         }
 
-        val button = findViewById<Button>(R.id.button_series)
-        button.setOnClickListener{
-            Toast.makeText(this.applicationContext, "Redirect", Toast.LENGTH_SHORT).show()
-            showSeries(item)
-        }
-
-        val buttonSend = findViewById<Button>(R.id.button_message)
-        buttonSend.setOnClickListener{
-            sendToFriend(item)
-        }
-
         detailsName.text = name
         detailsText.text = description
         detailsLinkMore.text = urlDetails
@@ -166,12 +161,14 @@ class DetailsActivity : AppCompatActivity() {
         Picasso.get().load(thumbnail).into(detailsImage)
     }
 
+    private fun showCharacterSeries(){
 
-    private fun showSeries(marvelObject: MarvelObject) {
-
+        Toast.makeText(this.applicationContext, item.name.toString(), Toast.LENGTH_SHORT).show()
+        (supportFragmentManager.findFragmentById(R.id.search_results_series) as SeriesFragment?)?.performSearch(item.name.toString())
     }
 
-    fun sendToFriend(marvelObject : MarvelObject){
+
+    private fun sendToFriend(marvelObject: MarvelObject){
         if(activeUser!=null){
         val listOfUsers = getActiveUsers()
         val database = FirebaseDatabase.getInstance()
@@ -182,15 +179,15 @@ class DetailsActivity : AppCompatActivity() {
         //jag är denna -> getString(R.string.msg_token_fmt,token)
         //jag är denna -> activeUser.email
         val timestamp = LocalDateTime.now()
-        val timestring = timestamp.toString().replace(".",":")
+        val timestring = timestamp.toString().replace(".", ":")
 
 
-        Log.d("CURRENT TIME FORMATTED","timestamp: $timestring")
-        var sender = activeUser?.email.toString()
+        Log.d("CURRENT TIME FORMATTED", "timestamp: $timestring")
+        val sender = activeUser?.email.toString()
         val target = "put@target.here"
 
         val message = "SENDER<${removeDotFromEmail(sender)}>RECIEVER<${removeDotFromEmail(target)}>TIME<$timestring>"
-        Log.d("MESSEAGEE",message)
+        Log.d("MESSEAGEE", message)
         val myReference = database.getReference(message)
 
 
@@ -211,13 +208,13 @@ class DetailsActivity : AppCompatActivity() {
         val listOfUserEmails = mutableListOf<String>()
         val ref = FirebaseDatabase.getInstance().getReference("currentUsers")
 
-        Log.d("What do i get here?????????",ref.toString())
+        Log.d("What do i get here?????????", ref.toString())
 
         return listOfUserEmails
     }
 
-    fun removeDotFromEmail(email : String?) : String?{
-        return email?.replace(".",",")
+    fun removeDotFromEmail(email: String?) : String?{
+        return email?.replace(".", ",")
     }
 
 }

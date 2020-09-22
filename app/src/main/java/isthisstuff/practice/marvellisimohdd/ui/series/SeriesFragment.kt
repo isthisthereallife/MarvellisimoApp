@@ -31,7 +31,7 @@ class SeriesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        marvelViewModel.itemsList.observe(viewLifecycleOwner, Observer {
+        marvelViewModel.itemsList.observe(viewLifecycleOwner, {
             adapter.data = it
         })
 
@@ -54,7 +54,7 @@ class SeriesFragment : Fragment() {
         return root
     }
 
-    private fun performSearch(query: String, offset: Int = 0) {
+    fun performSearch(query: String, offset: Int = 0) {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
         var preferredSearchMethod = sharedPreferences.getString("list_search_mode", "")
         Log.d("kolla, såhär har du valt att söka", "$preferredSearchMethod")
