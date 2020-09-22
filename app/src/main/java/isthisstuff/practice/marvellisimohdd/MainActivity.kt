@@ -2,6 +2,7 @@ package isthisstuff.practice.marvellisimohdd
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Message
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -17,11 +18,16 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -39,7 +45,9 @@ class MainActivity : AppCompatActivity() {
 
     private val realm: Realm = Realm.getDefaultInstance()
     private var menuInflated: Boolean = false
-
+    private var database = FirebaseDatabase.getInstance()
+    private var databaseCurrentUsersReference = database.getReference("currentUsers")
+    var concurrentUsersHashMap = HashMap<String,String>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +55,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+
+
+
 
         //FIREBASE cloud messaging
         FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener(OnCompleteListener { task ->
@@ -62,10 +74,31 @@ class MainActivity : AppCompatActivity() {
         })
         //end of FIREBASE cloud messaging
 
+        //FIREBASE database
+        val userListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot){
+                    val user = dataSnapshot.value
+                    //wth is is this
+                Log.d("userListener -> onDataChange -> dataSnapshot.value",user.toString())
+                //spara till nån lista kanske?
+                concurrentUsersHashMap = user as HashMap<String,String>
+                Log.d("TRYING TO LOG CURRENT USERS (THIS WON'T WORK",concurrentUsersHashMap.toString())
+
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.w("userListener -> onCancelled",databaseError.toException())
+                //do something here?
+            }
+        }
+
+
         //PURGE all null users
         realm.executeTransaction {
             realm.where<User>().isNull("email").findAll().deleteAllFromRealm()
         }
+        databaseCurrentUsersReference.addValueEventListener(userListener)
+
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
@@ -119,11 +152,22 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (menuInflated) {
-            val user = realm.where<User>().findFirst()
-            if(user==null) {
+
+            //hämta inloggad
+            val u = FirebaseAuth.getInstance().currentUser?.email
+            val user = realm.where<User>().equalTo("email", u).findFirst()
+
+
+            if (user == null) {
                 saveUser()
             }
             updateLoginDisplay()
+            //kommer om användaren redan står som inloggad, skriv inte igen
+            if (!concurrentUsersHashMap.containsValue(u.toString().replace(".", ","))) {
+                databaseCurrentUsersReference.push().setValue(
+                    FirebaseAuth.getInstance().currentUser?.email.toString().replace(".", ",")
+                )
+            }
         }
     }
 
@@ -144,6 +188,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+
+        //val userEmailWithoutDots = realm.where<User>().findFirst().toString().replace(".","")
+        FirebaseDatabase.getInstance().getReference("currentUsers").removeValue()
+
         FirebaseAuth.getInstance().signOut()
         realm.close()
         Log.d("onDestroy","FirebaseAuth signed out, realm closed")
