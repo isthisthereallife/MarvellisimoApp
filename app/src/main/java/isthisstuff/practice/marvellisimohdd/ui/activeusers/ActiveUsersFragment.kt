@@ -23,17 +23,26 @@ class ActiveUsersFragment : Fragment() {
         //FIREBASE database
         val userListener = object : ValueEventListener {
             var concurrentUsersHashMap = HashMap<String, String>()
+
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val user = dataSnapshot.value
-                //wth is is this
+
+                //detta skriver ut alla users från currentUsers i Firebase Realtime Database
                 Log.d("userListener -> onDataChange -> dataSnapshot.value", user.toString())
 
                 if (user != null) {
                     concurrentUsersHashMap = user as HashMap<String, String>
                     Log.d("CURRENT USERS", concurrentUsersHashMap.toString())
-
+                    //DETTA HÄR OVANFÖR FUNKAR!
+                    //TODO
+                    //DETTA HÄR UNDER ÄR FELET
                     concurrentUsersHashMap.forEach { it ->
+                        Log.d("Value to save to adapter.data",it.value)
                         adapter.data = adapter.data.plus(it.value)
+
+                        //TODO denna ändrar inte värdet på data i ActiveUsersAdapter (eftersom jag inte når denna)
+                        Log.d("VÄRDET PÅ ADAPTERNS DATA",adapter.data.toString())
+                        adapter.notifyItemInserted(adapter.data.size-1)
                     }
                 }
             }

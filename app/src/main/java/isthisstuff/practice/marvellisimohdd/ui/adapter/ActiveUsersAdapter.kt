@@ -12,7 +12,8 @@ import isthisstuff.practice.marvellisimohdd.R
 class ActiveUsersAdapter() : RecyclerView.Adapter<MyActiveUsersViewHolder>() {
     lateinit var itemEmail: TextView
 
-    var data: List<String> = listOf("KOLLA","HÄRA","LISTAN","FUNKAR")
+    //TODO den går bara in i den här om jag sätter ett värde, och jag lyckas inte sätta ett nytt värde i ActiveUsersFragment
+    var data: List<String> = mutableListOf("WHAT")
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -29,7 +30,7 @@ class ActiveUsersAdapter() : RecyclerView.Adapter<MyActiveUsersViewHolder>() {
     }
     override fun onBindViewHolder(holder : MyActiveUsersViewHolder, position: Int){
         val item = data[position]
-        Log.d("ActiveUsersAdapter->onBindViewHolder","Wow, ett element!")
+        Log.d("ActiveUsersAdapter->onBindViewHolder","Wow, ett element! $item")
 
         holder.view.findViewById<TextView>(R.id.user_email_text_view).text = item
         holder.view.findViewById<LinearLayout>(R.id.active_user_item).setOnClickListener{
