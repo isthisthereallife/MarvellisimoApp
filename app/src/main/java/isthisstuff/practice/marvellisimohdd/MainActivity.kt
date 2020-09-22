@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     private val realm: Realm = Realm.getDefaultInstance()
-    private var menuInflated: Boolean = false
     private var database = FirebaseDatabase.getInstance()
     private var databaseCurrentUsersReference = database.getReference("currentUsers")
     var concurrentUsersHashMap = HashMap<String,String>()
@@ -108,7 +107,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // menu should be considered as a top level destination.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_character, R.id.nav_series
+                R.id.nav_home, R.id.nav_character
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

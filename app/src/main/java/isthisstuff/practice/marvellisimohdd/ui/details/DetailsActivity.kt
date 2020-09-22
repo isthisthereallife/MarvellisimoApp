@@ -22,7 +22,6 @@ import isthisstuff.practice.marvellisimohdd.convertMarvelObjectToMarvelRealmObje
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
-import isthisstuff.practice.marvellisimohdd.ui.series.SeriesFragment
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
