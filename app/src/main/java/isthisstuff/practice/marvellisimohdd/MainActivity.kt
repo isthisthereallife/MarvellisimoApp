@@ -26,6 +26,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
@@ -112,14 +113,13 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        navView.getHeaderView(0).setOnClickListener { login() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
-        menuInflated = true
-        findViewById<LinearLayout>(R.id.signIn).setOnClickListener { login() }
-        updateLoginDisplay()
         return true
     }
 
@@ -151,7 +151,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (menuInflated) {
 
             //hämta inloggad
             val u = FirebaseAuth.getInstance().currentUser?.email
@@ -167,8 +166,8 @@ class MainActivity : AppCompatActivity() {
                 databaseCurrentUsersReference.push().setValue(
                     FirebaseAuth.getInstance().currentUser?.email.toString().replace(".", ",")
                 )
-            }
         }
+        updateLoginDisplay()
     }
 
     override fun onSupportNavigateUp(): Boolean {
