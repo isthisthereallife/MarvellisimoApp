@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity() {
     private var menuInflated: Boolean = false
 
 
+    private lateinit var navHeader:View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,15 +64,16 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(baseContext,"is there anything here?: $msg",Toast.LENGTH_SHORT).show()
         })
         //end of FIREBASE cloud messaging
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        val navView: NavigationView = findViewById(R.id.nav_view)
+        val navController = findNavController(R.id.nav_host_fragment)
+        navHeader = navView.getHeaderView(0)
 
         //PURGE all null users
         realm.executeTransaction {
             realm.where<User>().isNull("email").findAll().deleteAllFromRealm()
         }
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
-        //val navHeader = findViewById<>()
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as a top level destination.
         appBarConfiguration = AppBarConfiguration(
@@ -81,7 +84,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        navView.getHeaderView(0).setOnClickListener { login() }
+        navHeader.setOnClickListener { login() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -151,9 +154,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateLoginDisplay() {
         if (FirebaseAuth.getInstance().currentUser != null) {
-            findViewById<TextView>(R.id.nameUser).text =
+            navHeader.findViewById<TextView>(R.id.nameUser).text =
                 FirebaseAuth.getInstance().currentUser?.displayName
-            findViewById<TextView>(R.id.emailUser).text =
+            navHeader.findViewById<TextView>(R.id.emailUser).text =
                 FirebaseAuth.getInstance().currentUser?.email
         }
     }
