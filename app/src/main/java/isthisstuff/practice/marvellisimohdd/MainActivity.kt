@@ -42,7 +42,7 @@ import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.firebase.MyFirebaseMessagingService
 import isthisstuff.practice.marvellisimohdd.ui.settings.MySettingsActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     private val realm: Realm = Realm.getDefaultInstance()
@@ -59,9 +59,10 @@ class MainActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-
-
-
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        val navView: NavigationView = findViewById(R.id.nav_view)
+        val navController = findNavController(R.id.nav_host_fragment)
+        navHeader = navView.getHeaderView(0)
 
         //FIREBASE cloud messaging
         FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener(OnCompleteListener { task ->
@@ -76,10 +77,6 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(baseContext,"is there anything here?: $msg",Toast.LENGTH_SHORT).show()
         })
         //end of FIREBASE cloud messaging
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
-        navHeader = navView.getHeaderView(0)
 
         //FIREBASE database
         val userListener = object : ValueEventListener {
@@ -89,7 +86,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d("userListener -> onDataChange -> dataSnapshot.value",user.toString())
                 //spara till nån lista kanske?
                 if(user!=null) {
-                    concurrentUsersHashMap = user as HashMap<String, String>
+                    concurrentUsersHashMap  = user as HashMap<String, String>
                     Log.d("CURRENT USERS", concurrentUsersHashMap.toString())
                 }
             }
@@ -99,7 +96,6 @@ class MainActivity : AppCompatActivity() {
                 //do something here?
             }
         }
-
 
         //PURGE all null users
         realm.executeTransaction {
@@ -119,6 +115,7 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         navHeader.setOnClickListener { login() }
+        //navView.setNavigationItemSelectedListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -140,42 +137,35 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun saveUser() {
-        if(FirebaseAuth.getInstance().currentUser!=null) {
-            realm.beginTransaction()
-            val newUser = User()
-            newUser.email = FirebaseAuth.getInstance().currentUser?.email
-            newUser.name = FirebaseAuth.getInstance().currentUser?.displayName
-            newUser.favorites = RealmList<MarvelRealmObject>()
+        realm.beginTransaction()
+        val newUser = User()
+        newUser.email = FirebaseAuth.getInstance().currentUser?.email
+        newUser.name = FirebaseAuth.getInstance().currentUser?.displayName
+        newUser.favorites = RealmList<MarvelRealmObject>()
 
-            realm.copyToRealmOrUpdate(newUser)
-            realm.commitTransaction()
+        realm.copyToRealmOrUpdate(newUser)
+        realm.commitTransaction()
 
-            val user = realm.where<User>().findFirst()
-            println("Saved new user: ${user!!.name}")
-        }else
-            Log.d("Tried to save user in saveUser","But it was null so didn't.")
-        }
+        val user = realm.where<User>().equalTo("email", FirebaseAuth.getInstance().currentUser!!.email).findFirst()
+        println("Saved new user: ${user!!.name}")
+    }
 
     override fun onResume() {
         super.onResume()
 
-            //hämta inloggad
-            val u = FirebaseAuth.getInstance().currentUser?.email
-            val user = realm.where<User>().equalTo("email", u).findFirst()
+        val activeUser:FirebaseUser? = FirebaseAuth.getInstance().currentUser
+        val dbUser:User? = realm.where<User>().equalTo("email", activeUser?.email).findFirst()
 
-
-            if (user == null) {
+        if(activeUser != null) {
+            if (dbUser == null) {
                 saveUser()
             }
             updateLoginDisplay()
-            //kommer om användaren redan står som inloggad, skriv inte igen. kolla också om den är null
-            if (!concurrentUsersHashMap.containsValue(u.toString().replace(".", ","))) {
-                if(u!=null)
-                databaseCurrentUsersReference.push().setValue(
-                    FirebaseAuth.getInstance().currentUser?.email.toString().replace(".", ",")
-                )
+
+            if (!concurrentUsersHashMap.containsValue(activeUser.email.toString().replace(".", ","))) {
+                databaseCurrentUsersReference.push().setValue(FirebaseAuth.getInstance().currentUser?.email.toString().replace(".", ","))
+            }
         }
-        updateLoginDisplay()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -213,4 +203,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        println("Navigation Item: ${item.itemId}")
+        return true
+    }
 }

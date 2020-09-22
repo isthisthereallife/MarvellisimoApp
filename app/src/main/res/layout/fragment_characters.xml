@@ -48,5 +48,5 @@
         app:layout_constraintBottom_toBottomOf="@id/search_field_characters"
         app:layout_constraintRight_toRightOf="@id/search_field_characters"
         app:layout_constraintTop_toTopOf="@id/search_field_characters"
-        android:background="@drawable/rounded_shape"/>
+        android:background="@drawable/rounded_shape" />
 </androidx.constraintlayout.widget.ConstraintLayout>
