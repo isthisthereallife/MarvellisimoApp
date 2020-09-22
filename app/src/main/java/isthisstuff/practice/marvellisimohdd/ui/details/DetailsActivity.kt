@@ -4,10 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -162,9 +160,12 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun showCharacterSeries(){
-
         Toast.makeText(this.applicationContext, item.name.toString(), Toast.LENGTH_SHORT).show()
-        (supportFragmentManager.findFragmentById(R.id.search_results_series) as SeriesFragment?)?.performSearch(item.name.toString())
+
+
+        val fragment:SeriesFragment? = supportFragmentManager.findFragmentById(R.id.search_results_series) as SeriesFragment?
+
+        fragment?.performSearch(item.name.toString())
     }
 
 

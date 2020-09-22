@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -55,6 +56,7 @@ class SeriesFragment : Fragment() {
     }
 
     fun performSearch(query: String, offset: Int = 0) {
+        Toast.makeText(this.requireContext(), "hello", Toast.LENGTH_SHORT).show()
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
         var preferredSearchMethod = sharedPreferences.getString("list_search_mode", "")
         Log.d("kolla, såhär har du valt att söka", "$preferredSearchMethod")
