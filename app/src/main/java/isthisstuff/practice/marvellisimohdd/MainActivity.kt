@@ -21,6 +21,7 @@ import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
@@ -79,14 +80,13 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        navView.getHeaderView(0).setOnClickListener { login() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
-        menuInflated = true
-        findViewById<LinearLayout>(R.id.signIn).setOnClickListener { login() }
-        updateLoginDisplay()
         return true
     }
 
@@ -118,13 +118,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (menuInflated) {
-            val user = realm.where<User>().findFirst()
-            if(user==null) {
-                saveUser()
-            }
-            updateLoginDisplay()
+        val dbUser:User? = realm.where<User>().equalTo("email", FirebaseAuth.getInstance().currentUser?.email).findFirst()
+        val activeUser:FirebaseUser? = FirebaseAuth.getInstance().currentUser
+        println("onResume, dbUser is: $dbUser\nand activeUser is: $activeUser")
+        if(dbUser==null && activeUser!=null) {
+            saveUser()
         }
+        updateLoginDisplay()
     }
 
     override fun onSupportNavigateUp(): Boolean {
