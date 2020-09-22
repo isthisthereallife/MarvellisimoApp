@@ -82,9 +82,10 @@ class MainActivity : AppCompatActivity() {
                     //wth is is this
                 Log.d("userListener -> onDataChange -> dataSnapshot.value",user.toString())
                 //spara till nån lista kanske?
-                concurrentUsersHashMap = user as HashMap<String,String>
-                Log.d("TRYING TO LOG CURRENT USERS (THIS WON'T WORK",concurrentUsersHashMap.toString())
-
+                if(user!=null) {
+                    concurrentUsersHashMap = user as HashMap<String, String>
+                    Log.d("CURRENT USERS", concurrentUsersHashMap.toString())
+                }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -164,8 +165,9 @@ class MainActivity : AppCompatActivity() {
                 saveUser()
             }
             updateLoginDisplay()
-            //kommer om användaren redan står som inloggad, skriv inte igen
+            //kommer om användaren redan står som inloggad, skriv inte igen. kolla också om den är null
             if (!concurrentUsersHashMap.containsValue(u.toString().replace(".", ","))) {
+                if(u!=null)
                 databaseCurrentUsersReference.push().setValue(
                     FirebaseAuth.getInstance().currentUser?.email.toString().replace(".", ",")
                 )
