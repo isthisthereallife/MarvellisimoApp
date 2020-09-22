@@ -136,18 +136,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun saveUser() {
-        realm.beginTransaction()
-        val newUser = User()
-        newUser.email = FirebaseAuth.getInstance().currentUser?.email
-        newUser.name = FirebaseAuth.getInstance().currentUser?.displayName
-        newUser.favorites = RealmList<MarvelRealmObject>()
+        if(FirebaseAuth.getInstance().currentUser!=null) {
+            realm.beginTransaction()
+            val newUser = User()
+            newUser.email = FirebaseAuth.getInstance().currentUser?.email
+            newUser.name = FirebaseAuth.getInstance().currentUser?.displayName
+            newUser.favorites = RealmList<MarvelRealmObject>()
 
-        realm.copyToRealmOrUpdate(newUser)
-        realm.commitTransaction()
+            realm.copyToRealmOrUpdate(newUser)
+            realm.commitTransaction()
 
-        val user = realm.where<User>().findFirst()
-        println("Saved new user: ${user!!.name}")
-    }
+            val user = realm.where<User>().findFirst()
+            println("Saved new user: ${user!!.name}")
+        }else
+            Log.d("Tried to save user in saveUser","But it was null so didn't.")
+        }
 
     override fun onResume() {
         super.onResume()

@@ -167,6 +167,7 @@ class DetailsActivity : AppCompatActivity() {
 
 
     fun sendToFriend(marvelObject : MarvelObject){
+        if(activeUser!=null){
         val listOfUsers = getActiveUsers()
         val database = FirebaseDatabase.getInstance()
 
@@ -192,6 +193,9 @@ class DetailsActivity : AppCompatActivity() {
         if (item.name!=null)
         myReference.setValue("Hello world, i, ${activeUser?.displayName} am sending the name of ${item.name}")
         else myReference.push().setValue("Hello world, i, ${activeUser?.displayName} am sending the name of ${item.title}")
+    } else {
+        Toast.makeText(this, "Try logging in first!", Toast.LENGTH_SHORT).show()
+    }
     }
 
     /**
