@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import io.realm.Realm
 import io.realm.RealmObject
@@ -21,6 +23,8 @@ import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.ui.series.SeriesFragment
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class DetailsActivity : AppCompatActivity() {
 
@@ -147,6 +151,12 @@ class DetailsActivity : AppCompatActivity() {
         val button = findViewById<Button>(R.id.button_series)
         button.setOnClickListener{
             Toast.makeText(this.applicationContext, "Redirect", Toast.LENGTH_SHORT).show()
+            showSeries(item)
+        }
+
+        val buttonSend = findViewById<Button>(R.id.button_message)
+        buttonSend.setOnClickListener{
+            sendToFriend(item)
         }
 
         detailsName.text = name
@@ -156,5 +166,58 @@ class DetailsActivity : AppCompatActivity() {
         Picasso.get().load(thumbnail).into(detailsImage)
     }
 
+
+    private fun showSeries(marvelObject: MarvelObject) {
+
+    }
+
+    fun sendToFriend(marvelObject : MarvelObject){
+        if(activeUser!=null){
+        val listOfUsers = getActiveUsers()
+        val database = FirebaseDatabase.getInstance()
+
+
+
+        //ändra message till "vem som skickat och till vem det ska" (och en timestamp)
+        //jag är denna -> getString(R.string.msg_token_fmt,token)
+        //jag är denna -> activeUser.email
+        val timestamp = LocalDateTime.now()
+        val timestring = timestamp.toString().replace(".",":")
+
+
+        Log.d("CURRENT TIME FORMATTED","timestamp: $timestring")
+        var sender = activeUser?.email.toString()
+        val target = "put@target.here"
+
+        val message = "SENDER<${removeDotFromEmail(sender)}>RECIEVER<${removeDotFromEmail(target)}>TIME<$timestring>"
+        Log.d("MESSEAGEE",message)
+        val myReference = database.getReference(message)
+
+
+
+        if (item.name!=null)
+        myReference.setValue("Hello world, i, ${activeUser?.displayName} am sending the name of ${item.name}")
+        else myReference.push().setValue("Hello world, i, ${activeUser?.displayName} am sending the name of ${item.title}")
+    } else {
+        Toast.makeText(this, "Try logging in first!", Toast.LENGTH_SHORT).show()
+    }
+    }
+
+    /**
+     *
+     * Hämta lista på användare, skicka tillbaka listan
+     */
+    fun getActiveUsers() : List<String>{
+        val listOfUserEmails = mutableListOf<String>()
+        val ref = FirebaseDatabase.getInstance().getReference("currentUsers")
+
+        Log.d("What do i get here?????????",ref.toString())
+
+        return listOfUserEmails
+    }
+
+    fun removeDotFromEmail(email : String?) : String?{
+        return email?.replace(".",",")
+    }
 
 }
