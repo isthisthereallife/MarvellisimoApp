@@ -11,10 +11,13 @@
         <item
             android:id="@+id/nav_character"
             android:icon="@drawable/ic_baseline_emoji_people_24"
-            android:title="@string/menu_characters" />
+            android:title="Characters" />
         <item
             android:id="@+id/nav_series"
             android:icon="@drawable/ic_baseline_menu_book_24"
             android:title="@string/menu_series" />
+        <item android:id="@+id/nav_reco"
+            android:icon="@drawable/ic_baseline_mail_24"
+            android:title="@string/recommendations"/>
     </group>
 </menu>

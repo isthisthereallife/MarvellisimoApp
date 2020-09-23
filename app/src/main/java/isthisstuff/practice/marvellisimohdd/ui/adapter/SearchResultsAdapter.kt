@@ -19,7 +19,6 @@ import isthisstuff.practice.marvellisimohdd.MyViewHolder
 import isthisstuff.practice.marvellisimohdd.convertMarvelObjectToMarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.SearchQueryRealmObject
-import isthisstuff.practice.marvellisimohdd.database.UrlsRealmObject
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
