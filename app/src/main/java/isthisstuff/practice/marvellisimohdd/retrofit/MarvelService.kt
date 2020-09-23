@@ -58,6 +58,20 @@ interface MarvelService {
         @Query("offset") offset: Int = 0
     ): Single<MarvelDataWrapper>
 
+    @GET("series?ts=$ts&apikey=$apiKey")
+    fun getSeriesWithCharacter(
+        @Query("hash") hash: String = HASH,
+        @Query("characters") query: String,
+        @Query("offset") offset: Int = 0
+    ): Single<MarvelDataWrapper>
+
+    @GET("characters?ts=$ts&apikey=$apiKey")
+    fun getCharacterWithSeries(
+        @Query("hash") hash: String = HASH,
+        @Query("series") query: String,
+        @Query("offset") offset: Int = 0
+    ): Single<MarvelDataWrapper>
+
 }
 
 fun String.md5(): String {

@@ -40,8 +40,8 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
 
     lateinit var marvelViewModel: MarvelViewModel
     lateinit var marvelDatatype: MarvelDatatypes
-    lateinit var query: String
     lateinit var preferredSearchMethod: String
+    lateinit var query: String
     var offset: Int = 0
 
     init {
