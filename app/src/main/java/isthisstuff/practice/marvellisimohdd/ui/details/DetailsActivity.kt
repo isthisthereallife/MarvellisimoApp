@@ -1,38 +1,26 @@
 package isthisstuff.practice.marvellisimohdd.ui.details
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import android.view.View
-import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.FirebaseDatabase
 import com.squareup.picasso.Picasso
 import io.realm.Realm
-import io.realm.RealmObject
 import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.checkFavorite
 import isthisstuff.practice.marvellisimohdd.ui.activeusers.ActiveUsersActivity
 import isthisstuff.practice.marvellisimohdd.convertMarvelObjectToMarvelRealmObject
-import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
-import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
-import isthisstuff.practice.marvellisimohdd.ui.search.SearchFragment
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class DetailsActivity : AppCompatActivity() {
 
@@ -40,20 +28,21 @@ class DetailsActivity : AppCompatActivity() {
     private lateinit var item: MarvelObject
 
 
-    private lateinit var detailsName:TextView
-    private lateinit var detailsImage:ImageView
-    private lateinit var detailsText:TextView
-    private lateinit var detailsLinkMore:TextView
-    private lateinit var detailsFavStar:ImageView
-    private lateinit var detailsBackArrow:ImageView
-    private lateinit var detailsSeries:Button
-    private lateinit var detailsMessage:Button
+    private lateinit var detailsName: TextView
+    private lateinit var detailsImage: ImageView
+    private lateinit var detailsText: TextView
+    private lateinit var detailsLinkMore: TextView
+    private lateinit var detailsFavStar: ImageView
+    private lateinit var detailsBackArrow: ImageView
+    private lateinit var buttonShowMore: Button
+    private lateinit var detailsMessage: Button
 
     private var name: String = "Name goes here."
     private var description: String = "*NO DESCRIPTION AVAILABLE*"
     private var urlDetails: String = "https://Marvel.com"
     private var thumbnail: String =
         "https://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
+    private var buttonText: String = ""
 
     private var favorite: Boolean = false
 
@@ -71,7 +60,7 @@ class DetailsActivity : AppCompatActivity() {
         detailsLinkMore = findViewById<TextView>(R.id.details_link_more)
         detailsFavStar = findViewById<ImageView>(R.id.details_favstar)
         detailsBackArrow = findViewById<ImageView>(R.id.details_arrow_back)
-        detailsSeries = findViewById<Button>(R.id.button_series)
+        buttonShowMore = findViewById<Button>(R.id.button_series)
         detailsMessage = findViewById<Button>(R.id.button_message)
 
 
@@ -81,10 +70,10 @@ class DetailsActivity : AppCompatActivity() {
 
         detailsFavStar.setOnClickListener { setFavorite() }
         detailsBackArrow.setOnClickListener { finish() }
-        detailsSeries.setOnClickListener { showCharacterSeries() }
+
         detailsMessage.setOnClickListener { sendToFriend(item) }
 
-        if(checkFavorite(item.id)) {
+        if (checkFavorite(item.id)) {
             favorite = true
             detailsFavStar.setImageResource(R.drawable.ic_baseline_star_filled_24)
         }
@@ -133,8 +122,15 @@ class DetailsActivity : AppCompatActivity() {
     private fun updateDetailsInformation() {
         if (item.name != null) {
             if (item.name.toString().isNotBlank())
-                name = item.name.toString().replace("ï¿½", "'")
+                buttonText = "See all series ${item.name} appears in"
+            buttonShowMore.text = buttonText
+            buttonShowMore.setOnClickListener { showAllSeriesWithThisCharacter() }
+            name = item.name.toString().replace("ï¿½", "'")
         } else if (item.title != null) {
+            buttonText = "See all characters who appear in ${item.title}"
+            buttonShowMore.text = buttonText
+            buttonShowMore.setOnClickListener { showAllCharactersInThisSeries() }
+
             name = item.title.toString().replace("ï¿½", "'")
         }
 
@@ -164,22 +160,19 @@ class DetailsActivity : AppCompatActivity() {
         Picasso.get().load(thumbnail).into(detailsImage)
     }
 
-
-    private fun showCharacterSeries(){
-        Toast.makeText(this.applicationContext, item.name.toString(), Toast.LENGTH_SHORT).show()
-
+    private fun showAllCharactersInThisSeries() {
         setContentView(R.layout.fragment_search)
-        /*val fragment:SearchFragment = supportFragmentManager.findFragmentById(R.id.fragment_search) as SearchFragment
-          fragment.performSearch(query = item.name.toString(), dataType = MarvelDatatypes.SERIES)*/
-
-        val m : MarvelViewModel by viewModels()
-        m.getData(MarvelDatatypes.CHARACTERS,item.id.toString(),0,"strict")
-
-        Toast.makeText(this.applicationContext, "yay", Toast.LENGTH_SHORT).show()
-
+        val m: MarvelViewModel by viewModels()
+        m.getCharactersInSeries(item.id.toString(), 0)
+        setContentView(R.layout.fragment_search)
     }
 
-
+    private fun showAllSeriesWithThisCharacter() {
+        setContentView(R.layout.fragment_search)
+        val m: MarvelViewModel by viewModels()
+        m.getSeriesContainingCharacter(item.id.toString(), 0)
+        setContentView(R.layout.fragment_search)
+    }
 
 
     fun sendToFriend(marvelObject: MarvelObject) {

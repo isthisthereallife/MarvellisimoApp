@@ -59,14 +59,14 @@ interface MarvelService {
     ): Single<MarvelDataWrapper>
 
     @GET("series?ts=$ts&apikey=$apiKey")
-    fun getSeriesWithCharacter(
+    fun getSeriesContainingCharacter(
         @Query("hash") hash: String = HASH,
         @Query("characters") query: String,
         @Query("offset") offset: Int = 0
     ): Single<MarvelDataWrapper>
 
     @GET("characters?ts=$ts&apikey=$apiKey")
-    fun getCharacterWithSeries(
+    fun getCharactersInSeries(
         @Query("hash") hash: String = HASH,
         @Query("series") query: String,
         @Query("offset") offset: Int = 0
