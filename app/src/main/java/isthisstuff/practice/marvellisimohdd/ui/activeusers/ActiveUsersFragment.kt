@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
@@ -28,17 +27,19 @@ class ActiveUsersFragment : Fragment() {
                 val user = dataSnapshot.value
 
                 //detta skriver ut alla users från currentUsers i Firebase Realtime Database
-                Log.d("userListener -> onDataChange -> dataSnapshot.value", user.toString())
+                Log.d("ActiveUsersFragment -> userListener -> onDataChange -> dataSnapshot.value", user.toString())
 
                 if (user != null) {
                     concurrentUsersHashMap = user as HashMap<String, String>
                     Log.d("CURRENT USERS", concurrentUsersHashMap.toString())
                     //DETTA HÄR OVANFÖR FUNKAR!
+
+
                     //TODO
                     //DETTA HÄR UNDER ÄR FELET
-                    concurrentUsersHashMap.forEach { it ->
-                        Log.d("Value to save to adapter.data",it.value)
-                        adapter.data = adapter.data.plus(it.value)
+                    concurrentUsersHashMap.values.forEach {
+                        Log.d("Value to save to adapter.data",it)
+                        adapter.data = adapter.data.plus(it)
 
                         //TODO denna ändrar inte värdet på data i ActiveUsersAdapter (eftersom jag inte når denna)
                         Log.d("VÄRDET PÅ ADAPTERNS DATA",adapter.data.toString())
