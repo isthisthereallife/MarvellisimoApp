@@ -9,7 +9,6 @@ import io.reactivex.schedulers.Schedulers
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.retrofit.MARVEL_API_BASE_URL
 import isthisstuff.practice.marvellisimohdd.retrofit.MarvelService
-import isthisstuff.practice.marvellisimohdd.ui.adapter.SearchResultsAdapter
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -156,6 +155,43 @@ class MarvelViewModel : ViewModel() {
     @SuppressLint("CheckResult")
     fun getSeriesStrict(_query: String, _offset: Int) {
         service.getSeriesStrict(query = _query, offset = _offset)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { result, err ->
+                if (err?.message != null)
+                    Log.d("__", "Error getAll " + err.message)
+                else {
+                    Log.d("__", "I got a DataWrapper $result")
+
+                    result.data.results.forEach {
+                        itemsList.value = itemsList.value?.plus(it)
+                    }
+                }
+            }
+    }
+
+
+    @SuppressLint("CheckResult")
+    fun getSeriesContainingCharacter(_query: String, _offset: Int) {
+        service.getSeriesContainingCharacter(query = _query, offset = _offset)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { result, err ->
+                if (err?.message != null)
+                    Log.d("__", "Error getAll " + err.message)
+                else {
+                    Log.d("__", "I got a DataWrapper $result")
+
+                    result.data.results.forEach {
+                        itemsList.value = itemsList.value?.plus(it)
+                    }
+                }
+            }
+    }
+
+    @SuppressLint("CheckResult")
+    fun getCharactersInSeries(_query: String, _offset: Int) {
+        service.getCharactersInSeries(query = _query, offset = _offset)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { result, err ->

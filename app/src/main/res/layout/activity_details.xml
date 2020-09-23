@@ -27,11 +27,11 @@
 
         <ImageView
 
-            android:background="@drawable/round_outline"
             android:id="@+id/details_image"
             android:layout_width="192dp"
             android:layout_height="192dp"
             android:layout_weight="1"
+            android:background="@drawable/round_outline"
 
             android:maxHeight="100dp"
             android:minHeight="100dp"
@@ -48,9 +48,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:paddingEnd="20dp"
             android:maxHeight="100dp"
             android:minHeight="100dp"
+            android:paddingEnd="20dp"
             android:src="@drawable/ic_baseline_star_border_24" />
 
     </LinearLayout>
@@ -111,13 +111,13 @@
                 android:layout_gravity="center"
 
                 android:autoLink="web"
+                android:background="@drawable/rounded_top_button"
                 android:padding="16dp"
                 android:text="@string/details_urls"
-                tools:text="Read more"
-                android:textSize="30sp"
                 android:textAlignment="center"
                 android:textColor="@color/secondaryTextColor"
-                android:background="@drawable/rounded_top_button"/>
+                android:textSize="30sp"
+                tools:text="Read more" />
 
             <Button
 
@@ -125,11 +125,11 @@
                 android:layout_width="300dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
-                android:textSize="20sp"
+                android:layout_weight="1"
+                android:background="@drawable/square_button"
                 android:text="SEND"
                 android:textColor="@color/secondaryTextColor"
-                android:layout_weight="1"
-                android:background="@drawable/square_button" />
+                android:textSize="20sp" />
 
             <Button
 
@@ -137,11 +137,11 @@
                 android:layout_width="300dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
-                android:textSize="20sp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_bottom_button"
                 android:text="See series from this character"
                 android:textColor="@color/secondaryTextColor"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_bottom_button" />
+                android:textSize="20sp" />
 
 
         </LinearLayout>
