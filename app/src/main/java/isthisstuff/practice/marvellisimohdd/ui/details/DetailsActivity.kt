@@ -176,11 +176,10 @@ class DetailsActivity : AppCompatActivity() {
         Toast.makeText(this.applicationContext, item.name.toString(), Toast.LENGTH_SHORT).show()
 
         finish()
-        setContentView(R.layout.fragment_series)
-
-
-        val fragment:SeriesFragment? = supportFragmentManager.findFragmentById(R.id.search_results_series) as SeriesFragment?
+        setContentView(R.layout.fragment_search)
+        val fragment:SeriesFragment? = supportFragmentManager.findFragmentById(R.id.search_results) as SeriesFragment?
         fragment?.performSearch(item.name.toString())
+
         Toast.makeText(this.applicationContext, fragment.toString(), Toast.LENGTH_SHORT).show()
 
 

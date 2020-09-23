@@ -36,16 +36,16 @@ class SeriesFragment : Fragment() {
             adapter.data = it
         })
 
-        root = inflater.inflate(R.layout.fragment_series, container, false)
+        root = inflater.inflate(R.layout.fragment_search, container, false)
 
-        root.rootView.findViewById<RecyclerView>(R.id.search_results_series).adapter = adapter
-        root.rootView.findViewById<ImageButton>(R.id.search_button_series)
-            .setOnClickListener { performSearch(root.rootView.findViewById<EditText>(R.id.search_field_series).text.toString()) }
+        root.rootView.findViewById<RecyclerView>(R.id.search_results).adapter = adapter
+        root.rootView.findViewById<ImageButton>(R.id.search_button)
+            .setOnClickListener { performSearch(root.rootView.findViewById<EditText>(R.id.search_field).text.toString()) }
 
-        root.rootView.findViewById<EditText>(R.id.search_field_series)
+        root.rootView.findViewById<EditText>(R.id.search_field)
             .setOnEditorActionListener { v, actionId, event ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    performSearch(root.rootView.findViewById<EditText>(R.id.search_field_series).text.toString())
+                    performSearch(root.rootView.findViewById<EditText>(R.id.search_field).text.toString())
                     true
                 } else false
             }
@@ -55,7 +55,7 @@ class SeriesFragment : Fragment() {
         return root
     }
 
-    private fun performSearch(query: String, offset: Int = 0) {
+    fun performSearch(query: String, offset: Int = 0) {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
         var preferredSearchMethod = sharedPreferences.getString("list_search_mode", "")
         Log.d("kolla, såhär har du valt att söka", "$preferredSearchMethod")
@@ -63,7 +63,7 @@ class SeriesFragment : Fragment() {
             preferredSearchMethod = "contains"
         }
 
-        root.rootView.findViewById<EditText>(R.id.search_field_series).clearFocus()
+        root.rootView.findViewById<EditText>(R.id.search_field).clearFocus()
         hideKeyboard()
         marvelViewModel.clearSearchData()
         marvelViewModel.getData(MarvelDatatypes.SERIES, query, offset, preferredSearchMethod)
