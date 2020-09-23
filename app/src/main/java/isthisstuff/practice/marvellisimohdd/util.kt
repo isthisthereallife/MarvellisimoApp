@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
@@ -16,7 +17,7 @@ import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.entities.Thumbnail
 import isthisstuff.practice.marvellisimohdd.entities.Urls
 
-class MyViewHolder(val view: LinearLayout) : RecyclerView.ViewHolder(view) {
+class MyViewHolder(val view: ConstraintLayout) : RecyclerView.ViewHolder(view) {
 
     val textView = view.findViewById<TextView>(R.id.title_text)
     val btnView = view.findViewById<ImageView>(R.id.search_results_image)

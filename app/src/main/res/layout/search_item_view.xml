@@ -1,34 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
-    android:padding="16dp"
-    android:id="@+id/search_result_item"
-    >
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/search_result_item">
 
     <ImageView
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:id="@+id/search_results_image"
         android:src="@mipmap/ic_launcher"
-        android:contentDescription="BildBeskrivning"/>
+        android:contentDescription=""
+        android:scaleType="centerCrop"
+        android:id="@+id/search_results_image"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="@id/search_results_image"
+        app:layout_constraintBottom_toBottomOf="@id/search_results_image"
+        app:layout_constraintStart_toEndOf="@id/search_results_image"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/title_text"
-            android:text="title text"
             android:textStyle="bold"
             android:textColor="@color/secondaryTextColor"
-            android:textSize="20sp"
-            android:layout_margin="5dp"/>
+            android:textSize="16sp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:maxLines="1"/>
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title_text"
+            android:src="@drawable/ic_baseline_star_border_24"/>
+
+        <!--
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,7 +52,7 @@
             android:textColor="@color/secondaryTextColor"
             android:textSize="18sp"
             android:layout_margin="5dp"/>
+        -->
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
