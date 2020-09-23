@@ -12,11 +12,16 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import io.realm.Realm
+import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.UrlsRealmObject
+import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.entities.Thumbnail
 import isthisstuff.practice.marvellisimohdd.entities.Urls
@@ -77,6 +82,23 @@ fun convertMarvelRealmObjectToMarvelObject(marvelRealmObject: MarvelRealmObject)
         ), urls = urls.toList()
     )
     return marvelObject
+}
+
+fun checkFavorite(itemId:Int):Boolean {
+    val realm = Realm.getDefaultInstance()
+    val activeUser:FirebaseUser? = FirebaseAuth.getInstance().currentUser
+    if (activeUser != null) {
+        val dbUser = realm.where<User>().equalTo("email", activeUser.email).findFirst()
+        Log.d("PRINTAR ALLA USERS I DATABASEN", realm.where<User>().findAll().toString())
+        Log.d("DetailsActivity innan loopa dbUsers favoriter", "dbUser=$dbUser")
+
+        for (x in dbUser!!.favorites) {
+            if (x.id == itemId) {
+                return true
+            }
+        }
+    }
+    return false
 }
 /*
 //FIREBASE database

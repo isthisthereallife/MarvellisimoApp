@@ -17,6 +17,7 @@ import io.realm.Realm
 import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.MyViewHolder
+import isthisstuff.practice.marvellisimohdd.checkFavorite
 import isthisstuff.practice.marvellisimohdd.convertMarvelObjectToMarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.SearchQueryRealmObject
@@ -81,11 +82,15 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
         //holder.view.findViewById<TextView>(R.id.info_text).text = item.description
         Picasso.get().load(item.thumbnail.path + "." + item.thumbnail.extension)
             .into(holder.view.findViewById<ImageView>(R.id.search_results_image))
+
+        if(checkFavorite(item.id)) {
+            holder.view.findViewById<ImageView>(R.id.search_favstar).setImageResource(R.drawable.ic_baseline_star_filled_24)
+        }
+
         holder.view.findViewById<ConstraintLayout>(R.id.search_result_item)
             .setOnClickListener { openDetails(it, position) }
 
         if (position == offset + 10) {
-
             offset += 20
             Log.d("RecyclerView", "Reached the end. Position: $position \t Offset: $offset")
             marvelViewModel.getData(marvelDatatype, query, offset, preferredSearchMethod)

@@ -69,6 +69,12 @@ class SearchFragment : Fragment() {
         return root
     }
 
+    override fun onResume() {
+        super.onResume()
+        // detta är kanske inte så optimalt
+        adapter.notifyDataSetChanged()
+    }
+
     private fun performSearch(query: String, offset: Int = 0, dataType:MarvelDatatypes=MarvelDatatypes.CHARACTERS) {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
         var preferredSearchMethod = sharedPreferences.getString("list_search_mode", "")

@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso
 import io.realm.Realm
 import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.R
+import isthisstuff.practice.marvellisimohdd.checkFavorite
 import isthisstuff.practice.marvellisimohdd.ui.activeusers.ActiveUsersActivity
 import isthisstuff.practice.marvellisimohdd.convertMarvelObjectToMarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.User
@@ -46,7 +47,6 @@ class DetailsActivity : AppCompatActivity() {
     private var activeUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     private var dbUser: User? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
@@ -66,24 +66,15 @@ class DetailsActivity : AppCompatActivity() {
         detailsFavStar.setOnClickListener { setFavorite() }
         detailsBackArrow.setOnClickListener { finish() }
 
-        Log.d("DetailsActivity innan activeUser - null check", "activeUser=$activeUser")
-        if (activeUser != null) {
-            dbUser = realm.where<User>().equalTo("email", activeUser!!.email).findFirst()
-            Log.d("PRINTAR ALLA USERS I DATABASEN", realm.where<User>().findAll().toString())
-            Log.d("DetailsActivity innan loopa dbUsers favoriter", "dbUser=$dbUser")
-
-            for (x in dbUser!!.favorites) {
-                if (x.id == item.id) {
-                    favorite = true
-                    detailsFavStar.setImageResource(R.drawable.ic_baseline_star_filled_24)
-                    break
-                }
-            }
+        if(checkFavorite(item.id)) {
+            favorite = true
+            detailsFavStar.setImageResource(R.drawable.ic_baseline_star_filled_24)
         }
     }
 
     private fun setFavorite() {
         if (activeUser != null) {
+            dbUser = realm.where<User>().equalTo("email", activeUser!!.email).findFirst()
             if (favorite) {
                 favorite = false
 
