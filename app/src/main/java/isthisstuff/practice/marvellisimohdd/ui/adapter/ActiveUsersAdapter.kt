@@ -14,7 +14,7 @@ class ActiveUsersAdapter() : RecyclerView.Adapter<MyActiveUsersViewHolder>() {
     lateinit var itemEmail: TextView
 
     //TODO den går bara in i den här om jag sätter ett värde, och jag lyckas inte sätta ett nytt värde i ActiveUsersFragment
-    var data =  LinkedHashMap<String, String>()
+    var data =  listOf<Pair<String, String>>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -30,13 +30,12 @@ class ActiveUsersAdapter() : RecyclerView.Adapter<MyActiveUsersViewHolder>() {
         return MyActiveUsersViewHolder(view)
     }
     override fun onBindViewHolder(holder : MyActiveUsersViewHolder, position: Int){
-        val i = data.entries
         val item = data[position]
-        Log.d("HÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄR !!!!!!!!!! ¤#/&¤/#(&¤/ ActiveUsersAdapter->onBindViewHolder",i.toString())
+        Log.d("HÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄR !!!!!!!!!! ¤#/&¤/#(&¤/ ActiveUsersAdapter->onBindViewHolder",item.second.toString())
 
         Log.d("ActiveUsersAdapter->onBindViewHolder","Wow, ett element! $item")
 
-        holder.view.findViewById<TextView>(R.id.user_email_text_view).text = item
+        holder.view.findViewById<TextView>(R.id.user_email_text_view).text = item.second
         holder.view.findViewById<LinearLayout>(R.id.active_user_item).setOnClickListener{
             //TODO HÄR SKA item (som är en email) bli <Receiver> i en sånhärn: /**val message = "SENDER<${removeDotFromEmail(sender)}>RECEIVER<${removeDotFromEmail(target)}>TIME<$timestring>"
             //        Log.d("MESSAGE",message)

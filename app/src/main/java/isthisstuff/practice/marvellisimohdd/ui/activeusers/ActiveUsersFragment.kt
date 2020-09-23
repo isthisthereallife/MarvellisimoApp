@@ -36,7 +36,9 @@ class ActiveUsersFragment : Fragment() {
                     concurrentUsersHashMap = user as HashMap<String, String>
                     Log.d("CURRENT USERS", concurrentUsersHashMap.toString())
                     //DETTA HÄR OVANFÖR FUNKAR!
-                    adapter.data = concurrentUsersHashMap
+                    adapter.data = concurrentUsersHashMap.toList()
+                    val h = concurrentUsersHashMap.toList()
+                    h
                     Log.d("ActiveUsersFragment -> userListener -> onDataChange -> adapter.data","HAHAHAHAH")
 
 /*
