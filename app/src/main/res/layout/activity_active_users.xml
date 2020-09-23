@@ -13,7 +13,6 @@
     android:name="isthisstuff.practice.marvellisimohdd.ui.activeusers.ActiveUsersFragment"
     android:id="@+id/active_user_frag_in_activity_active_user"/>
 
-    <include layout="@layout/fragment_active_user" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

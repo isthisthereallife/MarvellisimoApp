@@ -9,12 +9,15 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.ui.adapter.ActiveUsersAdapter
 
 class ActiveUsersFragment : Fragment() {
     lateinit var root: View
+    private var database = FirebaseDatabase.getInstance()
+    private var databaseCurrentUsersReference = database.getReference("currentUsers")
     var concurrentUsersHashMap = HashMap<String, String>()
     private var adapter: ActiveUsersAdapter = ActiveUsersAdapter()
 
@@ -33,8 +36,10 @@ class ActiveUsersFragment : Fragment() {
                     concurrentUsersHashMap = user as HashMap<String, String>
                     Log.d("CURRENT USERS", concurrentUsersHashMap.toString())
                     //DETTA HÄR OVANFÖR FUNKAR!
+                    adapter.data = concurrentUsersHashMap
+                    Log.d("ActiveUsersFragment -> userListener -> onDataChange -> adapter.data","HAHAHAHAH")
 
-
+/*
                     //TODO
                     //DETTA HÄR UNDER ÄR FELET
                     concurrentUsersHashMap.values.forEach {
@@ -45,6 +50,8 @@ class ActiveUsersFragment : Fragment() {
                         Log.d("VÄRDET PÅ ADAPTERNS DATA",adapter.data.toString())
                         adapter.notifyItemInserted(adapter.data.size-1)
                     }
+
+ */
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
@@ -55,6 +62,8 @@ class ActiveUsersFragment : Fragment() {
                 //do something here?
             }
         }
+        databaseCurrentUsersReference.addValueEventListener(userListener)
+
     }
     override fun onCreateView(
         inflater: LayoutInflater,
