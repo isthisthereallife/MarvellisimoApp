@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     private val realm: Realm = Realm.getDefaultInstance()
-    private var menuInflated: Boolean = false
     private var database = FirebaseDatabase.getInstance()
     private var databaseCurrentUsersReference = database.getReference("currentUsers")
     var concurrentUsersHashMap = HashMap<String, String>()
