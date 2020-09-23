@@ -85,6 +85,8 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
 
         if(checkFavorite(item.id)) {
             holder.view.findViewById<ImageView>(R.id.search_favstar).setImageResource(R.drawable.ic_baseline_star_filled_24)
+        } else {
+            holder.view.findViewById<ImageView>(R.id.search_favstar).setImageResource(R.drawable.ic_baseline_star_border_24)
         }
 
         holder.view.findViewById<ConstraintLayout>(R.id.search_result_item)
