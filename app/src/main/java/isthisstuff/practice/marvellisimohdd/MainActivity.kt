@@ -49,9 +49,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var menuInflated: Boolean = false
     private var database = FirebaseDatabase.getInstance()
     private var databaseCurrentUsersReference = database.getReference("currentUsers")
-    var concurrentUsersHashMap = HashMap<String,String>()
+    var concurrentUsersHashMap = HashMap<String, String>()
 
-    private lateinit var navHeader:View
+    private lateinit var navHeader: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,33 +66,37 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //FIREBASE cloud messaging
         FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener(OnCompleteListener { task ->
-            if(!task.isSuccessful){
-                Log.w("FAILURE! Tried to get a FirebaseInstanceID.getInstance().instanceID", "getInstanceID failed", task.exception)
+            if (!task.isSuccessful) {
+                Log.w(
+                    "FAILURE! Tried to get a FirebaseInstanceID.getInstance().instanceID",
+                    "getInstanceID failed",
+                    task.exception
+                )
                 return@OnCompleteListener
             }
             val token = task.result?.token
 
-            val msg = getString(R.string.msg_token_fmt,token)
-            Log.d("Got a token","Token is: $msg")
-            Toast.makeText(baseContext,"is there anything here?: $msg",Toast.LENGTH_SHORT).show()
+            val msg = getString(R.string.msg_token_fmt, token)
+            Log.d("Got a token", "Token is: $msg")
+            Toast.makeText(baseContext, "is there anything here?: $msg", Toast.LENGTH_SHORT).show()
         })
         //end of FIREBASE cloud messaging
 
         //FIREBASE database
         val userListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot){
-                    val user = dataSnapshot.value
-                    //wth is is this
-                Log.d("userListener -> onDataChange -> dataSnapshot.value",user.toString())
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val user = dataSnapshot.value
+                //wth is is this
+                Log.d("userListener -> onDataChange -> dataSnapshot.value", user.toString())
                 //spara till nån lista kanske?
-                if(user!=null) {
-                    concurrentUsersHashMap  = user as HashMap<String, String>
+                if (user != null) {
+                    concurrentUsersHashMap = user as HashMap<String, String>
                     Log.d("CURRENT USERS", concurrentUsersHashMap.toString())
                 }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Log.w("userListener -> onCancelled",databaseError.toException())
+                Log.w("userListener -> onCancelled", databaseError.toException())
                 //do something here?
             }
         }
@@ -108,7 +112,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // menu should be considered as a top level destination.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_character, R.id.nav_series,R.id.nav_reco
+                R.id.nav_home, R.id.nav_character, R.id.nav_series, R.id.nav_reco
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -125,12 +129,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean{
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        Log.d("onOptionsItemSelected: ","CLICKED ITEM ${item.title}")
-        if (id == R.id.action_settings){
+        Log.d("onOptionsItemSelected: ", "CLICKED ITEM ${item.title}")
+        if (id == R.id.action_settings) {
             //kicka settings-aktiviteten
-            startActivity(Intent(this@MainActivity,MySettingsActivity::class.java))
+            startActivity(Intent(this@MainActivity, MySettingsActivity::class.java))
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -146,24 +150,31 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         realm.copyToRealmOrUpdate(newUser)
         realm.commitTransaction()
 
-        val user = realm.where<User>().equalTo("email", FirebaseAuth.getInstance().currentUser!!.email).findFirst()
+        val user =
+            realm.where<User>().equalTo("email", FirebaseAuth.getInstance().currentUser!!.email)
+                .findFirst()
         println("Saved new user: ${user!!.name}")
     }
 
     override fun onResume() {
         super.onResume()
 
-        val activeUser:FirebaseUser? = FirebaseAuth.getInstance().currentUser
-        val dbUser:User? = realm.where<User>().equalTo("email", activeUser?.email).findFirst()
+        val activeUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+        val dbUser: User? = realm.where<User>().equalTo("email", activeUser?.email).findFirst()
 
-        if(activeUser != null) {
+        if (activeUser != null) {
             if (dbUser == null) {
                 saveUser()
             }
             updateLoginDisplay()
 
-            if (!concurrentUsersHashMap.containsValue(activeUser.email.toString().replace(".", ","))) {
-                databaseCurrentUsersReference.push().setValue(FirebaseAuth.getInstance().currentUser?.email.toString().replace(".", ","))
+            if (!concurrentUsersHashMap.containsValue(
+                    activeUser.email.toString().replace(".", ",")
+                )
+            ) {
+                databaseCurrentUsersReference.push().setValue(
+                    FirebaseAuth.getInstance().currentUser?.email.toString().replace(".", ",")
+                )
             }
         }
     }
@@ -191,7 +202,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         FirebaseAuth.getInstance().signOut()
         realm.close()
-        Log.d("onDestroy","FirebaseAuth signed out, realm closed")
+        Log.d("onDestroy", "FirebaseAuth signed out, realm closed")
     }
 
     private fun updateLoginDisplay() {

@@ -30,32 +30,25 @@ class ActiveUsersFragment : Fragment() {
                 val user = dataSnapshot.value
 
                 //detta skriver ut alla users från currentUsers i Firebase Realtime Database
-                Log.d("ActiveUsersFragment -> userListener -> onDataChange -> dataSnapshot.value", user.toString())
+                Log.d(
+                    "ActiveUsersFragment -> userListener -> onDataChange -> dataSnapshot.value",
+                    user.toString()
+                )
 
                 if (user != null) {
                     concurrentUsersHashMap = user as HashMap<String, String>
                     Log.d("CURRENT USERS", concurrentUsersHashMap.toString())
                     //DETTA HÄR OVANFÖR FUNKAR!
                     adapter.data = concurrentUsersHashMap.toList()
-                    val h = concurrentUsersHashMap.toList()
-                    h
-                    Log.d("ActiveUsersFragment -> userListener -> onDataChange -> adapter.data","HAHAHAHAH")
 
-/*
-                    //TODO
-                    //DETTA HÄR UNDER ÄR FELET
-                    concurrentUsersHashMap.values.forEach {
-                        Log.d("Value to save to adapter.data",it)
-                        adapter.data = adapter.data.plus(it)
+                    Log.d(
+                        "ActiveUsersFragment -> userListener -> onDataChange -> adapter.data",
+                        "HAHAHAHAH"
+                    )
 
-                        //TODO denna ändrar inte värdet på data i ActiveUsersAdapter (eftersom jag inte når denna)
-                        Log.d("VÄRDET PÅ ADAPTERNS DATA",adapter.data.toString())
-                        adapter.notifyItemInserted(adapter.data.size-1)
-                    }
-
- */
                 }
             }
+
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.e(
                     "userListener -> onCancelled",
@@ -67,13 +60,14 @@ class ActiveUsersFragment : Fragment() {
         databaseCurrentUsersReference.addValueEventListener(userListener)
 
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d("TAG GOES HERE","WOW! VI ÄR I FRAGMENTET ActiveUsersFragment!!!!!")
-        root = inflater.inflate(R.layout.fragment_active_user,container,false)
+        Log.d("TAG GOES HERE", "WOW! VI ÄR I FRAGMENTET ActiveUsersFragment!!!!!")
+        root = inflater.inflate(R.layout.fragment_active_user, container, false)
         root.rootView.findViewById<RecyclerView>(R.id.active_user_recyclerView).adapter = adapter
 
         return root

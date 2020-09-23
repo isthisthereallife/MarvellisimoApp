@@ -7,14 +7,17 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.FirebaseDatabase
 import isthisstuff.practice.marvellisimohdd.MyActiveUsersViewHolder
 import isthisstuff.practice.marvellisimohdd.R
+import java.time.LocalDateTime
 
 class ActiveUsersAdapter() : RecyclerView.Adapter<MyActiveUsersViewHolder>() {
     lateinit var itemEmail: TextView
+    private var database = FirebaseDatabase.getInstance()
+    private var databaseMessageReference = database.getReference("messages")
 
-    //TODO den går bara in i den här om jag sätter ett värde, och jag lyckas inte sätta ett nytt värde i ActiveUsersFragment
-    var data =  listOf<Pair<String, String>>()
+    var data = listOf<Pair<String, String>>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -24,25 +27,36 @@ class ActiveUsersAdapter() : RecyclerView.Adapter<MyActiveUsersViewHolder>() {
     override fun getItemCount() = data.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyActiveUsersViewHolder {
-        Log.d("ActiveUsersAdapter->onCreateViewHolder","Wow, en ViewHolder!")
+        Log.d("ActiveUsersAdapter->onCreateViewHolder", "Wow, en ViewHolder!")
         val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.item_active_user,parent,false) as LinearLayout
+        val view = layoutInflater.inflate(R.layout.item_active_user, parent, false) as LinearLayout
         return MyActiveUsersViewHolder(view)
     }
-    override fun onBindViewHolder(holder : MyActiveUsersViewHolder, position: Int){
+
+    override fun onBindViewHolder(holder: MyActiveUsersViewHolder, position: Int) {
         val item = data[position]
-        Log.d("HÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄR !!!!!!!!!! ¤#/&¤/#(&¤/ ActiveUsersAdapter->onBindViewHolder",item.second.toString())
+        Log.d(
+            "HÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄR !!!!!!!!!! ¤#/&¤/#(&¤/ ActiveUsersAdapter->onBindViewHolder",
+            item.second.toString()
+        )
 
-        Log.d("ActiveUsersAdapter->onBindViewHolder","Wow, ett element! $item")
+        Log.d("ActiveUsersAdapter->onBindViewHolder", "Wow, ett element! $item")
 
-        holder.view.findViewById<TextView>(R.id.user_email_text_view).text = item.second
-        holder.view.findViewById<LinearLayout>(R.id.active_user_item).setOnClickListener{
-            //TODO HÄR SKA item (som är en email) bli <Receiver> i en sånhärn: /**val message = "SENDER<${removeDotFromEmail(sender)}>RECEIVER<${removeDotFromEmail(target)}>TIME<$timestring>"
-            //        Log.d("MESSAGE",message)
+        holder.view.findViewById<TextView>(R.id.user_email_text_view).text =
+            item.second.replace(",", ".")
+        holder.view.findViewById<LinearLayout>(R.id.active_user_item).setOnClickListener {
+
             //        val myReference = database.getReference(message)**/
+            val timeString = LocalDateTime.now().toString().replace(".", ":")
 
-            //val message = "SENDER<${(sender)}>RECEIVER<${item}>TIME<$timestring>
+            val message =
+                "SENDER<${"TODO put sender here "}>RECEIVER<${item.second}>TIME<$timeString>"
 
+            databaseMessageReference.push().setValue(message)
+
+
+            val updatedText = "Skickat till ${item.second}"
+            holder.view.findViewById<TextView>(R.id.user_email_text_view).text = updatedText
 
             //och kanske göra en toast om att det skickats
 

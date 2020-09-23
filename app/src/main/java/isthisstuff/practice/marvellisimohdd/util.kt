@@ -26,7 +26,7 @@ class MyViewHolder(val view: LinearLayout) : RecyclerView.ViewHolder(view) {
     val btnView = view.findViewById<ImageView>(R.id.search_results_image)
 }
 
-class MyActiveUsersViewHolder(val view: LinearLayout): RecyclerView.ViewHolder(view){
+class MyActiveUsersViewHolder(val view: LinearLayout) : RecyclerView.ViewHolder(view) {
     val userEmail = view.findViewById<TextView>(R.id.user_email_text_view)
 }
 
