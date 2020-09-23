@@ -20,13 +20,13 @@ import isthisstuff.practice.marvellisimohdd.ui.activeusers.ActiveUsersActivity
 import isthisstuff.practice.marvellisimohdd.convertMarvelObjectToMarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
+import isthisstuff.practice.marvellisimohdd.ui.adapter.ActiveUsersAdapter
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 
 class DetailsActivity : AppCompatActivity() {
 
     private val realm: Realm = Realm.getDefaultInstance()
     private lateinit var item: MarvelObject
-
 
     private lateinit var detailsName: TextView
     private lateinit var detailsImage: ImageView
@@ -177,11 +177,17 @@ class DetailsActivity : AppCompatActivity() {
 
     fun sendToFriend(marvelObject: MarvelObject) {
         //setContentView(R.layout.fragment_active_user)
-        startActivity(Intent(this, ActiveUsersActivity::class.java))
         if (activeUser != null) {
+
+            intent = Intent(this, ActiveUsersActivity::class.java)
+            intent.putExtra("MarvelObject", item)
+            intent.putExtra("senderEmail", activeUser!!.email.toString())
+            /*ActiveUsersAdapter().sender = activeUser!!.email.toString()
+            ActiveUsersAdapter().marvelObjectId = item.id.toString()
+             */
+            startActivity(intent)
+
             /*
-            // val listOfUsers = getActiveUsers()
-            val database = FirebaseDatabase.getInstance()
 
 
             //ändra message till "vem som skickat och till vem det ska" (och en timestamp)
