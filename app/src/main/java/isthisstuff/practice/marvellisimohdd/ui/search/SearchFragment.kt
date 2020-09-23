@@ -69,7 +69,7 @@ class SearchFragment : Fragment() {
         return root
     }
 
-    private fun performSearch(query: String, offset: Int = 0, dataType:MarvelDatatypes=MarvelDatatypes.CHARACTERS) {
+    fun performSearch(query: String, offset: Int = 0, dataType:MarvelDatatypes=MarvelDatatypes.CHARACTERS) {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
         var preferredSearchMethod = sharedPreferences.getString("list_search_mode", "")
         Log.d("kolla, såhär har du valt att söka", "$preferredSearchMethod")

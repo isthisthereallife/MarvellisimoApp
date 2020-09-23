@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import android.view.View
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -26,10 +27,11 @@ import isthisstuff.practice.marvellisimohdd.convertMarvelObjectToMarvelRealmObje
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
+import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
+import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
+import isthisstuff.practice.marvellisimohdd.ui.search.SearchFragment
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import isthisstuff.practice.marvellisimohdd.ui.series.SeriesFragment
-
 
 class DetailsActivity : AppCompatActivity() {
 
@@ -171,17 +173,18 @@ class DetailsActivity : AppCompatActivity() {
         Picasso.get().load(thumbnail).into(detailsImage)
     }
 
-    @SuppressLint("ResourceType")
+
     private fun showCharacterSeries(){
         Toast.makeText(this.applicationContext, item.name.toString(), Toast.LENGTH_SHORT).show()
 
-        finish()
         setContentView(R.layout.fragment_search)
-        val fragment:SeriesFragment? = supportFragmentManager.findFragmentById(R.id.search_results) as SeriesFragment?
-        fragment?.performSearch(item.name.toString())
+        /*val fragment:SearchFragment = supportFragmentManager.findFragmentById(R.id.fragment_search) as SearchFragment
+          fragment.performSearch(query = item.name.toString(), dataType = MarvelDatatypes.SERIES)*/
 
-        Toast.makeText(this.applicationContext, fragment.toString(), Toast.LENGTH_SHORT).show()
+        val m : MarvelViewModel by viewModels()
+        m.getData(MarvelDatatypes.CHARACTERS,item.id.toString(),0,"strict")
 
+        Toast.makeText(this.applicationContext, "yay", Toast.LENGTH_SHORT).show()
 
     }
 
