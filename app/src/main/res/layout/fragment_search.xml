@@ -26,7 +26,6 @@
         android:background="@drawable/edit_text_background"
         android:imeOptions="actionDone"
         android:inputType="text"
-        android:hint="Sök Karaktär"
         android:textColor="@color/primaryTextColor"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
@@ -36,7 +35,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias=".95"
         android:paddingStart="20dp"
-        />
+        android:autofillHints="" />
 
     <ImageButton
         android:id="@+id/search_button"

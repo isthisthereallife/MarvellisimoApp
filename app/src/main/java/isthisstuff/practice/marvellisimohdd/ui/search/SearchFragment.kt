@@ -61,11 +61,11 @@ class SearchFragment : Fragment() {
         when((activity as AppCompatActivity).supportActionBar!!.title.toString()) {
             "Characters" -> {
                 searchingFor = MarvelDatatypes.CHARACTERS
-                searchFieldView.hint = "Sök Karaktär"
+                searchFieldView.hint = getString(R.string.search_hint_character)
             }
             "Series" -> {
                 searchingFor = MarvelDatatypes.SERIES
-                searchFieldView.hint = "Sök Serie"
+                searchFieldView.hint= getString(R.string.search_hint_series)
             }
         }
 
