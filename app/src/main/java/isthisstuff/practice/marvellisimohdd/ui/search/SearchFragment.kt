@@ -1,5 +1,6 @@
 package isthisstuff.practice.marvellisimohdd.ui.search
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +16,8 @@ import androidx.lifecycle.Observer
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import isthisstuff.practice.marvellisimohdd.R
+import isthisstuff.practice.marvellisimohdd.checkFavorite
+import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.hideKeyboard
 import isthisstuff.practice.marvellisimohdd.ui.adapter.SearchResultsAdapter
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
@@ -27,11 +30,16 @@ class SearchFragment : Fragment() {
     private var adapter: SearchResultsAdapter = SearchResultsAdapter(this)
     var searchingFor: MarvelDatatypes = MarvelDatatypes.CHARACTERS
 
+    lateinit var sharedPreferences:SharedPreferences
+    var onlyFavorites:Boolean = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
+
         marvelViewModel.itemsList.observe(viewLifecycleOwner, Observer {
             adapter.data = it
         })
@@ -71,12 +79,23 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        onlyFavorites = sharedPreferences.getBoolean("only_favorites", false)
+        if(onlyFavorites) {
+            var newList: List<MarvelObject>? = listOf<MarvelObject>()
+            for(x in marvelViewModel.itemsList.value!!) {
+                if(checkFavorite(x.id)) {
+                    newList = newList!!.plus(x)
+                }
+            }
+            marvelViewModel.itemsList.value = newList
+        } else {
+            performSearch(query = "a", dataType =  searchingFor)
+        }
         adapter.notifyDataSetChanged()
     }
 
     fun performSearch(query: String, offset: Int = 0, dataType:MarvelDatatypes=MarvelDatatypes.CHARACTERS) {
-
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
+        Log.d("debug_print", "onlyFavorites = $onlyFavorites")
         var preferredSearchMethod = sharedPreferences.getString("list_search_mode", "")
         Log.d("kolla, såhär har du valt att söka", "$preferredSearchMethod")
         if (preferredSearchMethod == null) {
@@ -86,7 +105,7 @@ class SearchFragment : Fragment() {
         root.rootView.findViewById<EditText>(R.id.search_field).clearFocus()
         hideKeyboard()
         marvelViewModel.clearSearchData()
-        marvelViewModel.getData(searchingFor, query, offset, preferredSearchMethod)
+        marvelViewModel.getData(searchingFor, query, offset, preferredSearchMethod, onlyFavorites)
         adapter.saveRequestData(
             marvelViewModel,
             searchingFor,

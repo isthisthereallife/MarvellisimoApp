@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import isthisstuff.practice.marvellisimohdd.checkFavorite
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.retrofit.MARVEL_API_BASE_URL
 import isthisstuff.practice.marvellisimohdd.retrofit.MarvelService
@@ -18,7 +19,7 @@ class MarvelViewModel : ViewModel() {
     var itemsList = MutableLiveData<List<MarvelObject>>()
     private val builder = OkHttpClient.Builder()
     private val okHttpClient = builder.build()
-    val service: MarvelService = Retrofit.Builder()
+    private val service: MarvelService = Retrofit.Builder()
         .baseUrl(MARVEL_API_BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -34,25 +35,26 @@ class MarvelViewModel : ViewModel() {
         _marvelDatatype: MarvelDatatypes,
         _query: String,
         _offset: Int,
-        preferredSearchMethod: String?
+        preferredSearchMethod: String?,
+        onlyFavorites:Boolean = false
     ) {
         when (preferredSearchMethod) {
             "contains" -> {
                 when (_marvelDatatype) {
-                    MarvelDatatypes.CHARACTERS -> getCharactersContains(_query, _offset)
-                    MarvelDatatypes.SERIES -> getSeriesContains(_query, _offset)
+                    MarvelDatatypes.CHARACTERS -> getCharactersContains(_query, _offset, onlyFavorites)
+                    MarvelDatatypes.SERIES -> getSeriesContains(_query, _offset, onlyFavorites)
                 }
             }
             "startsWith" -> {
                 when (_marvelDatatype) {
-                    MarvelDatatypes.CHARACTERS -> getCharactersStartsWith(_query, _offset)
-                    MarvelDatatypes.SERIES -> getSeriesStartsWith(_query, _offset)
+                    MarvelDatatypes.CHARACTERS -> getCharactersStartsWith(_query, _offset, onlyFavorites)
+                    MarvelDatatypes.SERIES -> getSeriesStartsWith(_query, _offset, onlyFavorites)
                 }
             }
             "strict" -> {
                 when (_marvelDatatype) {
-                    MarvelDatatypes.CHARACTERS -> getCharactersStrict(_query, _offset)
-                    MarvelDatatypes.SERIES -> getSeriesStrict(_query, _offset)
+                    MarvelDatatypes.CHARACTERS -> getCharactersStrict(_query, _offset, onlyFavorites)
+                    MarvelDatatypes.SERIES -> getSeriesStrict(_query, _offset, onlyFavorites)
                 }
             }
 
@@ -63,7 +65,7 @@ class MarvelViewModel : ViewModel() {
 
 
     @SuppressLint("CheckResult")
-    fun getCharactersContains(_query: String, _offset: Int) {
+    fun getCharactersContains(_query: String, _offset: Int, onlyFavorites: Boolean = false) {
         service.getCharacterContains(query = "%$_query", offset = _offset)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
@@ -74,14 +76,20 @@ class MarvelViewModel : ViewModel() {
                     Log.d("__", "I got a DataWrapper $result")
 
                     result.data.results.forEach {
-                        itemsList.value = itemsList.value?.plus(it)
+                        if(onlyFavorites) {
+                            if(checkFavorite(it.id)) {
+                                itemsList.value = itemsList.value?.plus(it)
+                            }
+                        } else {
+                            itemsList.value = itemsList.value?.plus(it)
+                        }
                     }
                 }
             }
     }
 
     @SuppressLint("CheckResult")
-    fun getCharactersStartsWith(_query: String, _offset: Int) {
+    fun getCharactersStartsWith(_query: String, _offset: Int, onlyFavorites: Boolean = false) {
         service.getCharacterStartsWith(query = _query, offset = _offset)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
@@ -92,14 +100,20 @@ class MarvelViewModel : ViewModel() {
                     Log.d("__", "I got a DataWrapper $result")
 
                     result.data.results.forEach {
-                        itemsList.value = itemsList.value?.plus(it)
+                        if(onlyFavorites) {
+                            if(checkFavorite(it.id)) {
+                                itemsList.value = itemsList.value?.plus(it)
+                            }
+                        } else {
+                            itemsList.value = itemsList.value?.plus(it)
+                        }
                     }
                 }
             }
     }
 
     @SuppressLint("CheckResult")
-    fun getCharactersStrict(_query: String, _offset: Int) {
+    fun getCharactersStrict(_query: String, _offset: Int, onlyFavorites: Boolean = false) {
         service.getCharacterStrict(query = _query, offset = _offset)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
@@ -110,14 +124,20 @@ class MarvelViewModel : ViewModel() {
                     Log.d("__", "I got a DataWrapper $result")
 
                     result.data.results.forEach {
-                        itemsList.value = itemsList.value?.plus(it)
+                        if(onlyFavorites) {
+                            if(checkFavorite(it.id)) {
+                                itemsList.value = itemsList.value?.plus(it)
+                            }
+                        } else {
+                            itemsList.value = itemsList.value?.plus(it)
+                        }
                     }
                 }
             }
     }
 
     @SuppressLint("CheckResult")
-    fun getSeriesContains(_query: String, _offset: Int) {
+    fun getSeriesContains(_query: String, _offset: Int, onlyFavorites: Boolean = false) {
         service.getSeriesContains(query = "%$_query", offset = _offset)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
@@ -128,14 +148,20 @@ class MarvelViewModel : ViewModel() {
                     Log.d("__", "I got a DataWrapper $result")
 
                     result.data.results.forEach {
-                        itemsList.value = itemsList.value?.plus(it)
+                        if(onlyFavorites) {
+                            if(checkFavorite(it.id)) {
+                                itemsList.value = itemsList.value?.plus(it)
+                            }
+                        } else {
+                            itemsList.value = itemsList.value?.plus(it)
+                        }
                     }
                 }
             }
     }
 
     @SuppressLint("CheckResult")
-    fun getSeriesStartsWith(_query: String, _offset: Int) {
+    fun getSeriesStartsWith(_query: String, _offset: Int, onlyFavorites: Boolean = false) {
         service.getSeriesStartsWith(query = _query, offset = _offset)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
@@ -146,14 +172,20 @@ class MarvelViewModel : ViewModel() {
                     Log.d("__", "I got a DataWrapper $result")
 
                     result.data.results.forEach {
-                        itemsList.value = itemsList.value?.plus(it)
+                        if(onlyFavorites) {
+                            if(checkFavorite(it.id)) {
+                                itemsList.value = itemsList.value?.plus(it)
+                            }
+                        } else {
+                            itemsList.value = itemsList.value?.plus(it)
+                        }
                     }
                 }
             }
     }
 
     @SuppressLint("CheckResult")
-    fun getSeriesStrict(_query: String, _offset: Int) {
+    fun getSeriesStrict(_query: String, _offset: Int, onlyFavorites: Boolean = false) {
         service.getSeriesStrict(query = _query, offset = _offset)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
@@ -164,7 +196,13 @@ class MarvelViewModel : ViewModel() {
                     Log.d("__", "I got a DataWrapper $result")
 
                     result.data.results.forEach {
-                        itemsList.value = itemsList.value?.plus(it)
+                        if(onlyFavorites) {
+                            if(checkFavorite(it.id)) {
+                                itemsList.value = itemsList.value?.plus(it)
+                            }
+                        } else {
+                            itemsList.value = itemsList.value?.plus(it)
+                        }
                     }
                 }
             }
@@ -172,7 +210,7 @@ class MarvelViewModel : ViewModel() {
 
 
     @SuppressLint("CheckResult")
-    fun getSeriesContainingCharacter(_query: String, _offset: Int) {
+    fun getSeriesContainingCharacter(_query: String, _offset: Int, onlyFavorites: Boolean = false) {
         service.getSeriesContainingCharacter(query = _query, offset = _offset)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
@@ -183,14 +221,20 @@ class MarvelViewModel : ViewModel() {
                     Log.d("__", "I got a DataWrapper $result")
 
                     result.data.results.forEach {
-                        itemsList.value = itemsList.value?.plus(it)
+                        if(onlyFavorites) {
+                            if(checkFavorite(it.id)) {
+                                itemsList.value = itemsList.value?.plus(it)
+                            }
+                        } else {
+                            itemsList.value = itemsList.value?.plus(it)
+                        }
                     }
                 }
             }
     }
 
     @SuppressLint("CheckResult")
-    fun getCharactersInSeries(_query: String, _offset: Int) {
+    fun getCharactersInSeries(_query: String, _offset: Int, onlyFavorites: Boolean = false) {
         service.getCharactersInSeries(query = _query, offset = _offset)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
@@ -201,7 +245,13 @@ class MarvelViewModel : ViewModel() {
                     Log.d("__", "I got a DataWrapper $result")
 
                     result.data.results.forEach {
-                        itemsList.value = itemsList.value?.plus(it)
+                        if(onlyFavorites) {
+                            if(checkFavorite(it.id)) {
+                                itemsList.value = itemsList.value?.plus(it)
+                            }
+                        } else {
+                            itemsList.value = itemsList.value?.plus(it)
+                        }
                     }
                 }
             }
