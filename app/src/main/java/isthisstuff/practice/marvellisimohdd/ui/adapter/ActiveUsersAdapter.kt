@@ -50,8 +50,9 @@ class ActiveUsersAdapter(_sender: String, _marvelObject: MarvelObject) :
     }
 
     private fun sendMessage(sender: String, receiver: String, payload: String) {
+        val receiverNoDots = receiver.replace(".",",")
         val customDatabaseMessageReference =
-            database.getReference("<TO:${receiver.replace(".", ",")}>")
+            database.getReference("<TO:${receiverNoDots}>")
         val timeString = LocalDateTime.now().toString().replace(".", ":")
 
         val message = "<SENDER>$sender</SENDER><PAYLOAD>$payload</PAYLOAD><TIMESTAMP>$timeString</TIMESTAMP>"
