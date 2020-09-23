@@ -3,6 +3,7 @@ package isthisstuff.practice.marvellisimohdd
 import android.app.Activity
 import android.content.Context
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
@@ -11,6 +12,9 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.UrlsRealmObject
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
@@ -21,6 +25,10 @@ class MyViewHolder(val view: ConstraintLayout) : RecyclerView.ViewHolder(view) {
 
     val textView = view.findViewById<TextView>(R.id.title_text)
     val btnView = view.findViewById<ImageView>(R.id.search_results_image)
+}
+
+class MyActiveUsersViewHolder(val view: LinearLayout) : RecyclerView.ViewHolder(view) {
+    val userEmail = view.findViewById<TextView>(R.id.user_email_text_view)
 }
 
 fun Fragment.hideKeyboard() {
@@ -70,6 +78,29 @@ fun convertMarvelRealmObjectToMarvelObject(marvelRealmObject: MarvelRealmObject)
     )
     return marvelObject
 }
+/*
+//FIREBASE database
+val userListener = object : ValueEventListener {
+    var concurrentUsersHashMap = HashMap<String,String>()
+    override fun onDataChange(dataSnapshot: DataSnapshot) {
+        val user = dataSnapshot.value
+        //wth is is this
+        Log.d("userListener -> onDataChange -> dataSnapshot.value", user.toString())
+
+        if (user != null) {
+            concurrentUsersHashMap = user as HashMap<String, String>
+            Log.d("CURRENT USERS", concurrentUsersHashMap.toString())
+        }
+    }
+
+
+
+    override fun onCancelled(databaseError: DatabaseError) {
+        Log.e("userListener -> onCancelled", databaseError.toException().printStackTrace().toString())
+        //do something here?
+    }
+}
+*/
 
 /*
 fun airplaneModeIsOn() : Boolean {

@@ -16,5 +16,8 @@
             android:id="@+id/nav_series"
             android:icon="@drawable/ic_baseline_menu_book_24"
             android:title="@string/menu_series" />
+        <item android:id="@+id/nav_reco"
+            android:icon="@drawable/ic_baseline_mail_24"
+            android:title="@string/recommendations"/>
     </group>
 </menu>

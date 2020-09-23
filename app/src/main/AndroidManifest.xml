@@ -3,6 +3,7 @@
     package="isthisstuff.practice.marvellisimohdd">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".database.RealmApp"
         android:allowBackup="true"
@@ -12,23 +13,25 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <!-- notification things start-->
+        <!-- notification things start -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_launcher_foreground" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/primaryColor" />
-        <!-- notification things end-->
-
+        <!-- notification things end -->
         <activity
             android:name=".ui.details.DetailsActivity"
             android:label="@string/title_activity_details"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".ui.settings.MySettingsActivity"
             android:label="SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activeusers.ActiveUsersActivity"
+            android:label="ActiveUsersActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivity"
@@ -49,6 +52,5 @@
             </intent-filter>
         </service>
     </application>
-
 
 </manifest>
