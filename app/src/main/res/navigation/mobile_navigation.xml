@@ -22,4 +22,9 @@
         android:name="isthisstuff.practice.marvellisimohdd.ui.series.SeriesFragment"
         android:label="@string/menu_series"
         tools:layout="@layout/fragment_series" />
+    <fragment
+        android:id="@+id/nav_reco"
+        android:name="isthisstuff.practice.marvellisimohdd.ui.recommendations.RecommendationsFragment"
+        android:label="Recommendations"
+        tools:layout="@layout/fragment_recommendations"/>
 </navigation>
