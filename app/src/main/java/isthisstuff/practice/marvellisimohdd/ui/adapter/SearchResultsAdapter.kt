@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
@@ -77,10 +78,10 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
             holder.view.findViewById<TextView>(R.id.title_text).text = item.title
         }
 
-        holder.view.findViewById<TextView>(R.id.info_text).text = item.description
+        //holder.view.findViewById<TextView>(R.id.info_text).text = item.description
         Picasso.get().load(item.thumbnail.path + "." + item.thumbnail.extension)
             .into(holder.view.findViewById<ImageView>(R.id.search_results_image))
-        holder.view.findViewById<LinearLayout>(R.id.search_result_item)
+        holder.view.findViewById<ConstraintLayout>(R.id.search_result_item)
             .setOnClickListener { openDetails(it, position) }
 
         if (position == offset + 10) {
@@ -103,7 +104,7 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.search_item_view, parent, false) as LinearLayout
+        val view = layoutInflater.inflate(R.layout.search_item_view, parent, false) as ConstraintLayout
         realm = Realm.getDefaultInstance()
         saveQueryToCache(query, checkIfSaveToCache())
 
