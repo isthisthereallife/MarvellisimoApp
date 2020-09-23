@@ -50,7 +50,7 @@ class ActiveUsersAdapter() : RecyclerView.Adapter<MyActiveUsersViewHolder>() {
             val timeString = LocalDateTime.now().toString().replace(".", ":")
 
             val message =
-                "SENDER<${"TODO put sender here "}>RECEIVER<${item.second}>TIME<$timeString>"
+                "SENDER<${"TODO put sender here "}>RECEIVER<${item.second}>TIME<$timeString>PAYLOAD:SERIES_ID<Todo skicka med ett id>"
 
             databaseMessageReference.push().setValue(message)
 
