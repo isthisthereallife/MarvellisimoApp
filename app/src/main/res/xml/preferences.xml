@@ -18,6 +18,12 @@
             app:key="list_search_mode"
             app:summary="Edit search mode"
             app:title="Search mode" />
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="only_favorites"
+            app:summaryOff="All results will be shown"
+            app:summaryOn="Only results previously added to favorites will be shown"
+            app:title="Only favorites" />
 
     </PreferenceCategory>
 

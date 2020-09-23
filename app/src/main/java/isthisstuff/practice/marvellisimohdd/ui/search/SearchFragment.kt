@@ -61,17 +61,16 @@ class SearchFragment : Fragment() {
             }
         }
 
-        println((activity as AppCompatActivity).supportActionBar!!.title.toString()+"\n"+searchingFor)
+        Log.d("debug_print","[Fragment titel: "+(activity as AppCompatActivity).supportActionBar!!.title.toString()+", Sökning efter: "+searchingFor+"]")
 
         //för att det inte ska se så tomt ut
-        performSearch("a", 0, searchingFor)
+        performSearch(query = "a", dataType =  searchingFor)
 
         return root
     }
-    
+
     override fun onResume() {
         super.onResume()
-        // detta är kanske inte så optimalt
         adapter.notifyDataSetChanged()
     }
 
