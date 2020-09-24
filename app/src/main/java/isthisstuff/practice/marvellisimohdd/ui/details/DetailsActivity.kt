@@ -1,51 +1,45 @@
 package isthisstuff.practice.marvellisimohdd.ui.details
-
-import android.content.Intent
+import io.realm.Realm
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
+import android.widget.Button
+import io.realm.kotlin.where
+import android.content.Intent
+import android.widget.TextView
+import android.widget.ImageView
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import com.squareup.picasso.Picasso
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.squareup.picasso.Picasso
-import io.realm.Realm
-import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.R
+import androidx.appcompat.app.AppCompatActivity
+import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.checkFavorite
+import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
+import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 import isthisstuff.practice.marvellisimohdd.ui.activeusers.ActiveUsersActivity
 import isthisstuff.practice.marvellisimohdd.convertMarvelObjectToMarvelRealmObject
-import isthisstuff.practice.marvellisimohdd.database.User
-import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
-import isthisstuff.practice.marvellisimohdd.ui.adapter.ActiveUsersAdapter
-import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 
 class DetailsActivity : AppCompatActivity() {
 
-    private val realm: Realm = Realm.getDefaultInstance()
     private lateinit var item: MarvelObject
-
     private lateinit var detailsName: TextView
-    private lateinit var detailsImage: ImageView
     private lateinit var detailsText: TextView
+    private lateinit var buttonShowMore: Button
+    private lateinit var detailsMessage: Button
+    private lateinit var detailsImage: ImageView
     private lateinit var detailsLinkMore: TextView
     private lateinit var detailsFavStar: ImageView
     private lateinit var detailsBackArrow: ImageView
-    private lateinit var buttonShowMore: Button
-    private lateinit var detailsMessage: Button
 
+    private val realm: Realm = Realm.getDefaultInstance()
     private var name: String = "Name goes here."
     private var description: String = "*NO DESCRIPTION AVAILABLE*"
     private var urlDetails: String = "https://Marvel.com"
-    private var thumbnail: String =
-        "https://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
+    private var thumbnail: String = "https://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
     private var buttonText: String = ""
-
     private var favorite: Boolean = false
-
     private var activeUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     private var dbUser: User? = null
 
@@ -53,6 +47,7 @@ class DetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
         setSupportActionBar(findViewById(R.id.toolbar))
+        item = (intent.getSerializableExtra("item") as MarvelObject)
 
         detailsName = findViewById<TextView>(R.id.details_name)
         detailsImage = findViewById<ImageView>(R.id.details_image)
@@ -62,16 +57,11 @@ class DetailsActivity : AppCompatActivity() {
         detailsBackArrow = findViewById<ImageView>(R.id.details_arrow_back)
         buttonShowMore = findViewById<Button>(R.id.button_series)
         detailsMessage = findViewById<Button>(R.id.button_message)
-
-
-        item = (intent.getSerializableExtra("item") as MarvelObject)
-
-        updateDetailsInformation()
-
         detailsFavStar.setOnClickListener { setFavorite() }
         detailsBackArrow.setOnClickListener { finish() }
-
         detailsMessage.setOnClickListener { sendToFriend(item) }
+
+        updateDetailsInformation()
 
         if (checkFavorite(item.id)) {
             favorite = true
@@ -173,7 +163,6 @@ class DetailsActivity : AppCompatActivity() {
         m.getSeriesContainingCharacter(item.id.toString(), 0)
         setContentView(R.layout.fragment_search)
     }
-
 
     fun sendToFriend(marvelObject: MarvelObject) {
         //setContentView(R.layout.fragment_active_user)
