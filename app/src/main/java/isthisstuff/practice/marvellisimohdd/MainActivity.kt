@@ -43,14 +43,13 @@ import isthisstuff.practice.marvellisimohdd.firebase.MyFirebaseMessagingService
 import isthisstuff.practice.marvellisimohdd.ui.settings.MySettingsActivity
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+    private lateinit var navHeader: View
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     private val realm: Realm = Realm.getDefaultInstance()
     private var database = FirebaseDatabase.getInstance()
     private var databaseCurrentUsersReference = database.getReference("currentUsers")
     var concurrentUsersHashMap = HashMap<String, String>()
-
-    private lateinit var navHeader: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,7 +104,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         realm.executeTransaction {
             realm.where<User>().isNull("email").findAll().deleteAllFromRealm()
         }
-
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as a top level destination.

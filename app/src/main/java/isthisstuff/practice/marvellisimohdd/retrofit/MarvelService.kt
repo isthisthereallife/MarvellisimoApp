@@ -71,7 +71,6 @@ interface MarvelService {
         @Query("series") query: String,
         @Query("offset") offset: Int = 0
     ): Single<MarvelDataWrapper>
-
 }
 
 fun String.md5(): String {

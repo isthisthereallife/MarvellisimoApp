@@ -14,12 +14,11 @@ import isthisstuff.practice.marvellisimohdd.ui.adapter.ActiveUsersAdapter
 
 class ActiveUsersActivity() : AppCompatActivity() {
     lateinit var marvelObject: MarvelObject
-    var senderEmail: String = ""
+    private var senderEmail: String = ""
     private var database = FirebaseDatabase.getInstance()
     private var databaseCurrentUsersReference = database.getReference("currentUsers")
     lateinit var adapter: ActiveUsersAdapter
-    var boolean = false
-
+    private var boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -10,7 +10,6 @@ open class User : RealmObject() {
     var email: String? = null
     var name: String? = null
     var favorites: RealmList<MarvelRealmObject> = RealmList()
-
 }
 
 open class MarvelRealmObject : RealmObject() {

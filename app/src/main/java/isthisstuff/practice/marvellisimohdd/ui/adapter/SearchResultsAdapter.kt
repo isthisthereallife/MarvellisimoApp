@@ -31,19 +31,18 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
     lateinit var itemNameView: TextView
     lateinit var itemInfoView: TextView
     lateinit var itemThumbnail: ImageView
+    lateinit var marvelViewModel: MarvelViewModel
+    lateinit var marvelDatatype: MarvelDatatypes
+    lateinit var preferredSearchMethod: String
+    lateinit var query: String
     private lateinit var realm: Realm
+    var offset: Int = 0
 
     var data: List<MarvelObject> = mutableListOf()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
-
-    lateinit var marvelViewModel: MarvelViewModel
-    lateinit var marvelDatatype: MarvelDatatypes
-    lateinit var preferredSearchMethod: String
-    lateinit var query: String
-    var offset: Int = 0
 
     init {
         //TODO lägg findViewById-grejjerna häri? /M
