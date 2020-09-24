@@ -131,8 +131,7 @@ val userListener = object : ValueEventListener {
 }
 */
 
-/*
-fun airplaneModeIsOn() : Boolean {
+fun airplaneModeIsOn(context: Context?) : Boolean {
     //AIRPLANE-MODE check
     if (Settings.System.getInt(
             context?.contentResolver,
@@ -147,4 +146,3 @@ fun airplaneModeIsOn() : Boolean {
         return true
     }
 }
- */

@@ -16,12 +16,9 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import io.realm.Realm
 import io.realm.kotlin.where
-import isthisstuff.practice.marvellisimohdd.R
-import isthisstuff.practice.marvellisimohdd.checkFavorite
-import isthisstuff.practice.marvellisimohdd.convertMarvelRealmObjectToMarvelObject
+import isthisstuff.practice.marvellisimohdd.*
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
-import isthisstuff.practice.marvellisimohdd.hideKeyboard
 import isthisstuff.practice.marvellisimohdd.ui.adapter.SearchResultsAdapter
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
@@ -116,18 +113,31 @@ class SearchFragment : Fragment() {
         hideKeyboard()
         marvelViewModel.clearSearchData()
 
-        if(onlyFavorites) {
+        if(onlyFavorites || airplaneModeIsOn(this.context)) {
+
+            // nu laddar vi från cache istället
+
             var newList: List<MarvelObject>? = listOf<MarvelObject>()
             realm.where<MarvelRealmObject>().findAll().forEach {
                 var convertedObject = convertMarvelRealmObjectToMarvelObject(it)
-                if(checkFavorite(convertedObject.id)) {
-                    newList = newList!!.plus(convertedObject)
-                }
+                newList = newList!!.plus(convertedObject)
             }
-            marvelViewModel.itemsList.value = newList
+
+            if(onlyFavorites) {
+                var newerList: List<MarvelObject>? = listOf<MarvelObject>()
+                newList!!.forEach {
+                    if(checkFavorite(it.id)) {
+                        newerList = newerList!!.plus(it)
+                    }
+                }
+                marvelViewModel.itemsList.value = newerList
+            } else {
+                marvelViewModel.itemsList.value = newList
+            }
         } else {
             marvelViewModel.getData(searchingFor, query, offset, preferredSearchMethod)
         }
+
         adapter.saveRequestData(
             marvelViewModel,
             searchingFor,
