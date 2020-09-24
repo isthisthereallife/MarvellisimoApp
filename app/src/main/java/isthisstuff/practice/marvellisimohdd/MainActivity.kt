@@ -90,22 +90,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 //spara till nån lista kanske?
                 if (user != null) {
                     concurrentUsersHashMap = user as HashMap<String, String>
-                    Log.d("CURRENT USERS", concurrentUsersHashMap.toString())
+                    Log.d("CURRENT USERS (i am in MainActivity)", concurrentUsersHashMap.toString())
                 }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Log.w("userListener -> onCancelled", databaseError.toException())
+                Log.w("MainActivity -> userListener -> onCancelled", databaseError.toException())
                 //do something here?
             }
         }
+        databaseCurrentUsersReference.addValueEventListener(userListener)
 
         //PURGE all null users
         realm.executeTransaction {
             realm.where<User>().isNull("email").findAll().deleteAllFromRealm()
         }
 
-        databaseCurrentUsersReference.addValueEventListener(userListener)
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as a top level destination.
@@ -197,6 +197,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onDestroy()
 
         //val userEmailWithoutDots = realm.where<User>().findFirst().toString().replace(".","")
+        //jag tömmer currentUsers helt när jag loggar ut!! kanske inte jättebra!!!
         FirebaseDatabase.getInstance().getReference("currentUsers").removeValue()
 
         FirebaseAuth.getInstance().signOut()

@@ -76,8 +76,11 @@ class RecommendationsFragment : Fragment() {
         var textBuilder = ""
         toList.forEach { it ->
             Log.d("Loopar meddelanden att skriva ut", it.second)
-            textBuilder = textBuilder.plus(it.second).plus("\n\n")
+            val sender = it.second.substringAfter("<SENDER>").substringBefore("</SENDER>")
+            val type = it.second.substringAfter("<MARVELTYPE>").substringBefore("</MARVELTYPE>")
+            val name = it.second.substringAfter("<MARVELOBJECTNAME>").substringBefore("</MARVELOBJECTNAME>")
 
+            textBuilder = textBuilder.plus("$sender thinks you should search for the $type $name").plus("\n\n")
         }
         recoTextView.text = textBuilder
     }
