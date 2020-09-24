@@ -57,6 +57,7 @@ class DetailsActivity : AppCompatActivity() {
         detailsBackArrow = findViewById<ImageView>(R.id.details_arrow_back)
         buttonShowMore = findViewById<Button>(R.id.button_series)
         detailsMessage = findViewById<Button>(R.id.button_message)
+
         detailsFavStar.setOnClickListener { setFavorite() }
         detailsBackArrow.setOnClickListener { finish() }
         detailsMessage.setOnClickListener { sendToFriend(item) }

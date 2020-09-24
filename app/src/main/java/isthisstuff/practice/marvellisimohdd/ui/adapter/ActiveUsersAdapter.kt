@@ -46,7 +46,7 @@ class ActiveUsersAdapter(_sender: String, _marvelObject: MarvelObject) :
                 receiver = item.second,
                 payload = marvelObject
             )
-            val updatedText = "Skickat till ${item.second}"
+            val updatedText = "Sent to ${item.second}"
             holder.view.findViewById<TextView>(R.id.user_email_text_view).text = updatedText
         }
 
