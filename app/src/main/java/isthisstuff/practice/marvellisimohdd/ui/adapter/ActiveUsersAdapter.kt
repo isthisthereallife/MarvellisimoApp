@@ -22,7 +22,7 @@ class ActiveUsersAdapter(_sender: String, _marvelObject: MarvelObject) :
     var sender = _sender
     var marvelObject = _marvelObject
 
-    var data = listOf<Pair<String, String>>()
+    var data = listOf<String>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -39,14 +39,14 @@ class ActiveUsersAdapter(_sender: String, _marvelObject: MarvelObject) :
     override fun onBindViewHolder(holder: MyActiveUsersViewHolder, position: Int) {
         val item = data[position]
         holder.view.findViewById<TextView>(R.id.user_email_text_view).text =
-            item.second.replace(",", ".")
+            item.replace(",", ".")
         holder.view.findViewById<LinearLayout>(R.id.active_user_item).setOnClickListener {
             sendMessage(
                 sender = sender,
-                receiver = item.second,
+                receiver = item,
                 payload = marvelObject
             )
-            val updatedText = "Skickat till ${item.second}"
+            val updatedText = "Skickat till ${item}"
             holder.view.findViewById<TextView>(R.id.user_email_text_view).text = updatedText
         }
 

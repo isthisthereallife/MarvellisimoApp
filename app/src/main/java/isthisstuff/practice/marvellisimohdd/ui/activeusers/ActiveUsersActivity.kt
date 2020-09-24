@@ -38,16 +38,19 @@ class ActiveUsersActivity() : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val user = dataSnapshot.value
 
-                //detta skriver ut alla users från currentUsers i Firebase Realtime Database
-                Log.d(
-                    "ActiveUsersActivity -> userListener -> onDataChange -> dataSnapshot.value",
-                    user.toString()
-                )
-
                 if (user != null) {
                     concurrentUsersHashMap = user as HashMap<String, String>
-                    Log.d("CURRENT USERS", concurrentUsersHashMap.toString())
-                    adapter.data = concurrentUsersHashMap.toList()
+                    val usersList = concurrentUsersHashMap.toList()
+                    val noDoubles = mutableListOf<String>()
+
+                    usersList.forEach {
+
+                        if (noDoubles.contains(it.second)) {
+                        } else {
+                            noDoubles.add(it.second)
+                        }
+                    }
+                    adapter.data = noDoubles
                 }
             }
 
