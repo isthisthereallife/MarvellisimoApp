@@ -149,7 +149,6 @@ class DetailsActivity : AppCompatActivity() {
 
         detailsName.text = name
         detailsText.text = description
-        detailsLinkMore.text = urlDetails
         thumbnail = item.thumbnail.path + "." + item.thumbnail.extension
         Picasso.get().load(thumbnail).into(detailsImage)
     }
