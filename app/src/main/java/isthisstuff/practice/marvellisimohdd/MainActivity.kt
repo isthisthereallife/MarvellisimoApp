@@ -134,6 +134,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             startActivity(Intent(this@MainActivity, MySettingsActivity::class.java))
             return true
         }
+        else if (id == R.id.action_log_out){
+            logOut()
+            return true
+        }
         return super.onOptionsItemSelected(item)
     }
 
@@ -191,24 +195,38 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    fun logOut(){
+        if(FirebaseAuth.getInstance().currentUser!=null) {
+            //val userEmailWithoutDots = realm.where<User>().findFirst().toString().replace(".","")
+            //jag tömmer currentUsers helt när jag loggar ut!! kanske inte jättebra!!!
+            FirebaseDatabase.getInstance().getReference("currentUsers").removeValue()
+            FirebaseAuth.getInstance().signOut()
+            updateLoginDisplay()
+            Toast.makeText(this, getString(R.string.toast_logout), Toast.LENGTH_SHORT).show()
+        }
+        else{
+            Toast.makeText(this,getString(R.string.toast_log_in_prompt),Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-
-        //val userEmailWithoutDots = realm.where<User>().findFirst().toString().replace(".","")
-        //jag tömmer currentUsers helt när jag loggar ut!! kanske inte jättebra!!!
-        FirebaseDatabase.getInstance().getReference("currentUsers").removeValue()
-
-        FirebaseAuth.getInstance().signOut()
+        logOut()
         realm.close()
         Log.d("onDestroy", "FirebaseAuth signed out, realm closed")
     }
 
     private fun updateLoginDisplay() {
+        Log.d("updateLoginDisplay()","currentUser = ${FirebaseAuth.getInstance().currentUser}")
         if (FirebaseAuth.getInstance().currentUser != null) {
             navHeader.findViewById<TextView>(R.id.nameUser).text =
                 FirebaseAuth.getInstance().currentUser?.displayName
             navHeader.findViewById<TextView>(R.id.emailUser).text =
                 FirebaseAuth.getInstance().currentUser?.email
+        }
+        else {
+            navHeader.findViewById<TextView>(R.id.nameUser).text = getString(R.string.nav_header_title)
+            navHeader.findViewById<TextView>(R.id.emailUser).text = getString(R.string.nav_header_subtitle)
         }
     }
 
