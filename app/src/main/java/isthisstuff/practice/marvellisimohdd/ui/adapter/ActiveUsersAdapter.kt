@@ -5,6 +5,7 @@ import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -40,14 +41,14 @@ class ActiveUsersAdapter(_sender: String, _marvelObject: MarvelObject) :
         val item = data[position]
         holder.view.findViewById<TextView>(R.id.user_email_text_view).text =
             item.replace(",", ".")
-        holder.view.findViewById<LinearLayout>(R.id.active_user_item).setOnClickListener {
+        holder.view.findViewById<Button>(R.id.button_send_to_user).setOnClickListener {
             sendMessage(
                 sender = sender,
                 receiver = item,
                 payload = marvelObject
             )
 
-            val updatedText = "Sent to ${item}"
+            val updatedText = "Sent to ${item.replace(",",".")}"
 
             holder.view.findViewById<TextView>(R.id.user_email_text_view).text = updatedText
         }
