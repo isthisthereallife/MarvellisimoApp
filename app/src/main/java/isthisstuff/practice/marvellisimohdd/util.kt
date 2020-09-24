@@ -71,29 +71,29 @@ fun convertMarvelObjectToMarvelRealmObject(marvelObject: MarvelObject): MarvelRe
 
 // blame -> //M
 fun convertMarvelRealmObjectToMarvelObject(marvelRealmObject: MarvelRealmObject): MarvelObject {
-    val urls = mutableListOf<Urls>()
+
+    var urls = listOf<Urls>()
     marvelRealmObject.urls?.forEach {
         val urlsObject = Urls(type = it.type!!, url = it.url!!)
-        urls.add(urlsObject)
+        urls = urls.plus(urlsObject)
     }
-    val marvelObject = MarvelObject(
-        id = marvelRealmObject.id!!, name = marvelRealmObject.name, title = marvelRealmObject.title,
-        description = marvelRealmObject.description, thumbnail = Thumbnail(
-            path = marvelRealmObject.thumbnail?.path!!,
-            extension = marvelRealmObject.thumbnail?.extension!!
-        ), urls = urls.toList()
+
+    var marvelObject = MarvelObject(
+        marvelRealmObject.id,
+        marvelRealmObject.name,
+        marvelRealmObject.title,
+        urls,
+        marvelRealmObject.description,
+        Thumbnail(marvelRealmObject.thumbnail!!.path,marvelRealmObject.thumbnail!!.extension)
     )
     return marvelObject
 }
 
-fun checkFavorite(itemId:Int):Boolean {
+fun checkFavorite(itemId:Int?):Boolean {
     val realm = Realm.getDefaultInstance()
     val activeUser:FirebaseUser? = FirebaseAuth.getInstance().currentUser
     if (activeUser != null) {
         val dbUser = realm.where<User>().equalTo("email", activeUser.email).findFirst()
-        Log.d("PRINTAR ALLA USERS I DATABASEN", realm.where<User>().findAll().toString())
-        Log.d("DetailsActivity innan loopa dbUsers favoriter", "dbUser=$dbUser")
-
         for (x in dbUser!!.favorites) {
             if (x.id == itemId) {
                 return true

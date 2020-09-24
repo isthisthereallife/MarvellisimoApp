@@ -15,7 +15,7 @@ data class MarvelDataContainer(
 )
 
 data class MarvelObject(
-    val id: Int,
+    val id: Int?,
     val name: String?,
     val title: String?,
     val urls: List<Urls>,
@@ -23,7 +23,7 @@ data class MarvelObject(
     val thumbnail: Thumbnail
 ) : Serializable
 
-data class Thumbnail(val path: String, val extension: String) : Serializable
+data class Thumbnail(val path: String?, val extension: String?) : Serializable
 
 data class Urls(val type: String, val url: String) : Serializable
 

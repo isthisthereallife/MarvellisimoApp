@@ -14,8 +14,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
+import io.realm.Realm
+import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.checkFavorite
+import isthisstuff.practice.marvellisimohdd.convertMarvelRealmObjectToMarvelObject
+import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.hideKeyboard
 import isthisstuff.practice.marvellisimohdd.ui.adapter.SearchResultsAdapter
@@ -25,9 +29,11 @@ import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 
 class SearchFragment : Fragment() {
     lateinit var root: View
-    lateinit var sharedPreferences:SharedPreferences
 
+    private var realm = Realm.getDefaultInstance()
+    lateinit var sharedPreferences:SharedPreferences
     var onlyFavorites:Boolean = false
+    var preferredSearchMethod:String = "contains"
     val marvelViewModel: MarvelViewModel by viewModels()
     var searchingFor: MarvelDatatypes = MarvelDatatypes.CHARACTERS
     private var adapter: SearchResultsAdapter = SearchResultsAdapter(this)
@@ -38,6 +44,7 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
+        onlyFavorites = sharedPreferences.getBoolean("only_favorites", false)
 
         marvelViewModel.itemsList.observe(viewLifecycleOwner, {
             adapter.data = it
@@ -87,9 +94,10 @@ class SearchFragment : Fragment() {
         onlyFavorites = sharedPreferences.getBoolean("only_favorites", false)
         if(onlyFavorites) {
             var newList: List<MarvelObject>? = listOf<MarvelObject>()
-            for(x in marvelViewModel.itemsList.value!!) {
-                if(checkFavorite(x.id)) {
-                    newList = newList!!.plus(x)
+            realm.where<MarvelRealmObject>().findAll().forEach {
+                var convertedObject = convertMarvelRealmObjectToMarvelObject(it)
+                if(checkFavorite(convertedObject.id)) {
+                    newList = newList!!.plus(convertedObject)
                 }
             }
             marvelViewModel.itemsList.value = newList
@@ -101,16 +109,25 @@ class SearchFragment : Fragment() {
 
     fun performSearch(query: String, offset: Int = 0) {
         Log.d("debug_print", "onlyFavorites = $onlyFavorites")
-        var preferredSearchMethod = sharedPreferences.getString("list_search_mode", "")
-        Log.d("kolla, såhär har du valt att söka", "$preferredSearchMethod")
-        if (preferredSearchMethod == null) {
-            preferredSearchMethod = "contains"
-        }
+        preferredSearchMethod = sharedPreferences.getString("list_search_mode", "contains").toString()
+        Log.d("kolla, såhär har du valt att söka", preferredSearchMethod)
 
         root.rootView.findViewById<EditText>(R.id.search_field).clearFocus()
         hideKeyboard()
         marvelViewModel.clearSearchData()
-        marvelViewModel.getData(searchingFor, query, offset, preferredSearchMethod, onlyFavorites)
+
+        if(onlyFavorites) {
+            var newList: List<MarvelObject>? = listOf<MarvelObject>()
+            realm.where<MarvelRealmObject>().findAll().forEach {
+                var convertedObject = convertMarvelRealmObjectToMarvelObject(it)
+                if(checkFavorite(convertedObject.id)) {
+                    newList = newList!!.plus(convertedObject)
+                }
+            }
+            marvelViewModel.itemsList.value = newList
+        } else {
+            marvelViewModel.getData(searchingFor, query, offset, preferredSearchMethod)
+        }
         adapter.saveRequestData(
             marvelViewModel,
             searchingFor,
