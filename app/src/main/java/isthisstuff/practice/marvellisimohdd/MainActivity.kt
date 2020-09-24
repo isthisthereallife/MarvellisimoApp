@@ -76,7 +76,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             val msg = getString(R.string.msg_token_fmt, token)
             Log.d("Got a token", "Token is: $msg")
-            Toast.makeText(baseContext, "is there anything here?: $msg", Toast.LENGTH_SHORT).show()
         })
         //end of FIREBASE cloud messaging
 
