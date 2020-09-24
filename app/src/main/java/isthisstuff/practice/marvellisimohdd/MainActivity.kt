@@ -135,7 +135,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             return true
         }
         else if (id == R.id.action_log_out){
-            logOut()
+            if(FirebaseAuth.getInstance().currentUser!=null) {
+                logOut()
+            }
+            else{
+                Toast.makeText(this,getString(R.string.toast_log_in_prompt),Toast.LENGTH_SHORT).show()
+            }
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -204,9 +209,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             updateLoginDisplay()
             Toast.makeText(this, getString(R.string.toast_logout), Toast.LENGTH_SHORT).show()
         }
-        else{
-            Toast.makeText(this,getString(R.string.toast_log_in_prompt),Toast.LENGTH_SHORT).show()
-        }
+
     }
 
     override fun onDestroy() {
