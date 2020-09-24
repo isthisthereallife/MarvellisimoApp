@@ -1,8 +1,11 @@
 package isthisstuff.practice.marvellisimohdd.ui.adapter
 
+import android.os.Parcel
+import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -11,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase
 import isthisstuff.practice.marvellisimohdd.MyActiveUsersViewHolder
 import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
+import isthisstuff.practice.marvellisimohdd.isCharacter
 import java.time.LocalDateTime
 
 class ActiveUsersAdapter(_sender: String, _marvelObject: MarvelObject) :
@@ -19,7 +23,7 @@ class ActiveUsersAdapter(_sender: String, _marvelObject: MarvelObject) :
     var sender = _sender
     var marvelObject = _marvelObject
 
-    var data = listOf<Pair<String, String>>()
+    var data = listOf<String>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -36,26 +40,38 @@ class ActiveUsersAdapter(_sender: String, _marvelObject: MarvelObject) :
     override fun onBindViewHolder(holder: MyActiveUsersViewHolder, position: Int) {
         val item = data[position]
         holder.view.findViewById<TextView>(R.id.user_email_text_view).text =
-            item.second.replace(",", ".")
-        holder.view.findViewById<LinearLayout>(R.id.active_user_item).setOnClickListener {
+            item.replace(",", ".")
+        holder.view.findViewById<Button>(R.id.button_send_to_user).setOnClickListener {
             sendMessage(
                 sender = sender,
-                receiver = item.second,
-                payload = marvelObject.id.toString()
+                receiver = item,
+                payload = marvelObject
             )
-            val updatedText = "Skickat till ${item.second}"
+
+            val updatedText = "Sent to ${item.replace(",",".")}"
+
             holder.view.findViewById<TextView>(R.id.user_email_text_view).text = updatedText
         }
 
     }
 
-    private fun sendMessage(sender: String, receiver: String, payload: String) {
-        val receiverNoDots = receiver.replace(".",",")
+    private fun sendMessage(sender: String, receiver: String, payload: MarvelObject) {
+        val receiverNoDots = receiver.replace(".", ",")
         val customDatabaseMessageReference =
             database.getReference("<TO:${receiverNoDots}>")
         val timeString = LocalDateTime.now().toString().replace(".", ":")
 
-        val message = "<SENDER>$sender</SENDER><PAYLOAD>$payload</PAYLOAD><TIMESTAMP>$timeString</TIMESTAMP>"
+        val type = if (isCharacter(payload)) "character"
+        else "series"
+
+        val name = if (type == "character")
+            marvelObject.name.toString()
+        else
+            marvelObject.title.toString()
+
+
+        val message =
+            "<SENDER>$sender</SENDER><PAYLOAD>$payload</PAYLOAD><MARVELOBJECTNAME>$name</MARVELOBJECTNAME><MARVELTYPE>$type</MARVELTYPE><TIMESTAMP>$timeString</TIMESTAMP>"
 
         customDatabaseMessageReference.push().setValue(message)
 

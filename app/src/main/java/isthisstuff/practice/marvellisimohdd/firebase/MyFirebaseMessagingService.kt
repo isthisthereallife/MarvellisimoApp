@@ -16,8 +16,6 @@ import isthisstuff.practice.marvellisimohdd.R
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-
-
     /**
      * Called if InstanceID token is updated. This may occur if the security of
      * the previous token had been compromised. Note that this is called when the InstanceID token
@@ -52,8 +50,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             // message, here is where that should be initiated. See sendNotification method below.
         }
         val params: Map<String, String> = remoteMessage.data
-
-
     }
 
     private fun handleNow() {
@@ -110,6 +106,4 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     companion object {
         private const val TAG = "MyFirebaseMsgService"
     }
-
-
 }

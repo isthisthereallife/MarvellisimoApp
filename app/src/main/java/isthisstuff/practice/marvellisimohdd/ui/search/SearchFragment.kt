@@ -12,7 +12,6 @@ import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import io.realm.Realm
@@ -30,14 +29,14 @@ import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 
 class SearchFragment : Fragment() {
     lateinit var root: View
-    val marvelViewModel: MarvelViewModel by viewModels()
-    private var adapter: SearchResultsAdapter = SearchResultsAdapter(this)
-    var searchingFor: MarvelDatatypes = MarvelDatatypes.CHARACTERS
-    private var realm = Realm.getDefaultInstance()
 
+    private var realm = Realm.getDefaultInstance()
     lateinit var sharedPreferences:SharedPreferences
     var onlyFavorites:Boolean = false
     var preferredSearchMethod:String = "contains"
+    val marvelViewModel: MarvelViewModel by viewModels()
+    var searchingFor: MarvelDatatypes = MarvelDatatypes.CHARACTERS
+    private var adapter: SearchResultsAdapter = SearchResultsAdapter(this)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +46,7 @@ class SearchFragment : Fragment() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
         onlyFavorites = sharedPreferences.getBoolean("only_favorites", false)
 
-        marvelViewModel.itemsList.observe(viewLifecycleOwner, Observer {
+        marvelViewModel.itemsList.observe(viewLifecycleOwner, {
             adapter.data = it
         })
 
@@ -55,11 +54,17 @@ class SearchFragment : Fragment() {
 
         root.rootView.findViewById<RecyclerView>(R.id.search_results).adapter = adapter
         root.rootView.findViewById<ImageButton>(R.id.search_button)
-            .setOnClickListener { performSearch(root.rootView.findViewById<EditText>(R.id.search_field).text.toString(), 0, searchingFor) }
+            .setOnClickListener { performSearch(
+                root.rootView.findViewById<EditText>(R.id.search_field).text.toString(),
+                0
+            ) }
         root.rootView.findViewById<EditText>(R.id.search_field)
             .setOnEditorActionListener { v, actionId, event ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    performSearch(root.rootView.findViewById<EditText>(R.id.search_field).text.toString(), 0, searchingFor)
+                    performSearch(
+                        root.rootView.findViewById<EditText>(R.id.search_field).text.toString(),
+                        0
+                    )
                     true
                 } else false
             }
@@ -79,7 +84,7 @@ class SearchFragment : Fragment() {
         Log.d("debug_print","[Fragment titel: "+(activity as AppCompatActivity).supportActionBar!!.title.toString()+", Sökning efter: "+searchingFor+"]")
 
         //för att det inte ska se så tomt ut
-        performSearch(query = "a", dataType =  searchingFor)
+        performSearch(query = "a")
 
         return root
     }
@@ -97,12 +102,12 @@ class SearchFragment : Fragment() {
             }
             marvelViewModel.itemsList.value = newList
         } else {
-            performSearch(query = "a", dataType =  searchingFor)
+            performSearch(query = "a")
         }
         adapter.notifyDataSetChanged()
     }
 
-    fun performSearch(query: String, offset: Int = 0, dataType:MarvelDatatypes=MarvelDatatypes.CHARACTERS) {
+    fun performSearch(query: String, offset: Int = 0) {
         Log.d("debug_print", "onlyFavorites = $onlyFavorites")
         preferredSearchMethod = sharedPreferences.getString("list_search_mode", "contains").toString()
         Log.d("kolla, såhär har du valt att söka", preferredSearchMethod)

@@ -102,6 +102,11 @@ fun checkFavorite(itemId:Int?):Boolean {
     }
     return false
 }
+
+fun isCharacter(marvelObject: MarvelObject) : Boolean{
+    if(marvelObject.title==null)return true
+    else return false
+}
 /*
 //FIREBASE database
 val userListener = object : ValueEventListener {
