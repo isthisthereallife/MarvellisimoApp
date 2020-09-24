@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener
 import io.realm.Realm
 import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
+import isthisstuff.practice.marvellisimohdd.database.ThumbnailRealmObject
 import isthisstuff.practice.marvellisimohdd.database.UrlsRealmObject
 import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
@@ -56,8 +57,9 @@ fun convertMarvelObjectToMarvelRealmObject(marvelObject: MarvelObject): MarvelRe
     marvelRealmObject.name = marvelObject.name
     marvelRealmObject.title = marvelObject.title
     marvelRealmObject.description = marvelObject.description
-    marvelRealmObject.thumbnail?.path = marvelObject.thumbnail.path
-    marvelRealmObject.thumbnail?.extension = marvelObject.thumbnail.extension
+    marvelRealmObject.thumbnail = ThumbnailRealmObject()
+    marvelRealmObject.thumbnail!!.path = marvelObject.thumbnail.path
+    marvelRealmObject.thumbnail!!.extension = marvelObject.thumbnail.extension
     marvelObject.urls.forEach {
         val urlsRealmObject = UrlsRealmObject()
         urlsRealmObject.type = it.type
