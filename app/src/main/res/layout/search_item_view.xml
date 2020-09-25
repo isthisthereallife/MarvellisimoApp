@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/search_result_item"
     android:paddingTop="5dp"
     android:paddingBottom="5dp"
-    android:paddingStart="5dp">
+    android:paddingStart="5dp"
+    tools:ignore="RtlSymmetry">
 
     <ImageView
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:src="@mipmap/ic_launcher"
-        android:contentDescription=""
+        android:contentDescription="@string/marvel_image"
         android:scaleType="centerCrop"
         android:id="@+id/search_results_image"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,29 +26,34 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="@id/search_results_image"
         app:layout_constraintBottom_toBottomOf="@id/search_results_image"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/search_results_image"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="@id/search_results_image">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/title_text"
-            android:textStyle="bold"
+            android:layout_width="254dp"
+            android:layout_height="51dp"
+            android:maxLines="1"
             android:textColor="@color/secondaryTextColor"
-            android:textSize="16sp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:maxLines="1"/>
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingStart="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:ignore="MissingConstraints,RtlSymmetry"
+            tools:layout_editor_absoluteX="11dp" />
 
         <ImageView
             android:id="@+id/search_favstar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title_text"
+            android:layout_marginStart="21dp"
             android:src="@drawable/ic_baseline_star_border_24"
-            android:layout_marginEnd="10dp"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/title_text"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/fav" />
 
         <!--
         <TextView
