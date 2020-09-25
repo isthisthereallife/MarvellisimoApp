@@ -133,7 +133,7 @@
 
             <Button
 
-                android:id="@+id/button_series"
+                android:id="@+id/button_show_related"
                 android:layout_width="300dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"

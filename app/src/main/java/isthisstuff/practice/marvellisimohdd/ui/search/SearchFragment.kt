@@ -1,5 +1,6 @@
 package isthisstuff.practice.marvellisimohdd.ui.search
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import io.realm.Realm
@@ -34,6 +36,7 @@ class SearchFragment : Fragment() {
     val marvelViewModel: MarvelViewModel by viewModels()
     var searchingFor: MarvelDatatypes = MarvelDatatypes.CHARACTERS
     private var adapter: SearchResultsAdapter = SearchResultsAdapter(this)
+    private var activityResultHappened:Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,30 +81,44 @@ class SearchFragment : Fragment() {
             }
         }
 
-        Log.d("debug_print","[Fragment titel: "+(activity as AppCompatActivity).supportActionBar!!.title.toString()+", Sökning efter: "+searchingFor+"]")
-
         //för att det inte ska se så tomt ut
+        Log.d("debug_log","[PERFORMING INITIAL SEARCH]")
         performSearch(query = "a")
 
         return root
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when(resultCode) {
+            1 -> {
+                activityResultHappened = true
+                Log.d("debug_log","[Fetching related data ${(data!!.extras!!.get("dataType") as MarvelDatatypes)}, searchMethod: ${(data.extras!!.get("searchMethod") as String)}]")
+                marvelViewModel.clearSearchData()
+                marvelViewModel.getData((data!!.extras!!.get("dataType") as MarvelDatatypes), (data.extras!!.get("itemId") as Int).toString(), 0, (data.extras!!.get("searchMethod") as String))
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
-        onlyFavorites = sharedPreferences.getBoolean("only_favorites", false)
-        if(onlyFavorites) {
-            var newList: List<MarvelObject>? = listOf<MarvelObject>()
-            realm.where<MarvelRealmObject>().findAll().forEach {
-                var convertedObject = convertMarvelRealmObjectToMarvelObject(it)
-                if(checkFavorite(convertedObject.id)) {
-                    newList = newList!!.plus(convertedObject)
+        if(!activityResultHappened) {
+            onlyFavorites = sharedPreferences.getBoolean("only_favorites", false)
+            if(onlyFavorites) {
+                var newList: List<MarvelObject>? = listOf<MarvelObject>()
+                realm.where<MarvelRealmObject>().findAll().forEach {
+                    var convertedObject = convertMarvelRealmObjectToMarvelObject(it)
+                    if(checkFavorite(convertedObject.id)) {
+                        newList = newList!!.plus(convertedObject)
+                    }
                 }
+                marvelViewModel.itemsList.value = newList
+            } else {
+                performSearch(query = "a")
             }
-            marvelViewModel.itemsList.value = newList
-        } else {
-            performSearch(query = "a")
+            adapter.notifyDataSetChanged()
         }
-        adapter.notifyDataSetChanged()
+        activityResultHappened=false
     }
 
     fun performSearch(query: String, offset: Int = 0) {

@@ -105,7 +105,8 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
         )
         val intent = Intent(fragment.context, DetailsActivity::class.java)
         intent.putExtra("item", this.data[position])
-        fragment.context?.startActivity(intent)
+        //fragment.context?.startActivity(intent)
+        fragment.startActivityForResult(intent,1)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {

@@ -9,7 +9,6 @@ import io.realm.kotlin.where
 import android.content.Intent
 import android.widget.TextView
 import android.widget.ImageView
-import androidx.activity.viewModels
 import com.squareup.picasso.Picasso
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -18,9 +17,9 @@ import androidx.appcompat.app.AppCompatActivity
 import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.checkFavorite
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
-import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 import isthisstuff.practice.marvellisimohdd.ui.activeusers.ActiveUsersActivity
 import isthisstuff.practice.marvellisimohdd.convertMarvelObjectToMarvelRealmObject
+import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
 
 class DetailsActivity : AppCompatActivity() {
 
@@ -57,12 +56,13 @@ class DetailsActivity : AppCompatActivity() {
         detailsLinkMore = findViewById<TextView>(R.id.details_link_more)
         detailsFavStar = findViewById<ImageView>(R.id.details_favstar)
         detailsBackArrow = findViewById<ImageView>(R.id.details_arrow_back)
-        buttonShowMore = findViewById<Button>(R.id.button_series)
+        buttonShowMore = findViewById<Button>(R.id.button_show_related)
         detailsMessage = findViewById<Button>(R.id.button_message)
 
         detailsFavStar.setOnClickListener { setFavorite() }
         detailsBackArrow.setOnClickListener { finish() }
         detailsMessage.setOnClickListener { sendToFriend(item) }
+        buttonShowMore.setOnClickListener{ getRelatedData() }
 
         updateDetailsInformation()
 
@@ -116,14 +116,12 @@ class DetailsActivity : AppCompatActivity() {
     private fun updateDetailsInformation() {
         if (item.name != null) {
             if (item.name.toString().isNotBlank())
-                buttonText = "See all series ${item.name} appears in"
+            buttonText = "See all series ${item.name} appears in"
             buttonShowMore.text = buttonText
-            buttonShowMore.setOnClickListener { showAllSeriesWithThisCharacter() }
             name = item.name.toString().replace("ï¿½", "'")
         } else if (item.title != null) {
             buttonText = "See all characters who appear in ${item.title}"
             buttonShowMore.text = buttonText
-            buttonShowMore.setOnClickListener { showAllCharactersInThisSeries() }
 
             name = item.title.toString().replace("ï¿½", "'")
         }
@@ -153,18 +151,16 @@ class DetailsActivity : AppCompatActivity() {
         Picasso.get().load(thumbnail).into(detailsImage)
     }
 
-    private fun showAllCharactersInThisSeries() {
-        setContentView(R.layout.fragment_search)
-        val m: MarvelViewModel by viewModels()
-        m.getCharactersInSeries(item.id.toString(), 0)
-        setContentView(R.layout.fragment_search)
-    }
-
-    private fun showAllSeriesWithThisCharacter() {
-        setContentView(R.layout.fragment_search)
-        val m: MarvelViewModel by viewModels()
-        m.getSeriesContainingCharacter(item.id.toString(), 0)
-        setContentView(R.layout.fragment_search)
+    private fun getRelatedData() {
+        var returnIntent:Intent = Intent()
+        returnIntent.putExtra("searchMethod", "related")
+        when(item.name) {
+            null -> returnIntent.putExtra("dataType", MarvelDatatypes.CHARACTERS)
+            else -> returnIntent.putExtra("dataType", MarvelDatatypes.SERIES)
+        }
+        returnIntent.putExtra("itemId", item.id)
+        setResult(1, returnIntent)
+        finish()
     }
 
     fun sendToFriend(marvelObject: MarvelObject) {

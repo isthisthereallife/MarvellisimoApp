@@ -56,10 +56,13 @@ class MarvelViewModel : ViewModel() {
                     MarvelDatatypes.SERIES -> getSeriesStrict(_query, _offset)
                 }
             }
-
+            "related" -> {
+                when (_marvelDatatype) {
+                    MarvelDatatypes.CHARACTERS -> getCharactersInSeries(_query, _offset)
+                    MarvelDatatypes.SERIES -> getSeriesContainingCharacter(_query, _offset)
+                }
+            }
         }
-
-
     }
 
 

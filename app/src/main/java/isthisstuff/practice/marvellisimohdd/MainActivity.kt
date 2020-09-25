@@ -42,7 +42,7 @@ import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.firebase.MyFirebaseMessagingService
 import isthisstuff.practice.marvellisimohdd.ui.settings.MySettingsActivity
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity() {
     private lateinit var navHeader: View
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -86,10 +86,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 //wth is is this
                 Log.d("userListener -> onDataChange -> dataSnapshot.value", user.toString())
                 //spara till nån lista kanske?
+
+                /*
                 if (user != null) {
                     concurrentUsersHashMap = user as HashMap<String, String>
                     Log.d("CURRENT USERS (i am in MainActivity)", concurrentUsersHashMap.toString())
                 }
+
+                 */
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -115,7 +119,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navView.setupWithNavController(navController)
 
         navHeader.setOnClickListener { login() }
-        //navView.setNavigationItemSelectedListener(this)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -230,10 +234,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             navHeader.findViewById<TextView>(R.id.nameUser).text = getString(R.string.nav_header_title)
             navHeader.findViewById<TextView>(R.id.emailUser).text = getString(R.string.nav_header_subtitle)
         }
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        println("Navigation Item: ${item.itemId}")
-        return true
     }
 }
