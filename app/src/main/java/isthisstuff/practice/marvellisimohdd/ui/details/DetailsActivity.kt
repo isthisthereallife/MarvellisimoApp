@@ -157,6 +157,7 @@ class DetailsActivity : AppCompatActivity() {
         setContentView(R.layout.fragment_search)
         val m: MarvelViewModel by viewModels()
         m.getCharactersInSeries(item.id.toString(), 0)
+
         setContentView(R.layout.fragment_search)
     }
 

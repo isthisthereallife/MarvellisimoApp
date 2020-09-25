@@ -44,9 +44,9 @@ class ActiveUsersActivity() : AppCompatActivity() {
 
                     usersList.forEach {
 
-                        if (noDoubles.contains(it.second)) {
+                        if (noDoubles.contains(it.first)) {
                         } else {
-                            noDoubles.add(it.second)
+                            noDoubles.add(it.first)
                         }
                     }
                     adapter.data = noDoubles
