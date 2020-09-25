@@ -34,15 +34,17 @@
         <TextView
             android:id="@+id/title_text"
             android:layout_width="254dp"
-            android:layout_height="51dp"
+            android:layout_height="60dp"
             android:maxLines="1"
-            android:textColor="@color/secondaryTextColor"
-            android:textSize="20sp"
-            android:textStyle="bold"
             android:paddingStart="25dp"
+            android:textColor="@color/secondaryTextColor"
+            android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
             tools:ignore="MissingConstraints,RtlSymmetry"
-            tools:layout_editor_absoluteX="11dp" />
+            tools:layout_editor_absoluteX="16dp" />
 
         <ImageView
             android:id="@+id/search_favstar"

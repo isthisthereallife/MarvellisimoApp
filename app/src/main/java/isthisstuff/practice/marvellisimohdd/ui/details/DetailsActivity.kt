@@ -8,6 +8,7 @@ import android.widget.Toast
 import android.widget.Button
 import io.realm.kotlin.where
 import android.content.Intent
+import android.view.animation.AnimationUtils
 import android.widget.TextView
 import android.widget.ImageView
 import androidx.activity.viewModels
@@ -22,6 +23,7 @@ import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 import isthisstuff.practice.marvellisimohdd.ui.activeusers.ActiveUsersActivity
 import isthisstuff.practice.marvellisimohdd.convertMarvelObjectToMarvelRealmObject
+import kotlinx.android.synthetic.main.activity_details.*
 
 class DetailsActivity : AppCompatActivity() {
 
@@ -64,6 +66,11 @@ class DetailsActivity : AppCompatActivity() {
         detailsFavStar.setOnClickListener { setFavorite() }
         detailsBackArrow.setOnClickListener { finish() }
         detailsMessage.setOnClickListener { sendToFriend(item) }
+
+        details_link_more.setOnClickListener {
+            val animation = AnimationUtils.loadAnimation(this, R.anim.bounce)
+            details_text.startAnimation(animation)
+        }
 
         updateDetailsInformation()
 
