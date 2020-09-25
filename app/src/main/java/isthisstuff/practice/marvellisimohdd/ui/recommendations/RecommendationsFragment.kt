@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -27,8 +28,9 @@ class RecommendationsFragment : Fragment() {
     private val mAuth = FirebaseAuth.getInstance()
     private val currentUser = mAuth.currentUser?.email
     private val currentUserNoDots = currentUser.toString().replace(".", ",")
-
+    private lateinit var target : LinearLayout
     private var activeUserMessagesReference = database.getReference("<TO:$currentUserNoDots>")
+    private var detachedView = false
 
     //private var activeUserMessagesReference = database.getReference("currentUsers")
     lateinit var root: View
@@ -42,6 +44,7 @@ class RecommendationsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         root = inflater.inflate(R.layout.fragment_recommendations, container, false)
+        target = root.findViewById(R.id.put_reco_items_here)
         if (currentUser != null) {
 
             //FIREBASE database
@@ -49,11 +52,17 @@ class RecommendationsFragment : Fragment() {
                 var concurrentMessagesHashMap = HashMap<String, String>()
 
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if(detachedView){
+                        Log.d("isDetached == true","DETATCHING VALUE EVENT LISTENER")
+                        activeUserMessagesReference.removeEventListener(this)
+                        return
+                    }
                     val messages = dataSnapshot.value
                     if (messages != null) {
                         concurrentMessagesHashMap = messages as HashMap<String, String>
                         printMessages(concurrentMessagesHashMap.toList())
                     }
+
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
@@ -64,14 +73,38 @@ class RecommendationsFragment : Fragment() {
                     //do something here? nah
                 }
             }
+            Log.d("Inflating fragment","ATTACHING VALUE EVENT LISTENER")
             activeUserMessagesReference.addValueEventListener(messageListener)
         } else Toast.makeText(this.context, "Log in to use this cool feature", Toast.LENGTH_SHORT)
             .show()
         return root
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        Log.d("onDetach","Detaching...")
+        detachedView = true
+
+        //    private var activeUserMessagesReference = database.getReference("<TO:$currentUserNoDots>")
+    }
+
 
     fun printMessages(toList: List<Pair<String, String>>) {
+        toList.forEach{it->
+            val textView = TextView(context)
+            textView.textSize = 15f
+            val sender = it.second.substringAfter("<SENDER>").substringBefore("</SENDER>")
+            val type = it.second.substringAfter("<MARVELTYPE>").substringBefore("</MARVELTYPE>")
+            val name = it.second.substringAfter("<MARVELOBJECTNAME>").substringBefore("</MARVELOBJECTNAME>")
+
+
+            val text = "$sender thinks you should search for the $type $name \n"
+            Log.d("printMessages","SKRIVER UT EN TEXTVY")
+            textView.text = text
+            target.addView(textView)
+        }
+
+        /* //GAMMLA LÖSNINGEN
         val recoTextView = root.findViewById<TextView>(R.id.recommendations_text_view)
         var textBuilder = ""
         toList.forEach { it ->
@@ -83,5 +116,6 @@ class RecommendationsFragment : Fragment() {
             textBuilder = textBuilder.plus("$sender thinks you should search for the $type $name").plus("\n\n")
         }
         recoTextView.text = textBuilder
+        */
     }
 }
