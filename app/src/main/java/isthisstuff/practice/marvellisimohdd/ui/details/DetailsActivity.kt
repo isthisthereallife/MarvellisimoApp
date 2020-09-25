@@ -1,5 +1,6 @@
 package isthisstuff.practice.marvellisimohdd.ui.details
 
+import android.annotation.SuppressLint
 import io.realm.Realm
 import android.net.Uri
 import android.os.Bundle
@@ -113,6 +114,7 @@ class DetailsActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateDetailsInformation() {
         if (item.name != null) {
             if (item.name.toString().isNotBlank())
@@ -136,7 +138,7 @@ class DetailsActivity : AppCompatActivity() {
         }
 
         if (item.urls[0].url.isNotBlank()) {
-            detailsLinkMore.text = item.urls[0].type
+            detailsLinkMore.text = "More " + item.urls[0].type + "s"
             detailsLinkMore.setOnClickListener {
                 startActivity(
                     Intent(
