@@ -17,6 +17,7 @@
             android:gravity="center_horizontal"
             android:paddingTop="50dp"
             android:text="@string/your_recommendations"
+            android:textSize="16sp"
             android:textColor="@color/primaryTextColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
