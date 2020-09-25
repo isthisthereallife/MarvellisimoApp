@@ -2,12 +2,10 @@ package isthisstuff.practice.marvellisimohdd
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Message
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.navigation.NavigationView
@@ -19,27 +17,18 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.FirebaseMessagingService
-import com.google.firebase.messaging.RemoteMessage
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.User
-import isthisstuff.practice.marvellisimohdd.firebase.MyFirebaseMessagingService
 import isthisstuff.practice.marvellisimohdd.ui.settings.MySettingsActivity
 
 class MainActivity : AppCompatActivity() {
@@ -49,7 +38,6 @@ class MainActivity : AppCompatActivity() {
     private val realm: Realm = Realm.getDefaultInstance()
     private var database = FirebaseDatabase.getInstance()
     private var databaseCurrentUsersReference = database.getReference("currentUsers")
-    var concurrentUsersHashMap = HashMap<String, String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,37 +67,11 @@ class MainActivity : AppCompatActivity() {
         })
         //end of FIREBASE cloud messaging
 
-        //FIREBASE database
-        val userListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val user = dataSnapshot.value
-                //wth is is this
-                Log.d("userListener -> onDataChange -> dataSnapshot.value", user.toString())
-                //spara till nån lista kanske?
-
-                /*
-                if (user != null) {
-                    concurrentUsersHashMap = user as HashMap<String, String>
-                    Log.d("CURRENT USERS (i am in MainActivity)", concurrentUsersHashMap.toString())
-                }
-
-                 */
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.w("MainActivity -> userListener -> onCancelled", databaseError.toException())
-                //do something here?
-            }
-        }
-        databaseCurrentUsersReference.addValueEventListener(userListener)
-
         //PURGE all null users
         realm.executeTransaction {
             realm.where<User>().isNull("email").findAll().deleteAllFromRealm()
         }
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as a top level destination.
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home, R.id.nav_character, R.id.nav_series, R.id.nav_reco
@@ -119,11 +81,9 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         navHeader.setOnClickListener { login() }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
@@ -136,13 +96,12 @@ class MainActivity : AppCompatActivity() {
             //kicka settings-aktiviteten
             startActivity(Intent(this@MainActivity, MySettingsActivity::class.java))
             return true
-        }
-        else if (id == R.id.action_log_out){
-            if(FirebaseAuth.getInstance().currentUser!=null) {
+        } else if (id == R.id.action_log_out) {
+            if (FirebaseAuth.getInstance().currentUser != null) {
                 logOut()
-            }
-            else{
-                Toast.makeText(this,getString(R.string.toast_log_in_prompt),Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, getString(R.string.toast_log_in_prompt), Toast.LENGTH_SHORT)
+                    .show()
             }
             return true
         }
@@ -177,14 +136,7 @@ class MainActivity : AppCompatActivity() {
             }
             updateLoginDisplay()
 
-            if (!concurrentUsersHashMap.containsValue(
-                    activeUser.email.toString().replace(".", ",")
-                )
-            ) {
-                databaseCurrentUsersReference.push().setValue(
-                    FirebaseAuth.getInstance().currentUser?.email.toString().replace(".", ",")
-                )
-            }
+            saveUserToRealtimeDatabase()
         }
     }
 
@@ -203,11 +155,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun logOut(){
-        if(FirebaseAuth.getInstance().currentUser!=null) {
-            //val userEmailWithoutDots = realm.where<User>().findFirst().toString().replace(".","")
-            //jag tömmer currentUsers helt när jag loggar ut!! kanske inte jättebra!!!
-            FirebaseDatabase.getInstance().getReference("currentUsers").removeValue()
+    private fun saveUserToRealtimeDatabase() {
+        if (FirebaseAuth.getInstance().currentUser != null)
+            databaseCurrentUsersReference.child(
+                FirebaseAuth.getInstance().currentUser?.email!!.replace(
+                    ".",
+                    ","
+                )
+            ).setValue("inloggad")
+
+    }
+
+    fun logOut() {
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            databaseCurrentUsersReference.child(
+                FirebaseAuth.getInstance().currentUser?.email!!.replace(
+                    ".",
+                    ","
+                )
+            ).removeValue()
             FirebaseAuth.getInstance().signOut()
             updateLoginDisplay()
             Toast.makeText(this, getString(R.string.toast_logout), Toast.LENGTH_SHORT).show()
@@ -223,16 +189,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateLoginDisplay() {
-        Log.d("updateLoginDisplay()","currentUser = ${FirebaseAuth.getInstance().currentUser}")
+        Log.d("updateLoginDisplay()", "currentUser = ${FirebaseAuth.getInstance().currentUser}")
         if (FirebaseAuth.getInstance().currentUser != null) {
             navHeader.findViewById<TextView>(R.id.nameUser).text =
                 FirebaseAuth.getInstance().currentUser?.displayName
             navHeader.findViewById<TextView>(R.id.emailUser).text =
                 FirebaseAuth.getInstance().currentUser?.email
-        }
-        else {
-            navHeader.findViewById<TextView>(R.id.nameUser).text = getString(R.string.nav_header_title)
-            navHeader.findViewById<TextView>(R.id.emailUser).text = getString(R.string.nav_header_subtitle)
+        } else {
+            navHeader.findViewById<TextView>(R.id.nameUser).text =
+                getString(R.string.nav_header_title)
+            navHeader.findViewById<TextView>(R.id.emailUser).text =
+                getString(R.string.nav_header_subtitle)
         }
     }
 }

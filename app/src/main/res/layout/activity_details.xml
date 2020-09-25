@@ -23,7 +23,8 @@
             android:layout_weight="1"
             android:minHeight="100dp"
             android:paddingStart="20dp"
-            android:src="@drawable/ic_baseline_arrow_back_24" />
+            android:src="@drawable/ic_baseline_arrow_back_24"
+            tools:ignore="RtlSymmetry" />
 
         <ImageView
 
@@ -32,7 +33,6 @@
             android:layout_height="192dp"
             android:layout_weight="1"
             android:background="@drawable/round_outline"
-
             android:maxHeight="100dp"
             android:minHeight="100dp"
             android:padding="@dimen/details_img_padding"
@@ -51,7 +51,8 @@
             android:maxHeight="100dp"
             android:minHeight="100dp"
             android:paddingEnd="20dp"
-            android:src="@drawable/ic_baseline_star_border_24" />
+            android:src="@drawable/ic_baseline_star_border_24"
+            tools:ignore="RtlSymmetry" />
 
     </LinearLayout>
 
@@ -78,10 +79,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/details_name"
-
-
-        >
+        app:layout_constraintTop_toBottomOf="@+id/details_name">
 
         <LinearLayout
 
@@ -93,13 +91,14 @@
 
                 android:id="@+id/details_text"
                 android:layout_width="400dp"
-
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:autoLink="web"
                 android:paddingHorizontal="16dp"
                 android:text="@string/detailed_page_bio_text"
                 android:textAlignment="center"
+                android:paddingTop="30dp"
+                android:paddingBottom="50dp"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="20sp" />
 
@@ -107,9 +106,8 @@
 
                 android:id="@+id/details_link_more"
                 android:layout_width="300dp"
-                android:layout_height="100dp"
+                android:layout_height="77dp"
                 android:layout_gravity="center"
-
                 android:autoLink="web"
                 android:background="@drawable/rounded_top_button"
                 android:padding="16dp"
@@ -123,13 +121,14 @@
 
                 android:id="@+id/button_message"
                 android:layout_width="300dp"
-                android:layout_height="100dp"
+                android:layout_height="74dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:background="@drawable/square_button"
-                android:text="SEND"
+                android:text="@string/send_friend"
+                android:textAllCaps="false"
                 android:textColor="@color/secondaryTextColor"
-                android:textSize="20sp" />
+                android:textSize="26sp" />
 
             <Button
 
@@ -139,10 +138,10 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:background="@drawable/rounded_bottom_button"
-                android:text="See series from this character"
+                android:text="@string/series_character"
+                android:textAllCaps="false"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="20sp" />
-
 
         </LinearLayout>
 

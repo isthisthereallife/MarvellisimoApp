@@ -1,5 +1,6 @@
 package isthisstuff.practice.marvellisimohdd.ui.details
 
+import android.annotation.SuppressLint
 import io.realm.Realm
 import android.net.Uri
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.widget.Toast
 import android.widget.Button
 import io.realm.kotlin.where
 import android.content.Intent
+import android.view.animation.AnimationUtils
 import android.widget.TextView
 import android.widget.ImageView
 import com.squareup.picasso.Picasso
@@ -20,6 +22,7 @@ import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.ui.activeusers.ActiveUsersActivity
 import isthisstuff.practice.marvellisimohdd.convertMarvelObjectToMarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
+import kotlinx.android.synthetic.main.activity_details.*
 
 class DetailsActivity : AppCompatActivity() {
 
@@ -63,6 +66,11 @@ class DetailsActivity : AppCompatActivity() {
         detailsBackArrow.setOnClickListener { finish() }
         detailsMessage.setOnClickListener { sendToFriend(item) }
         buttonShowMore.setOnClickListener{ getRelatedData() }
+
+        details_link_more.setOnClickListener {
+            val animation = AnimationUtils.loadAnimation(this, R.anim.bounce)
+            details_text.startAnimation(animation)
+        }
 
         updateDetailsInformation()
 
@@ -113,6 +121,7 @@ class DetailsActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateDetailsInformation() {
         if (item.name != null) {
             if (item.name.toString().isNotBlank())
@@ -134,7 +143,7 @@ class DetailsActivity : AppCompatActivity() {
         }
 
         if (item.urls[0].url.isNotBlank()) {
-            detailsLinkMore.text = item.urls[0].type
+            detailsLinkMore.text = "More " + item.urls[0].type + "s"
             detailsLinkMore.setOnClickListener {
                 startActivity(
                     Intent(

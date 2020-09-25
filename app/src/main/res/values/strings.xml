@@ -12,8 +12,8 @@
     <!-- Strings used for fragments for navigation -->
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-    <string name="search_hint_character">Search for a character...</string>
-    <string name="search_hint_series">Search for a series...</string>
+    <string name="search_hint_character">Search for a character…</string>
+    <string name="search_hint_series">Search for a series…</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
@@ -37,4 +37,8 @@
     <string name="nav_header_desc">Murvel Logo</string>
     <string name="favorites_added">has been added to favorites</string>
     <string name="favorites_removed">has been removed from your favorites</string>
+    <string name="series_character">See series from this character</string>
+    <string name="send_friend">Send to friend</string>
+    <string name="fav">favorite</string>
+    <string name="marvel_image">marvel image</string>
 </resources>
