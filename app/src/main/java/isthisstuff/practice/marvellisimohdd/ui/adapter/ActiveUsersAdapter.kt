@@ -16,6 +16,7 @@ import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.isCharacter
 import java.time.LocalDateTime
+import java.util.*
 
 class ActiveUsersAdapter(_sender: String, _marvelObject: MarvelObject) :
     RecyclerView.Adapter<MyActiveUsersViewHolder>() {
@@ -59,7 +60,13 @@ class ActiveUsersAdapter(_sender: String, _marvelObject: MarvelObject) :
         val receiverNoDots = receiver.replace(".", ",")
         val customDatabaseMessageReference =
             database.getReference("<TO:${receiverNoDots}>")
-        val timeString = LocalDateTime.now().toString().replace(".", ":")
+        var timeString = ""
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            timeString = LocalDateTime.now().toString().replace(".", ":")
+        } else {
+            Log.d("YOUR API IS WAY OLD", Calendar.getInstance().toString())
+            timeString = Calendar.getInstance().toString()
+        }
 
         val type = if (isCharacter(payload)) "character"
         else "series"
