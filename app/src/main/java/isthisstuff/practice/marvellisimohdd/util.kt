@@ -2,7 +2,8 @@ package isthisstuff.practice.marvellisimohdd
 
 import android.app.Activity
 import android.content.Context
-import android.provider.Settings
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -14,9 +15,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import io.realm.Realm
 import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
@@ -26,6 +24,7 @@ import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.entities.Thumbnail
 import isthisstuff.practice.marvellisimohdd.entities.Urls
+
 
 class MyViewHolder(val view: ConstraintLayout) : RecyclerView.ViewHolder(view) {
 
@@ -84,12 +83,12 @@ fun convertMarvelRealmObjectToMarvelObject(marvelRealmObject: MarvelRealmObject)
         marvelRealmObject.title,
         urls,
         marvelRealmObject.description,
-        Thumbnail(marvelRealmObject.thumbnail!!.path,marvelRealmObject.thumbnail!!.extension)
+        Thumbnail(marvelRealmObject.thumbnail!!.path, marvelRealmObject.thumbnail!!.extension)
     )
     return marvelObject
 }
 
-fun checkFavorite(itemId:Int?):Boolean {
+fun checkFavorite(itemId: Int?):Boolean {
     val realm = Realm.getDefaultInstance()
     val activeUser:FirebaseUser? = FirebaseAuth.getInstance().currentUser
     if (activeUser != null) {
@@ -107,42 +106,23 @@ fun isCharacter(marvelObject: MarvelObject) : Boolean{
     if(marvelObject.title==null)return true
     else return false
 }
-/*
-//FIREBASE database
-val userListener = object : ValueEventListener {
-    var concurrentUsersHashMap = HashMap<String,String>()
-    override fun onDataChange(dataSnapshot: DataSnapshot) {
-        val user = dataSnapshot.value
-        //wth is is this
-        Log.d("userListener -> onDataChange -> dataSnapshot.value", user.toString())
 
-        if (user != null) {
-            concurrentUsersHashMap = user as HashMap<String, String>
-            Log.d("CURRENT USERS", concurrentUsersHashMap.toString())
+fun isOnline(context: Context?): Boolean {
+    val connectivityManager =
+        context!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val capabilities =
+        connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+    if (capabilities != null) {
+        if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+            Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+            return true
+        } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+            Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+            return true
+        } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+            Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+            return true
         }
     }
-
-
-
-    override fun onCancelled(databaseError: DatabaseError) {
-        Log.e("userListener -> onCancelled", databaseError.toException().printStackTrace().toString())
-        //do something here?
-    }
-}
-*/
-
-fun airplaneModeIsOn(context: Context?) : Boolean {
-    //AIRPLANE-MODE check
-    if (Settings.System.getInt(
-            context?.contentResolver,
-            Settings.Global.AIRPLANE_MODE_ON,
-            0
-        ) == 0
-    ) {
-        Log.d("Phone in airplane mode", "FALSE")
-        return false
-    } else {
-        Log.d("Phone is in airplane mode", "TRUE")
-        return true
-    }
+    return false
 }

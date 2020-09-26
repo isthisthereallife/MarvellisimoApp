@@ -13,9 +13,9 @@ import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.Navigation
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
+import io.realm.Case
 import io.realm.Realm
 import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.*
@@ -25,65 +25,69 @@ import isthisstuff.practice.marvellisimohdd.ui.adapter.SearchResultsAdapter
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 
-
 class SearchFragment : Fragment() {
     lateinit var root: View
 
     private var realm = Realm.getDefaultInstance()
-    lateinit var sharedPreferences:SharedPreferences
-    var onlyFavorites:Boolean = false
-    var preferredSearchMethod:String = "contains"
-    val marvelViewModel: MarvelViewModel by viewModels()
-    var searchingFor: MarvelDatatypes = MarvelDatatypes.CHARACTERS
-    private var adapter: SearchResultsAdapter = SearchResultsAdapter(this)
-    private var activityResultHappened:Boolean = false
+    private val marvelViewModel: MarvelViewModel by viewModels()
+    private var searchResultsAdapter: SearchResultsAdapter = SearchResultsAdapter(this)
+    private lateinit var sharedPreferences:SharedPreferences
+
+    var query:String = ""
+    var dataType:MarvelDatatypes = MarvelDatatypes.CHARACTERS
+    private var searchMethod:String = "contains"
+    private var onlyFavorites:Boolean = false
+
+    private lateinit var recyclerView:RecyclerView
+    private lateinit var searchButton:ImageButton
+    private lateinit var inputField:EditText
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
-        onlyFavorites = sharedPreferences.getBoolean("only_favorites", false)
-
-        marvelViewModel.itemsList.observe(viewLifecycleOwner, {
-            adapter.data = it
-        })
-
         root = inflater.inflate(R.layout.fragment_search, container, false)
 
-        root.rootView.findViewById<RecyclerView>(R.id.search_results).adapter = adapter
-        root.rootView.findViewById<ImageButton>(R.id.search_button)
-            .setOnClickListener { performSearch(
-                root.rootView.findViewById<EditText>(R.id.search_field).text.toString(),
-                0
-            ) }
-        root.rootView.findViewById<EditText>(R.id.search_field)
-            .setOnEditorActionListener { v, actionId, event ->
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    performSearch(
-                        root.rootView.findViewById<EditText>(R.id.search_field).text.toString(),
-                        0
-                    )
-                    true
-                } else false
-            }
-        val searchFieldView:EditText = root.rootView.findViewById<EditText>(R.id.search_field)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
 
-        when((activity as AppCompatActivity).supportActionBar!!.title.toString()) {
-            "Characters" -> {
-                searchingFor = MarvelDatatypes.CHARACTERS
-                searchFieldView.hint = getString(R.string.search_hint_character)
-            }
-            "Series" -> {
-                searchingFor = MarvelDatatypes.SERIES
-                searchFieldView.hint= getString(R.string.search_hint_series)
-            }
+        searchMethod = sharedPreferences.getString("list_search_mode", "contains").toString()
+
+        marvelViewModel.itemsList.observe(viewLifecycleOwner, {
+            searchResultsAdapter.data = it
+        })
+
+        recyclerView = root.findViewById(R.id.search_results)
+        searchButton = root.findViewById(R.id.search_button)
+        inputField = root.findViewById(R.id.search_field)
+
+        recyclerView.adapter = searchResultsAdapter
+
+        val incomingData = this.arguments
+
+        searchButton.setOnClickListener {
+            updateDataTypeByTitle()
+            searchMethod = sharedPreferences.getString("list_search_mode", "contains").toString()
+            runSearch(inputField.text.toString(), dataType)
         }
 
-        //för att det inte ska se så tomt ut
-        Log.d("debug_log","[PERFORMING INITIAL SEARCH]")
-        performSearch(query = "a")
+        inputField.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                searchMethod = sharedPreferences.getString("list_search_mode", "contains").toString()
+                runSearch(inputField.text.toString(), dataType)
+                true
+            } else false
+        }
+
+        updateDataTypeByTitle()
+        updateTitleAndHintByDataType(dataType)
+
+        if(incomingData!=null) {
+            searchMethod = "related"
+            query = incomingData.get("query") as String
+            dataType = incomingData.get("dataType") as MarvelDatatypes
+            runSearch(query, dataType)
+        }
 
         return root
     }
@@ -91,76 +95,178 @@ class SearchFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when(resultCode) {
-            1 -> {
-                activityResultHappened = true
-                Log.d("debug_log","[Fetching related data ${(data!!.extras!!.get("dataType") as MarvelDatatypes)}, searchMethod: ${(data.extras!!.get("searchMethod") as String)}]")
-                marvelViewModel.clearSearchData()
-                marvelViewModel.getData((data!!.extras!!.get("dataType") as MarvelDatatypes), (data.extras!!.get("itemId") as Int).toString(), 0, (data.extras!!.get("searchMethod") as String))
+            1 -> { // success!
+                searchMethod = "related"
+                query = data!!.extras!!.get("query") as String
+                dataType = data.extras!!.get("dataType") as MarvelDatatypes
+                updateTitleAndHintByDataType(dataType)
+                runSearch(query, dataType)
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        if(!activityResultHappened) {
-            onlyFavorites = sharedPreferences.getBoolean("only_favorites", false)
-            if(onlyFavorites) {
-                var newList: List<MarvelObject>? = listOf<MarvelObject>()
-                realm.where<MarvelRealmObject>().findAll().forEach {
-                    var convertedObject = convertMarvelRealmObjectToMarvelObject(it)
-                    if(checkFavorite(convertedObject.id)) {
-                        newList = newList!!.plus(convertedObject)
-                    }
-                }
-                marvelViewModel.itemsList.value = newList
-            } else {
-                performSearch(query = "a")
-            }
-            adapter.notifyDataSetChanged()
+        if(searchMethod!="related") {
+            runSearch(query, dataType)
         }
-        activityResultHappened=false
     }
 
-    fun performSearch(query: String, offset: Int = 0) {
-        Log.d("debug_print", "onlyFavorites = $onlyFavorites")
-        preferredSearchMethod = sharedPreferences.getString("list_search_mode", "contains").toString()
-        Log.d("kolla, såhär har du valt att söka", preferredSearchMethod)
-
-        root.rootView.findViewById<EditText>(R.id.search_field).clearFocus()
+    fun runSearch(query:String, dataType: MarvelDatatypes?, offset: Int = 0, cleanSlate:Boolean = true) {
+        // prepare for search
         hideKeyboard()
-        marvelViewModel.clearSearchData()
+        inputField.clearFocus()
+        if(cleanSlate) marvelViewModel.clearSearchData()
 
-        if(onlyFavorites || airplaneModeIsOn(this.context)) {
+        onlyFavorites = sharedPreferences.getBoolean("only_favorites", false)
+        this.query = query
 
-            // nu laddar vi från cache istället
-
-            var newList: List<MarvelObject>? = listOf<MarvelObject>()
-            realm.where<MarvelRealmObject>().findAll().forEach {
-                var convertedObject = convertMarvelRealmObjectToMarvelObject(it)
-                newList = newList!!.plus(convertedObject)
-            }
-
-            if(onlyFavorites) {
-                var newerList: List<MarvelObject>? = listOf<MarvelObject>()
-                newList!!.forEach {
-                    if(checkFavorite(it.id)) {
-                        newerList = newerList!!.plus(it)
+        // return api results filtered by the search
+        when(searchMethod) {
+            "contains" -> {
+                when(dataType) {
+                    MarvelDatatypes.CHARACTERS -> {
+                        if(onlyFavorites || !isOnline(context)) {
+                            var results:List<MarvelObject> = listOf()
+                            realm.where<MarvelRealmObject>().contains("name", query, Case.INSENSITIVE).findAll().forEach {
+                                results = results.plus(convertMarvelRealmObjectToMarvelObject(it))
+                            }
+                            if(onlyFavorites) {
+                                var favoriteResults:List<MarvelObject> = listOf()
+                                results.forEach {
+                                    if(checkFavorite(it.id)) favoriteResults = favoriteResults.plus(it)
+                                }
+                                results = favoriteResults
+                            }
+                            results.forEach {
+                                marvelViewModel.itemsList.value = marvelViewModel.itemsList.value?.plus(it)
+                            }
+                        } else marvelViewModel.getData(dataType, offset, Pair("nameStartsWith", "%$query"))
+                    }
+                    MarvelDatatypes.SERIES -> {
+                        if(onlyFavorites || !isOnline(context)) {
+                            var results:List<MarvelObject> = listOf()
+                            realm.where<MarvelRealmObject>().contains("title", query, Case.INSENSITIVE).findAll().forEach {
+                                results = results.plus(convertMarvelRealmObjectToMarvelObject(it))
+                            }
+                            if(onlyFavorites) {
+                                var favoriteResults:List<MarvelObject> = listOf()
+                                results.forEach {
+                                    if(checkFavorite(it.id)) favoriteResults = favoriteResults.plus(it)
+                                }
+                                results = favoriteResults
+                            }
+                            marvelViewModel.itemsList.value = results
+                        } else marvelViewModel.getData(dataType, offset, Pair("titleStartsWith", "%$query"))
                     }
                 }
-                marvelViewModel.itemsList.value = newerList
-            } else {
-                marvelViewModel.itemsList.value = newList
             }
-        } else {
-            marvelViewModel.getData(searchingFor, query, offset, preferredSearchMethod)
+            "startsWith" ->  {
+                when(dataType) {
+                    MarvelDatatypes.CHARACTERS -> {
+                        if(onlyFavorites || !isOnline(context)) {
+                            var results:List<MarvelObject> = listOf()
+                            realm.where<MarvelRealmObject>().beginsWith("name", query, Case.INSENSITIVE).findAll().forEach {
+                                results = results.plus(convertMarvelRealmObjectToMarvelObject(it))
+                            }
+                            if(onlyFavorites) {
+                                var favoriteResults:List<MarvelObject> = listOf()
+                                results.forEach {
+                                    if(checkFavorite(it.id)) favoriteResults = favoriteResults.plus(it)
+                                }
+                                results = favoriteResults
+                            }
+                            marvelViewModel.itemsList.value = results
+                        } else marvelViewModel.getData(dataType, offset, Pair("nameStartsWith", query))
+                    }
+                    MarvelDatatypes.SERIES -> {
+                        if(onlyFavorites || !isOnline(context)) {
+                            var results:List<MarvelObject> = listOf()
+                            realm.where<MarvelRealmObject>().beginsWith("name", query, Case.INSENSITIVE).findAll().forEach {
+                                results = results.plus(convertMarvelRealmObjectToMarvelObject(it))
+                            }
+                            if(onlyFavorites) {
+                                var favoriteResults:List<MarvelObject> = listOf()
+                                results.forEach {
+                                    if(checkFavorite(it.id)) favoriteResults = favoriteResults.plus(it)
+                                }
+                                results = favoriteResults
+                            }
+                            marvelViewModel.itemsList.value = results
+                        } else marvelViewModel.getData(dataType, offset, Pair("titleStartsWith", query))
+                    }
+                }
+            }
+            "strict" -> {
+                when(dataType) {
+                    MarvelDatatypes.CHARACTERS -> {
+                        if(onlyFavorites || !isOnline(context)) {
+                            var results:List<MarvelObject> = listOf()
+                            realm.where<MarvelRealmObject>().equalTo("name", query, Case.INSENSITIVE).findAll().forEach {
+                                results = results.plus(convertMarvelRealmObjectToMarvelObject(it))
+                            }
+                            if(onlyFavorites) {
+                                var favoriteResults:List<MarvelObject> = listOf()
+                                results.forEach {
+                                    if(checkFavorite(it.id)) favoriteResults = favoriteResults.plus(it)
+                                }
+                                results = favoriteResults
+                            }
+                            marvelViewModel.itemsList.value = results
+                        } else marvelViewModel.getData(dataType, offset, Pair("name", query))
+                    }
+                    MarvelDatatypes.SERIES -> {
+                        if(onlyFavorites || !isOnline(context)) {
+                            var results:List<MarvelObject> = listOf()
+                            realm.where<MarvelRealmObject>().equalTo("name", query, Case.INSENSITIVE).findAll().forEach {
+                                results = results.plus(convertMarvelRealmObjectToMarvelObject(it))
+                            }
+                            if(onlyFavorites) {
+                                var favoriteResults:List<MarvelObject> = listOf()
+                                results.forEach {
+                                    if(checkFavorite(it.id)) favoriteResults = favoriteResults.plus(it)
+                                }
+                                results = favoriteResults
+                            }
+                            marvelViewModel.itemsList.value = results
+                        } else marvelViewModel.getData(dataType, offset, Pair("title", query))
+                    }
+                }
+            }
+            "related" -> {
+                when(dataType) {
+                    MarvelDatatypes.CHARACTERS -> {
+                        if(!onlyFavorites && isOnline(context)) marvelViewModel.getData(dataType, offset, Pair("series", query))
+                    }
+                    MarvelDatatypes.SERIES -> {
+                        if(!onlyFavorites && isOnline(context)) marvelViewModel.getData(dataType, offset, Pair("characters", query))
+                    }
+                }
+            }
         }
+    }
 
-        adapter.saveRequestData(
-            marvelViewModel,
-            searchingFor,
-            query,
-            offset,
-            preferredSearchMethod
-        )
+    private fun updateTitleAndHintByDataType(dataType: MarvelDatatypes) {
+        when(dataType) {
+            MarvelDatatypes.CHARACTERS -> {
+                (activity as AppCompatActivity).supportActionBar!!.title = "Characters"
+                inputField.hint = getString(R.string.search_hint_character)
+            }
+            MarvelDatatypes.SERIES -> {
+                (activity as AppCompatActivity).supportActionBar!!.title = "Series"
+                inputField.hint = getString(R.string.search_hint_series)
+            }
+        }
+    }
+
+    private fun updateDataTypeByTitle() {
+        when((activity as AppCompatActivity).supportActionBar!!.title.toString()) {
+            "Characters" -> {
+                dataType = MarvelDatatypes.CHARACTERS
+            }
+            "Series" -> {
+                dataType = MarvelDatatypes.SERIES
+            }
+        }
     }
 }

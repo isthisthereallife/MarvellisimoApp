@@ -1,42 +1,26 @@
 package isthisstuff.practice.marvellisimohdd.ui.adapter
 
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import io.realm.Realm
-import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.MyViewHolder
 import isthisstuff.practice.marvellisimohdd.checkFavorite
 import isthisstuff.practice.marvellisimohdd.convertMarvelObjectToMarvelRealmObject
-import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
-import isthisstuff.practice.marvellisimohdd.database.SearchQueryRealmObject
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
-import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
-import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 import isthisstuff.practice.marvellisimohdd.ui.details.DetailsActivity
+import isthisstuff.practice.marvellisimohdd.ui.search.SearchFragment
 
-class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapter<MyViewHolder>() {
+class SearchResultsAdapter(private val fragment: SearchFragment) : RecyclerView.Adapter<MyViewHolder>() {
 
-    lateinit var itemNameView: TextView
-    lateinit var itemInfoView: TextView
-    lateinit var itemThumbnail: ImageView
-    lateinit var marvelViewModel: MarvelViewModel
-    lateinit var marvelDatatype: MarvelDatatypes
-    lateinit var preferredSearchMethod: String
-    lateinit var query: String
-    private lateinit var realm: Realm
-    var offset: Int = 0
+    private val realm: Realm = Realm.getDefaultInstance()
 
     var data: List<MarvelObject> = mutableListOf()
         set(value) {
@@ -44,118 +28,66 @@ class SearchResultsAdapter(private val fragment: Fragment) : RecyclerView.Adapte
             notifyDataSetChanged()
         }
 
-    init {
-        //TODO lägg findViewById-grejjerna häri? /M
-    }
+    private var offset: Int = 0
 
-    fun saveRequestData(
-        marvelViewModel: MarvelViewModel,
-        marvelDatatype: MarvelDatatypes,
-        query: String,
-        offset: Int,
-        preferredSearchMethod: String
-    ) {
-        this.marvelViewModel = marvelViewModel
-        this.marvelDatatype = marvelDatatype
-        this.query = query
-        this.offset = offset
-        this.preferredSearchMethod = preferredSearchMethod
-    }
 
     override fun getItemCount() = data.size
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val item = data[position]
 
-        //spara till cache kanske? kollar och gör /M
-        //men tänk om detta redan kommer från cachen?? hmmmm /M
+        val itemTitle: TextView = holder.view.findViewById(R.id.title_text)
+        val itemThumbnail: ImageView = holder.view.findViewById(R.id.search_results_image)
+        val itemStar:ImageView = holder.view.findViewById(R.id.search_favstar)
 
-        saveSearchResultToCache(item, checkIfSaveToCache())
+        if(checkIfSaveToCache()) saveSearchResultToCache(item)
 
-        if (item.name != null) {
-            holder.view.findViewById<TextView>(R.id.title_text).text = item.name
-        } else {
-            holder.view.findViewById<TextView>(R.id.title_text).text = item.title
+        when(item.name) {
+            null -> itemTitle.text = item.title
+            else -> itemTitle.text = item.name
         }
 
-        //holder.view.findViewById<TextView>(R.id.info_text).text = item.description
         Picasso.get().load(item.thumbnail.path + "." + item.thumbnail.extension)
-            .into(holder.view.findViewById<ImageView>(R.id.search_results_image))
+            .into(itemThumbnail)
 
         if(checkFavorite(item.id)) {
-            holder.view.findViewById<ImageView>(R.id.search_favstar).setImageResource(R.drawable.ic_baseline_star_filled_24)
+            itemStar.setImageResource(R.drawable.ic_baseline_star_filled_24)
         } else {
-            holder.view.findViewById<ImageView>(R.id.search_favstar).setImageResource(R.drawable.ic_baseline_star_border_24)
+            itemStar.setImageResource(R.drawable.ic_baseline_star_border_24)
         }
 
         holder.view.findViewById<ConstraintLayout>(R.id.search_result_item)
-            .setOnClickListener { openDetails(it, position) }
+            .setOnClickListener { openDetails(position) }
 
         if (position == offset + 10) {
             offset += 20
-            Log.d("RecyclerView", "Reached the end. Position: $position \t Offset: $offset")
-            marvelViewModel.getData(marvelDatatype, query, offset, preferredSearchMethod)
+            fragment.runSearch(fragment.query, fragment.dataType, offset, false)
         }
     }
 
-    private fun openDetails(view: View, position: Int) {
-        Log.d(
-            "searchResultClicked",
-            "klickade på view: $view \n och this: $this \n och this.data:${this.data[position]}"
-        )
-        val intent = Intent(fragment.context, DetailsActivity::class.java)
-        intent.putExtra("item", this.data[position])
-        //fragment.context?.startActivity(intent)
-        fragment.startActivityForResult(intent,1)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.search_item_view, parent, false) as ConstraintLayout
-        realm = Realm.getDefaultInstance()
-        saveQueryToCache(query, checkIfSaveToCache())
-
         return MyViewHolder(view)
+    }
+
+    private fun openDetails(position: Int) {
+        val intent = Intent(fragment.context, DetailsActivity::class.java)
+        intent.putExtra("item", this.data[position])
+        fragment.startActivityForResult(intent, 1)
     }
 
     private fun checkIfSaveToCache(): Boolean {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.fragment.context)
         val saveToCacheBoolean = sharedPreferences.getBoolean("cache", false)
-        Log.d("Preferensen som heter cache har detta värde", saveToCacheBoolean.toString())
         return saveToCacheBoolean
     }
 
-    private fun saveQueryToCache(query: String, cachingActivated: Boolean = false) {
-        if (cachingActivated) {
-            val searchQuery = SearchQueryRealmObject()
-
-            searchQuery.query = query
-            realm.beginTransaction()
-            realm.copyToRealmOrUpdate(searchQuery)
-            realm.commitTransaction()
-            Log.d("Search query saved to cache", "Query: ${searchQuery.query}")
-            Log.d(
-                "Queries currently in cache",
-                realm.where<SearchQueryRealmObject>().findAll().toString()
-            )
-        }
-    }
-
-    private fun saveSearchResultToCache(marvelObject: MarvelObject, cachingActivated: Boolean) {
-        if (cachingActivated) {
-            //borde vi spara ner en kopia av bilderna också? /M
-            val marvelRealmObject = convertMarvelObjectToMarvelRealmObject(marvelObject)
-            realm.beginTransaction()
+    private fun saveSearchResultToCache(marvelObject: MarvelObject) {
+        val marvelRealmObject = convertMarvelObjectToMarvelRealmObject(marvelObject)
+        realm.executeTransaction {
             realm.copyToRealmOrUpdate(marvelRealmObject)
-            realm.commitTransaction()
-            Log.d(
-                "ONE OBJECT ?SAVED? (if not saved before!)",
-                "OBJECT NAME: ${marvelRealmObject.name}"
-            )
-            Log.d(
-                "NUMBER OF CACHED MARVELOBJOKTS",
-                realm.where<MarvelRealmObject>().findAll().size.toString()
-            )
         }
     }
 }

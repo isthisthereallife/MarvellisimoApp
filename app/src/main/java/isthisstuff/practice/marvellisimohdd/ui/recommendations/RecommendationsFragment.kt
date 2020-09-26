@@ -9,8 +9,11 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -24,6 +27,7 @@ import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.entities.Thumbnail
 import isthisstuff.practice.marvellisimohdd.entities.Urls
 import isthisstuff.practice.marvellisimohdd.ui.adapter.SearchResultsAdapter
+import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 import isthisstuff.practice.marvellisimohdd.ui.details.DetailsActivity
 
@@ -112,7 +116,7 @@ class RecommendationsFragment : Fragment() {
             val marvelObject = makeMarvelObjectFromPayload(payload, type)
             val intent = Intent(this.context, DetailsActivity::class.java)
             intent.putExtra("item", marvelObject)
-            textView.setOnClickListener { startActivity(intent) }
+            textView.setOnClickListener { startActivityForResult(intent, 2) }
         }
 
         /* //GAMMLA LÖSNINGEN
@@ -128,6 +132,22 @@ class RecommendationsFragment : Fragment() {
         }
         recoTextView.text = textBuilder
         */
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when(resultCode) {
+            1 -> {
+                var relatedData:Bundle = bundleOf(
+                    "query" to data!!.extras!!.get("query"),
+                    "dataType" to data.extras!!.get("dataType"))
+
+                when(data.extras!!.get("dataType")) {
+                    MarvelDatatypes.CHARACTERS -> findNavController().navigate(R.id.nav_character, relatedData)
+                    MarvelDatatypes.SERIES -> findNavController().navigate(R.id.nav_series, relatedData)
+                }
+            }
+        }
     }
 
     fun makeMarvelObjectFromPayload(marvelString: String, type: String): MarvelObject {

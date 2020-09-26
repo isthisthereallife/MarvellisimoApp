@@ -3,7 +3,7 @@ package isthisstuff.practice.marvellisimohdd.retrofit
 import io.reactivex.Single
 import isthisstuff.practice.marvellisimohdd.entities.MarvelDataWrapper
 import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.Url
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
@@ -14,63 +14,9 @@ const val privateKey = "a517e2142e39da03e49f617637f61a8eda5bddcc"
 const val MARVEL_API_BASE_URL = "https://gateway.marvel.com/v1/public/"
 val HASH = (ts + privateKey + apiKey).md5()
 
-
 interface MarvelService {
-    @GET("characters?ts=$ts&apikey=$apiKey")
-    fun getCharacterContains(
-        @Query("hash") hash: String = HASH,
-        @Query("nameStartsWith") query: String,
-        @Query("offset") offset: Int = 0
-    ): Single<MarvelDataWrapper>
-
-    @GET("series?ts=$ts&apikey=$apiKey")
-    fun getSeriesContains(
-        @Query("hash") hash: String = HASH,
-        @Query("titleStartsWith") query: String,
-        @Query("offset") offset: Int = 0
-    ): Single<MarvelDataWrapper>
-
-    @GET("characters?ts=$ts&apikey=$apiKey")
-    fun getCharacterStartsWith(
-        @Query("hash") hash: String = HASH,
-        @Query("nameStartsWith") query: String,
-        @Query("offset") offset: Int = 0
-    ): Single<MarvelDataWrapper>
-
-    @GET("series?ts=$ts&apikey=$apiKey")
-    fun getSeriesStartsWith(
-        @Query("hash") hash: String = HASH,
-        @Query("titleStartsWith") query: String,
-        @Query("offset") offset: Int = 0
-    ): Single<MarvelDataWrapper>
-
-    @GET("characters?ts=$ts&apikey=$apiKey")
-    fun getCharacterStrict(
-        @Query("hash") hash: String = HASH,
-        @Query("name") query: String,
-        @Query("offset") offset: Int = 0
-    ): Single<MarvelDataWrapper>
-
-    @GET("series?ts=$ts&apikey=$apiKey")
-    fun getSeriesStrict(
-        @Query("hash") hash: String = HASH,
-        @Query("title") query: String,
-        @Query("offset") offset: Int = 0
-    ): Single<MarvelDataWrapper>
-
-    @GET("series?ts=$ts&apikey=$apiKey")
-    fun getSeriesContainingCharacter(
-        @Query("hash") hash: String = HASH,
-        @Query("characters") query: String,
-        @Query("offset") offset: Int = 0
-    ): Single<MarvelDataWrapper>
-
-    @GET("characters?ts=$ts&apikey=$apiKey")
-    fun getCharactersInSeries(
-        @Query("hash") hash: String = HASH,
-        @Query("series") query: String,
-        @Query("offset") offset: Int = 0
-    ): Single<MarvelDataWrapper>
+    @GET
+    fun builtRequestResult(@Url url:String?): Single<MarvelDataWrapper?>?
 }
 
 fun String.md5(): String {

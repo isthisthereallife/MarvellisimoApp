@@ -143,7 +143,7 @@ class DetailsActivity : AppCompatActivity() {
         }
 
         if (item.urls[0].url.isNotBlank()) {
-            detailsLinkMore.text = "More " + item.urls[0].type + "s"
+            detailsLinkMore.text = "More ${item.urls[0].type}s"
             detailsLinkMore.setOnClickListener {
                 startActivity(
                     Intent(
@@ -161,19 +161,17 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun getRelatedData() {
-        var returnIntent:Intent = Intent()
-        returnIntent.putExtra("searchMethod", "related")
+        val returnIntent:Intent = Intent()
+        returnIntent.putExtra("query", item.id.toString())
         when(item.name) {
             null -> returnIntent.putExtra("dataType", MarvelDatatypes.CHARACTERS)
             else -> returnIntent.putExtra("dataType", MarvelDatatypes.SERIES)
         }
-        returnIntent.putExtra("itemId", item.id)
         setResult(1, returnIntent)
         finish()
     }
 
     fun sendToFriend(marvelObject: MarvelObject) {
-        //setContentView(R.layout.fragment_active_user)
         if (activeUser != null) {
 
             intent = Intent(this, ActiveUsersActivity::class.java)
