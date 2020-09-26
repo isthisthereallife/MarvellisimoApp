@@ -66,7 +66,6 @@ class SearchFragment : Fragment() {
         val incomingData = this.arguments
 
         searchButton.setOnClickListener {
-            searchResultsAdapter.resetOffset()
             updateDataTypeByTitle()
             searchMethod = sharedPreferences.getString("list_search_mode", "contains").toString()
             runSearch(inputField.text.toString(), dataType)
@@ -118,7 +117,10 @@ class SearchFragment : Fragment() {
         hideKeyboard()
         inputField.clearFocus()
 
-        if(cleanSlate) marvelViewModel.clearSearchData()
+        if(cleanSlate) {
+            searchResultsAdapter.resetOffset()
+            marvelViewModel.clearSearchData()
+        }
 
         onlyFavorites = sharedPreferences.getBoolean("only_favorites", false)
         this.query = query

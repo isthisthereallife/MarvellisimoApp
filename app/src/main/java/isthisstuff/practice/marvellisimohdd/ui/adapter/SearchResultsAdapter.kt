@@ -22,10 +22,6 @@ import isthisstuff.practice.marvellisimohdd.ui.search.SearchFragment
 class SearchResultsAdapter(private val fragment: SearchFragment) : RecyclerView.Adapter<MyViewHolder>() {
 
     private var offset: Int = 0
-
-    init {
-        offset = 0
-    }
     private val realm: Realm = Realm.getDefaultInstance()
 
     var data: List<MarvelObject> = mutableListOf()
@@ -80,7 +76,6 @@ class SearchResultsAdapter(private val fragment: SearchFragment) : RecyclerView.
         val intent = Intent(fragment.context, DetailsActivity::class.java)
         intent.putExtra("item", this.data[position])
         fragment.startActivityForResult(intent, 1)
-        offset = 0
     }
 
     private fun checkIfSaveToCache(): Boolean {
