@@ -11,10 +11,7 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import io.realm.Realm
-import isthisstuff.practice.marvellisimohdd.R
-import isthisstuff.practice.marvellisimohdd.MyViewHolder
-import isthisstuff.practice.marvellisimohdd.checkFavorite
-import isthisstuff.practice.marvellisimohdd.convertMarvelObjectToMarvelRealmObject
+import isthisstuff.practice.marvellisimohdd.*
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.ui.details.DetailsActivity
 import isthisstuff.practice.marvellisimohdd.ui.search.SearchFragment
@@ -61,7 +58,7 @@ class SearchResultsAdapter(private val fragment: SearchFragment) : RecyclerView.
         Log.d("OFFSET",offset.toString())
         if (position == offset + 10) {
             offset += 20
-            fragment.runSearch(fragment.query, fragment.dataType, offset, false)
+            if(!fragment.onlyFavorites && isOnline(fragment.context)) fragment.runSearch(fragment.query, fragment.dataType, offset, false)
         }
     }
 

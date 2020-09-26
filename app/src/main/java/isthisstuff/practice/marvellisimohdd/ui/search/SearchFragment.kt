@@ -36,7 +36,7 @@ class SearchFragment : Fragment() {
     var query:String = ""
     var dataType:MarvelDatatypes = MarvelDatatypes.CHARACTERS
     private var searchMethod:String = "contains"
-    private var onlyFavorites:Boolean = false
+    var onlyFavorites:Boolean = false
 
     private lateinit var recyclerView:RecyclerView
     private lateinit var searchButton:ImageButton
@@ -143,7 +143,7 @@ class SearchFragment : Fragment() {
                                 results = favoriteResults
                             }
                             results.forEach {
-                                marvelViewModel.itemsList.value = marvelViewModel.itemsList.value?.plus(it)
+                                marvelViewModel.itemsList.value = results
                             }
                         } else marvelViewModel.getData(dataType, offset, Pair("nameStartsWith", "%$query"))
                     }
