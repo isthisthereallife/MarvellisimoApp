@@ -1,6 +1,7 @@
 package isthisstuff.practice.marvellisimohdd.ui.adapter
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -20,6 +21,11 @@ import isthisstuff.practice.marvellisimohdd.ui.search.SearchFragment
 
 class SearchResultsAdapter(private val fragment: SearchFragment) : RecyclerView.Adapter<MyViewHolder>() {
 
+    private var offset: Int = 0
+
+    init {
+        offset = 0
+    }
     private val realm: Realm = Realm.getDefaultInstance()
 
     var data: List<MarvelObject> = mutableListOf()
@@ -27,8 +33,6 @@ class SearchResultsAdapter(private val fragment: SearchFragment) : RecyclerView.
             field = value
             notifyDataSetChanged()
         }
-
-    private var offset: Int = 0
 
 
     override fun getItemCount() = data.size
@@ -58,7 +62,7 @@ class SearchResultsAdapter(private val fragment: SearchFragment) : RecyclerView.
 
         holder.view.findViewById<ConstraintLayout>(R.id.search_result_item)
             .setOnClickListener { openDetails(position) }
-
+        Log.d("OFFSET",offset.toString())
         if (position == offset + 10) {
             offset += 20
             fragment.runSearch(fragment.query, fragment.dataType, offset, false)
@@ -76,6 +80,7 @@ class SearchResultsAdapter(private val fragment: SearchFragment) : RecyclerView.
         val intent = Intent(fragment.context, DetailsActivity::class.java)
         intent.putExtra("item", this.data[position])
         fragment.startActivityForResult(intent, 1)
+        offset = 0
     }
 
     private fun checkIfSaveToCache(): Boolean {
@@ -89,6 +94,10 @@ class SearchResultsAdapter(private val fragment: SearchFragment) : RecyclerView.
         realm.executeTransaction {
             realm.copyToRealmOrUpdate(marvelRealmObject)
         }
+    }
+
+    fun resetOffset(){
+        offset = 0
     }
 }
 

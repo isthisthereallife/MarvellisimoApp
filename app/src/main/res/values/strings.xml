@@ -41,4 +41,6 @@
     <string name="send_friend">Send to friend</string>
     <string name="fav">favorite</string>
     <string name="marvel_image">marvel image</string>
+    <string name="action_bar_title_characters">Characters</string>
+    <string name="action_bar_title_series">Series</string>
 </resources>

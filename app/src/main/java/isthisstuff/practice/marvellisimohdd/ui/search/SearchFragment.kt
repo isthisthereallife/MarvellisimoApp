@@ -66,6 +66,7 @@ class SearchFragment : Fragment() {
         val incomingData = this.arguments
 
         searchButton.setOnClickListener {
+            searchResultsAdapter.resetOffset()
             updateDataTypeByTitle()
             searchMethod = sharedPreferences.getString("list_search_mode", "contains").toString()
             runSearch(inputField.text.toString(), dataType)
@@ -116,6 +117,7 @@ class SearchFragment : Fragment() {
         // prepare for search
         hideKeyboard()
         inputField.clearFocus()
+
         if(cleanSlate) marvelViewModel.clearSearchData()
 
         onlyFavorites = sharedPreferences.getBoolean("only_favorites", false)
@@ -249,11 +251,11 @@ class SearchFragment : Fragment() {
     private fun updateTitleAndHintByDataType(dataType: MarvelDatatypes) {
         when(dataType) {
             MarvelDatatypes.CHARACTERS -> {
-                (activity as AppCompatActivity).supportActionBar!!.title = "Characters"
+                (activity as AppCompatActivity).supportActionBar!!.title = getString(R.string.action_bar_title_characters)
                 inputField.hint = getString(R.string.search_hint_character)
             }
             MarvelDatatypes.SERIES -> {
-                (activity as AppCompatActivity).supportActionBar!!.title = "Series"
+                (activity as AppCompatActivity).supportActionBar!!.title = getString(R.string.action_bar_title_series)
                 inputField.hint = getString(R.string.search_hint_series)
             }
         }
