@@ -27,9 +27,9 @@ import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 class SearchFragment : Fragment() {
     lateinit var root: View
 
-    private var realm = Realm.getDefaultInstance()
+    private val realm = Realm.getDefaultInstance()
     private val marvelViewModel: MarvelViewModel by viewModels()
-    private var searchResultsAdapter: SearchResultsAdapter = SearchResultsAdapter(this)
+    val searchResultsAdapter: SearchResultsAdapter = SearchResultsAdapter(this)
     private lateinit var sharedPreferences:SharedPreferences
 
     var query:String = ""
@@ -105,6 +105,11 @@ class SearchFragment : Fragment() {
                 runSearch(query, dataType)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        searchResultsAdapter.notifyDataSetChanged()
     }
 
     fun runSearch(query:String, dataType: MarvelDatatypes?, offset: Int = 0, cleanSlate:Boolean = true) {

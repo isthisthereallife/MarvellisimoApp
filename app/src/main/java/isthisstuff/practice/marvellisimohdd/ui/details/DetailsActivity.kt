@@ -11,18 +11,22 @@ import android.content.Intent
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import android.widget.ImageView
+import androidx.activity.viewModels
 import com.squareup.picasso.Picasso
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import isthisstuff.practice.marvellisimohdd.R
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.checkFavorite
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.ui.activeusers.ActiveUsersActivity
 import isthisstuff.practice.marvellisimohdd.convertMarvelObjectToMarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
+import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 import kotlinx.android.synthetic.main.activity_details.*
+import kotlinx.android.synthetic.main.fragment_search.*
 
 class DetailsActivity : AppCompatActivity() {
 
