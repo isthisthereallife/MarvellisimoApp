@@ -1,9 +1,13 @@
 package isthisstuff.practice.marvellisimohdd.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import isthisstuff.practice.marvellisimohdd.R
 
 class HomeFragment : Fragment() {
@@ -15,12 +19,9 @@ class HomeFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_home, container, false)
 
-        root.findViewById<LinearLayout>(R.id.home_linear_layout).setOnClickListener{
-            //TODO den här ska göra samma som hamburgaren (öppna sidomenyn)
-
-        }
+        root.findViewById<TextView>(R.id.home_characters).setOnClickListener{ Navigation.findNavController(root).navigate(R.id.nav_character, null) }
+        root.findViewById<TextView>(R.id.home_series).setOnClickListener{ Navigation.findNavController(root).navigate(R.id.nav_series, null) }
 
         return root
     }
-
 }
