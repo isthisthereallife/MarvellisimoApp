@@ -16,7 +16,7 @@ import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.ui.details.DetailsActivity
 import isthisstuff.practice.marvellisimohdd.ui.search.SearchFragment
 
-class SearchResultsAdapter(private val fragment: SearchFragment) : RecyclerView.Adapter<MyViewHolder>() {
+class SearchResultsAdapter(private val searchFragment: SearchFragment) : RecyclerView.Adapter<MyViewHolder>() {
 
     private var offset: Int = 0
     private val realm: Realm = Realm.getDefaultInstance()
@@ -58,7 +58,8 @@ class SearchResultsAdapter(private val fragment: SearchFragment) : RecyclerView.
         Log.d("OFFSET",offset.toString())
         if (position == offset + 10) {
             offset += 20
-            if(!fragment.onlyFavorites && isOnline(fragment.context)) fragment.runSearch(fragment.query, fragment.dataType, offset, false)
+            // fix this
+            if(!searchFragment.latestSearchWasCache) searchFragment.runSearch(searchFragment.query, searchFragment.dataType, offset, false)
         }
     }
 
@@ -70,13 +71,13 @@ class SearchResultsAdapter(private val fragment: SearchFragment) : RecyclerView.
     }
 
     private fun openDetails(position: Int) {
-        val intent = Intent(fragment.context, DetailsActivity::class.java)
+        val intent = Intent(searchFragment.context, DetailsActivity::class.java)
         intent.putExtra("item", this.data[position])
-        fragment.startActivityForResult(intent, 1)
+        searchFragment.startActivityForResult(intent, 1)
     }
 
     private fun checkIfSaveToCache(): Boolean {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.fragment.context)
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.searchFragment.context)
         val saveToCacheBoolean = sharedPreferences.getBoolean("cache", false)
         return saveToCacheBoolean
     }

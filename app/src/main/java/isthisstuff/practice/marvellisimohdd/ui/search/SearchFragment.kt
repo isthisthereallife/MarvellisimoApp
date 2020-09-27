@@ -3,7 +3,6 @@ package isthisstuff.practice.marvellisimohdd.ui.search
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +36,7 @@ class SearchFragment : Fragment() {
     var dataType:MarvelDatatypes = MarvelDatatypes.CHARACTERS
     private var searchMethod:String = "contains"
     var onlyFavorites:Boolean = false
+    var latestSearchWasCache:Boolean = false
 
     private lateinit var recyclerView:RecyclerView
     private lateinit var searchButton:ImageButton
@@ -89,6 +89,8 @@ class SearchFragment : Fragment() {
             runSearch(query, dataType)
         }
 
+        runSearch(query, dataType)
+
         return root
     }
 
@@ -105,17 +107,11 @@ class SearchFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        if(searchMethod!="related") {
-            runSearch(query, dataType)
-        }
-    }
-
     fun runSearch(query:String, dataType: MarvelDatatypes?, offset: Int = 0, cleanSlate:Boolean = true) {
         // prepare for search
         hideKeyboard()
         inputField.clearFocus()
+        latestSearchWasCache = false
 
         if(cleanSlate) {
             searchResultsAdapter.resetOffset()
@@ -131,6 +127,7 @@ class SearchFragment : Fragment() {
                 when(dataType) {
                     MarvelDatatypes.CHARACTERS -> {
                         if(onlyFavorites || !isOnline(context)) {
+                            latestSearchWasCache = true
                             var results:List<MarvelObject> = listOf()
                             realm.where<MarvelRealmObject>().contains("name", query, Case.INSENSITIVE).findAll().forEach {
                                 results = results.plus(convertMarvelRealmObjectToMarvelObject(it))
@@ -149,6 +146,7 @@ class SearchFragment : Fragment() {
                     }
                     MarvelDatatypes.SERIES -> {
                         if(onlyFavorites || !isOnline(context)) {
+                            latestSearchWasCache = true
                             var results:List<MarvelObject> = listOf()
                             realm.where<MarvelRealmObject>().contains("title", query, Case.INSENSITIVE).findAll().forEach {
                                 results = results.plus(convertMarvelRealmObjectToMarvelObject(it))
@@ -169,6 +167,7 @@ class SearchFragment : Fragment() {
                 when(dataType) {
                     MarvelDatatypes.CHARACTERS -> {
                         if(onlyFavorites || !isOnline(context)) {
+                            latestSearchWasCache = true
                             var results:List<MarvelObject> = listOf()
                             realm.where<MarvelRealmObject>().beginsWith("name", query, Case.INSENSITIVE).findAll().forEach {
                                 results = results.plus(convertMarvelRealmObjectToMarvelObject(it))
@@ -185,6 +184,7 @@ class SearchFragment : Fragment() {
                     }
                     MarvelDatatypes.SERIES -> {
                         if(onlyFavorites || !isOnline(context)) {
+                            latestSearchWasCache = true
                             var results:List<MarvelObject> = listOf()
                             realm.where<MarvelRealmObject>().beginsWith("name", query, Case.INSENSITIVE).findAll().forEach {
                                 results = results.plus(convertMarvelRealmObjectToMarvelObject(it))
@@ -205,6 +205,7 @@ class SearchFragment : Fragment() {
                 when(dataType) {
                     MarvelDatatypes.CHARACTERS -> {
                         if(onlyFavorites || !isOnline(context)) {
+                            latestSearchWasCache = true
                             var results:List<MarvelObject> = listOf()
                             realm.where<MarvelRealmObject>().equalTo("name", query, Case.INSENSITIVE).findAll().forEach {
                                 results = results.plus(convertMarvelRealmObjectToMarvelObject(it))
@@ -221,6 +222,7 @@ class SearchFragment : Fragment() {
                     }
                     MarvelDatatypes.SERIES -> {
                         if(onlyFavorites || !isOnline(context)) {
+                            latestSearchWasCache = true
                             var results:List<MarvelObject> = listOf()
                             realm.where<MarvelRealmObject>().equalTo("name", query, Case.INSENSITIVE).findAll().forEach {
                                 results = results.plus(convertMarvelRealmObjectToMarvelObject(it))

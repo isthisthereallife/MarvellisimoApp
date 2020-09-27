@@ -63,7 +63,7 @@ class DetailsActivity : AppCompatActivity() {
         detailsMessage = findViewById<Button>(R.id.button_message)
 
         detailsFavStar.setOnClickListener { setFavorite() }
-        detailsBackArrow.setOnClickListener { finish() }
+        detailsBackArrow.setOnClickListener { onBackPressed() }
         detailsMessage.setOnClickListener { sendToFriend(item) }
         buttonShowMore.setOnClickListener{ getRelatedData() }
 
