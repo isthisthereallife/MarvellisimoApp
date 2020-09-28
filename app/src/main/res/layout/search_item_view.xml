@@ -34,9 +34,9 @@
 
         <TextView
             android:id="@+id/title_text"
-            android:layout_width="258dp"
-            android:layout_height="45dp"
-            android:layout_marginEnd="30dp"
+            android:layout_width="274dp"
+            android:layout_height="53dp"
+            android:layout_marginEnd="20dp"
             android:maxLines="2"
             android:textColor="@color/secondaryTextColor"
             android:textSize="16sp"
