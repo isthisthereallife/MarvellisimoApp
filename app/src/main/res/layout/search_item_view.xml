@@ -34,8 +34,8 @@
 
         <TextView
             android:id="@+id/title_text"
-            android:layout_width="274dp"
-            android:layout_height="53dp"
+            android:layout_width="288dp"
+            android:layout_height="60dp"
             android:layout_marginEnd="20dp"
             android:maxLines="2"
             android:textColor="@color/secondaryTextColor"
@@ -43,6 +43,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/search_favstar"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="MissingConstraints" />
