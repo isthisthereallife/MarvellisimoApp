@@ -69,16 +69,19 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="30dp"
+    android:layout_height="50dp"
     app:layout_constraintBottom_toBottomOf="parent"
     android:gravity="center"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingBottom="20dp"
+    tools:ignore="UseCompoundDrawables">
 
     <ImageView
         android:layout_width="31dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:src="@drawable/ic_copyleft_red" />
+        android:src="@drawable/ic_copyleft_red"
+        android:contentDescription="@string/copyleft" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
