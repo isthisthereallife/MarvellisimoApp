@@ -129,11 +129,11 @@ class DetailsActivity : AppCompatActivity() {
     private fun updateDetailsInformation() {
         if (item.name != null) {
             if (item.name.toString().isNotBlank())
-            buttonText = "See all series ${item.name} appears in"
+            buttonText = "Series with ${item.name}"
             buttonShowMore.text = buttonText
             name = item.name.toString().replace("ï¿½", "'")
         } else if (item.title != null) {
-            buttonText = "See all characters who appear in ${item.title}"
+            buttonText = "Characters in ${item.title}"
             buttonShowMore.text = buttonText
 
             name = item.title.toString().replace("ï¿½", "'")

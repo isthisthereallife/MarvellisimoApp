@@ -87,9 +87,10 @@
                 android:layout_height="wrap_content"
                 android:autoLink="web"
                 android:paddingHorizontal="24dp"
-                android:text="Test Text \n This is a test Text \n The End"
+                android:text="@string/example_details"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="20sp"
+                android:textAlignment="center"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -106,6 +107,7 @@
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="30sp"
                 tools:text="Read more"
+                android:padding="8dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginHorizontal="48dp"
                 app:layout_constraintTop_toBottomOf="@id/details_text"/>
@@ -120,7 +122,8 @@
                 android:text="@string/send_friend"
                 android:textAllCaps="false"
                 android:textColor="@color/secondaryTextColor"
-                android:textSize="26sp"
+                android:textSize="30sp"
+                android:padding="8dp"
                 android:layout_marginHorizontal="48dp"
                 app:layout_constraintTop_toBottomOf="@id/details_link_more"/>
 
@@ -134,7 +137,8 @@
                 android:text="@string/series_character"
                 android:textAllCaps="false"
                 android:textColor="@color/secondaryTextColor"
-                android:textSize="20sp"
+                android:textSize="30sp"
+                android:padding="8dp"
                 android:layout_marginHorizontal="48dp"
                 app:layout_constraintTop_toBottomOf="@id/button_message"/>
 

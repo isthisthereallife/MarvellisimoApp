@@ -43,4 +43,5 @@
     <string name="marvel_image">marvel image</string>
     <string name="action_bar_title_characters">Characters</string>
     <string name="action_bar_title_series">Series</string>
+    <string name="example_details">Test Text \n This is a test Text \n The End</string>
 </resources>
