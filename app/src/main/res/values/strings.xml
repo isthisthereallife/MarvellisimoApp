@@ -2,7 +2,7 @@
     <string name="app_name">Murvel</string>
     <string name="nav_header_title">Login for better experience</string>
     <string name="nav_header_subtitle">Click here to log in</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Preferences</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_characters">Characters</string>
@@ -44,4 +44,8 @@
     <string name="action_bar_title_characters">Characters</string>
     <string name="action_bar_title_series">Series</string>
     <string name="example_details">Test Text \n This is a test Text \n The End</string>
+    <string name="returnButton">return</string>
+    <string name="char_">Characters</string>
+    <string name="ser_">Series</string>
+    <string name="copyright">© Daniel | Magnus | David</string>
 </resources>

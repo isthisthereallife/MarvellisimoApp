@@ -35,7 +35,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias=".95"
         android:paddingStart="20dp"
-        android:autofillHints="" />
+        android:autofillHints=""
+        tools:ignore="LabelFor,RtlSymmetry" />
 
     <ImageButton
         android:id="@+id/search_button"
@@ -48,5 +49,6 @@
         app:layout_constraintBottom_toBottomOf="@id/search_field"
         app:layout_constraintRight_toRightOf="@id/search_field"
         app:layout_constraintTop_toTopOf="@id/search_field"
-        android:background="@drawable/rounded_shape" />
+        android:background="@drawable/rounded_shape"
+        android:contentDescription="@string/marvel_image" />
 </androidx.constraintlayout.widget.ConstraintLayout>

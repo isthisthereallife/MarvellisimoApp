@@ -7,7 +7,8 @@
     android:id="@+id/search_result_item"
     android:paddingTop="5dp"
     android:paddingBottom="5dp"
-    android:paddingStart="5dp">
+    android:paddingStart="5dp"
+    tools:ignore="RtlSymmetry">
 
     <ImageView
         android:layout_width="75dp"
@@ -40,7 +41,8 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:layout_editor_absoluteX="4dp" />
+            tools:layout_editor_absoluteX="4dp"
+            tools:ignore="MissingConstraints" />
 
         <ImageView
             android:id="@+id/search_favstar"
