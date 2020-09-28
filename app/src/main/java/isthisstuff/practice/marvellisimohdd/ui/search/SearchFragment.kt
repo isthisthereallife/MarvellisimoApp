@@ -95,6 +95,9 @@ class SearchFragment : Fragment() {
         }
 
         runSearch(query, dataType)
+        if(onlyFavorites || !isOnline(context)) {
+            latestSearchWasCache = true
+        }
 
         return root
     }
@@ -115,6 +118,7 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        onlyFavorites = sharedPreferences.getBoolean("only_favorites", false)
         searchResultsAdapter.notifyDataSetChanged()
     }
 
@@ -150,9 +154,8 @@ class SearchFragment : Fragment() {
                                 }
                                 results = favoriteResults
                             }
-                            results.forEach {
-                                marvelViewModel.itemsList.value = results
-                            }
+                            results = results.sortedBy { it.name }
+                            marvelViewModel.itemsList.value = results
                         } else marvelViewModel.getData(dataType, offset, Pair("nameStartsWith", "%$query"))
                     }
                     MarvelDatatypes.SERIES -> {
@@ -169,6 +172,7 @@ class SearchFragment : Fragment() {
                                 }
                                 results = favoriteResults
                             }
+                            results = results.sortedBy { it.title }
                             marvelViewModel.itemsList.value = results
                         } else marvelViewModel.getData(dataType, offset, Pair("titleStartsWith", "%$query"))
                     }
@@ -190,6 +194,7 @@ class SearchFragment : Fragment() {
                                 }
                                 results = favoriteResults
                             }
+                            results = results.sortedBy { it.name }
                             marvelViewModel.itemsList.value = results
                         } else marvelViewModel.getData(dataType, offset, Pair("nameStartsWith", query))
                     }
@@ -207,6 +212,7 @@ class SearchFragment : Fragment() {
                                 }
                                 results = favoriteResults
                             }
+                            results = results.sortedBy { it.title }
                             marvelViewModel.itemsList.value = results
                         } else marvelViewModel.getData(dataType, offset, Pair("titleStartsWith", query))
                     }
@@ -228,6 +234,7 @@ class SearchFragment : Fragment() {
                                 }
                                 results = favoriteResults
                             }
+                            results = results.sortedBy { it.name }
                             marvelViewModel.itemsList.value = results
                         } else marvelViewModel.getData(dataType, offset, Pair("name", query))
                     }
@@ -245,6 +252,7 @@ class SearchFragment : Fragment() {
                                 }
                                 results = favoriteResults
                             }
+                            results = results.sortedBy { it.title }
                             marvelViewModel.itemsList.value = results
                         } else marvelViewModel.getData(dataType, offset, Pair("title", query))
                     }
