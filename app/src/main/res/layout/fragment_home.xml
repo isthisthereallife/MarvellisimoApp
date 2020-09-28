@@ -67,14 +67,26 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    android:gravity="center"
+    android:orientation="horizontal">
 
+    <ImageView
+        android:layout_width="31dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:src="@drawable/ic_copyleft_red" />
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         android:text="@string/copyright"
         android:textColor="@color/secondaryTextColor"
         android:textSize="18sp"
         android:gravity="center"
-        android:layout_marginBottom="16dp"/>
+        />
+</LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
