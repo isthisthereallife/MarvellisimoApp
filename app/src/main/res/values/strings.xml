@@ -47,5 +47,6 @@
     <string name="returnButton">return</string>
     <string name="char_">Characters</string>
     <string name="ser_">Series</string>
-    <string name="copyright">© Daniel | Magnus | David</string>
+    <string name="creators">Daniel | Magnus | David</string>
+    <string name="search">search</string>
 </resources>
