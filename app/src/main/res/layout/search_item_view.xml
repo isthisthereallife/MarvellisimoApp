@@ -34,14 +34,17 @@
 
         <TextView
             android:id="@+id/title_text"
-            android:layout_width="284dp"
-            android:layout_height="51dp"
+            android:layout_width="258dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="30dp"
             android:maxLines="2"
             android:textColor="@color/secondaryTextColor"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:layout_editor_absoluteX="4dp"
+            app:layout_constraintEnd_toStartOf="@+id/search_favstar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:ignore="MissingConstraints" />
 
         <ImageView

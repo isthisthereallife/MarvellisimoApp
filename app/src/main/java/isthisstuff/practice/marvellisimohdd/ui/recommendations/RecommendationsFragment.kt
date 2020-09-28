@@ -1,6 +1,7 @@
 package isthisstuff.practice.marvellisimohdd.ui.recommendations
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,24 +10,20 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import io.realm.Realm
-import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.R
-import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.entities.Thumbnail
 import isthisstuff.practice.marvellisimohdd.entities.Urls
-import isthisstuff.practice.marvellisimohdd.ui.adapter.SearchResultsAdapter
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 import isthisstuff.practice.marvellisimohdd.ui.details.DetailsActivity
@@ -107,11 +104,14 @@ class RecommendationsFragment : Fragment() {
             val name = it.second.substringAfter("<MARVELOBJECTNAME>")
                 .substringBefore("</MARVELOBJECTNAME>")
             val payload = it.second.substringAfter("<PAYLOAD>").substringBefore("</PAYLOAD")
+            textView.setTextColor(resources.getColor(R.color.secondaryTextColor))
 
             val text = "$sender thinks you should search for the $type $name \n"
             Log.d("printMessages", "SKRIVER UT EN TEXTVY")
+
             textView.text = text
             target.addView(textView)
+
             //pallar inte göra MarvelObject parcelable. detta är en lösning. deal with it.
             val marvelObject = makeMarvelObjectFromPayload(payload, type)
             val intent = Intent(this.context, DetailsActivity::class.java)
@@ -138,13 +138,20 @@ class RecommendationsFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         when(resultCode) {
             1 -> {
-                var relatedData:Bundle = bundleOf(
+                val relatedData: Bundle = bundleOf(
                     "query" to data!!.extras!!.get("query"),
-                    "dataType" to data.extras!!.get("dataType"))
+                    "dataType" to data.extras!!.get("dataType")
+                )
 
-                when(data.extras!!.get("dataType")) {
-                    MarvelDatatypes.CHARACTERS -> findNavController().navigate(R.id.nav_character, relatedData)
-                    MarvelDatatypes.SERIES -> findNavController().navigate(R.id.nav_series, relatedData)
+                when (data.extras!!.get("dataType")) {
+                    MarvelDatatypes.CHARACTERS -> findNavController().navigate(
+                        R.id.nav_character,
+                        relatedData
+                    )
+                    MarvelDatatypes.SERIES -> findNavController().navigate(
+                        R.id.nav_series,
+                        relatedData
+                    )
                 }
             }
         }
