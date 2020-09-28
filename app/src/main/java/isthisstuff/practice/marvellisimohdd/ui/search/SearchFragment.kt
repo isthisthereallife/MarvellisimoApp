@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.navigation.NavigationView
 import io.realm.Case
 import io.realm.Realm
 import io.realm.kotlin.where
@@ -42,6 +43,8 @@ class SearchFragment : Fragment() {
     private lateinit var searchButton:ImageButton
     private lateinit var inputField:EditText
 
+    lateinit var navView: NavigationView
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,6 +60,7 @@ class SearchFragment : Fragment() {
             searchResultsAdapter.data = it
         })
 
+        navView = container!!.rootView.findViewById(R.id.nav_view)
         recyclerView = root.findViewById(R.id.search_results)
         searchButton = root.findViewById(R.id.search_button)
         inputField = root.findViewById(R.id.search_field)
@@ -86,6 +90,7 @@ class SearchFragment : Fragment() {
             searchMethod = "related"
             query = incomingData.get("query") as String
             dataType = incomingData.get("dataType") as MarvelDatatypes
+            updateSelectedNavMenuItem()
             runSearch(query, dataType)
         }
 
@@ -101,6 +106,7 @@ class SearchFragment : Fragment() {
                 searchMethod = "related"
                 query = data!!.extras!!.get("query") as String
                 dataType = data.extras!!.get("dataType") as MarvelDatatypes
+                updateSelectedNavMenuItem()
                 updateTitleAndHintByDataType(dataType)
                 runSearch(query, dataType)
             }
@@ -278,6 +284,13 @@ class SearchFragment : Fragment() {
             "Series" -> {
                 dataType = MarvelDatatypes.SERIES
             }
+        }
+    }
+
+    private fun updateSelectedNavMenuItem() {
+        when(dataType) {
+            MarvelDatatypes.CHARACTERS -> navView.menu.getItem(1).isChecked = true
+            MarvelDatatypes.SERIES -> navView.menu.getItem(2).isChecked = true
         }
     }
 }
