@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -45,6 +46,7 @@ class SearchFragment : Fragment() {
     private lateinit var searchButton:ImageButton
     private lateinit var inputField:EditText
     lateinit var loadingSpinner:ProgressBar
+    lateinit var nothingFound:TextView
 
     lateinit var navView: NavigationView
 
@@ -64,9 +66,12 @@ class SearchFragment : Fragment() {
         })
 
         var skipFirstObserve:Int = 0
-        marvelViewModel.itemsListChanged.observe(viewLifecycleOwner, {
-            Log.d("debug_log", "Turning Spinner Off!")
-            if(skipFirstObserve==1)loadingSpinner.visibility = View.INVISIBLE
+        marvelViewModel.itemsFound.observe(viewLifecycleOwner, {
+            if(skipFirstObserve==1){
+                loadingSpinner.visibility = View.INVISIBLE
+                if(marvelViewModel.itemsFound.value!!) nothingFound.visibility = View.INVISIBLE
+                if(!marvelViewModel.itemsFound.value!!) nothingFound.visibility = View.VISIBLE
+            }
             if(skipFirstObserve==0) skipFirstObserve = 1
         })
 
@@ -75,6 +80,7 @@ class SearchFragment : Fragment() {
         searchButton = root.findViewById(R.id.search_button)
         inputField = root.findViewById(R.id.search_field)
         loadingSpinner = root.findViewById(R.id.search_loadingbar)
+        nothingFound = root.findViewById(R.id.nothing_found)
 
         recyclerView.adapter = searchResultsAdapter
 
@@ -145,6 +151,7 @@ class SearchFragment : Fragment() {
         }
 
         loadingSpinner.visibility = View.VISIBLE
+        nothingFound.visibility = View.INVISIBLE
 
         onlyFavorites = sharedPreferences.getBoolean("only_favorites", false)
         this.query = query

@@ -20,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MarvelViewModel() : ViewModel() {
     var itemsList = MutableLiveData<List<MarvelObject>>()
-    val itemsListChanged:MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
+    val itemsFound:MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
 
     private val builder = OkHttpClient.Builder()
     private val okHttpClient = builder.build()
@@ -61,7 +61,8 @@ class MarvelViewModel() : ViewModel() {
                     result!!.data.results.forEach {
                         itemsList.value = itemsList.value?.plus(it)
                     }
-                    itemsListChanged.value = !itemsListChanged.value!!
+                    if(itemsList.value!!.isEmpty()) itemsFound.value = false
+                    if(itemsList.value!!.isNotEmpty()) itemsFound.value = true
                 }
             }
     }
