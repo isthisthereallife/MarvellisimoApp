@@ -3,6 +3,7 @@ package isthisstuff.practice.marvellisimohdd.ui.adapter
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -60,6 +61,8 @@ class SearchResultsAdapter(private val searchFragment: SearchFragment) : Recycle
             offset += 20
             if(!searchFragment.latestSearchWasCache && isOnline(searchFragment.context) && !searchFragment.onlyFavorites) searchFragment.runSearch(searchFragment.query, searchFragment.dataType, offset, false)
         }
+
+        if(searchFragment.loadingSpinner.visibility == View.VISIBLE) searchFragment.loadingSpinner.visibility = View.INVISIBLE
     }
 
 
