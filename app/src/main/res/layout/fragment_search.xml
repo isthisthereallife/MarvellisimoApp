@@ -50,5 +50,5 @@
         app:layout_constraintRight_toRightOf="@id/search_field"
         app:layout_constraintTop_toTopOf="@id/search_field"
         android:background="@drawable/rounded_shape"
-        android:contentDescription="@string/marvel_image" />
+        android:contentDescription="@string/search" />
 </androidx.constraintlayout.widget.ConstraintLayout>
