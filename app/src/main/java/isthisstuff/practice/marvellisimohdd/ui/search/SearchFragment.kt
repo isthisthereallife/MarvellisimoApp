@@ -3,6 +3,7 @@ package isthisstuff.practice.marvellisimohdd.ui.search
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,6 +61,13 @@ class SearchFragment : Fragment() {
 
         marvelViewModel.itemsList.observe(viewLifecycleOwner, {
             searchResultsAdapter.data = it
+        })
+
+        var skipFirstObserve:Int = 0
+        marvelViewModel.itemsListChanged.observe(viewLifecycleOwner, {
+            Log.d("debug_log", "Turning Spinner Off!")
+            if(skipFirstObserve==1)loadingSpinner.visibility = View.INVISIBLE
+            if(skipFirstObserve==0) skipFirstObserve = 1
         })
 
         navView = container!!.rootView.findViewById(R.id.nav_view)
