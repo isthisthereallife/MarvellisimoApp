@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -42,6 +43,7 @@ class SearchFragment : Fragment() {
     private lateinit var recyclerView:RecyclerView
     private lateinit var searchButton:ImageButton
     private lateinit var inputField:EditText
+    lateinit var loadingSpinner:ProgressBar
 
     lateinit var navView: NavigationView
 
@@ -64,6 +66,7 @@ class SearchFragment : Fragment() {
         recyclerView = root.findViewById(R.id.search_results)
         searchButton = root.findViewById(R.id.search_button)
         inputField = root.findViewById(R.id.search_field)
+        loadingSpinner = root.findViewById(R.id.search_loadingbar)
 
         recyclerView.adapter = searchResultsAdapter
 
@@ -132,6 +135,8 @@ class SearchFragment : Fragment() {
             searchResultsAdapter.resetOffset()
             marvelViewModel.clearSearchData()
         }
+
+        loadingSpinner.visibility = View.VISIBLE
 
         onlyFavorites = sharedPreferences.getBoolean("only_favorites", false)
         this.query = query

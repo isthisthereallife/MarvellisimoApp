@@ -8,6 +8,18 @@
     android:background="@drawable/gradient"
     android:id="@+id/fragment_search">
 
+    <ProgressBar
+        android:id="@+id/search_loadingbar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="@id/search_results"
+        app:layout_constraintBottom_toBottomOf="@id/search_results"
+        app:layout_constraintStart_toStartOf="@id/search_results"
+        app:layout_constraintEnd_toEndOf="@id/search_results"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_results"
         android:layout_width="match_parent"
