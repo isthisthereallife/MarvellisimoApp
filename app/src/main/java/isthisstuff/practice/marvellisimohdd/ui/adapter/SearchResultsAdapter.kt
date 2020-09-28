@@ -58,7 +58,7 @@ class SearchResultsAdapter(private val searchFragment: SearchFragment) : Recycle
         Log.d("OFFSET",offset.toString())
         if (position == offset + 10) {
             offset += 20
-            if(!searchFragment.latestSearchWasCache) searchFragment.runSearch(searchFragment.query, searchFragment.dataType, offset, false)
+            if(!searchFragment.latestSearchWasCache && isOnline(searchFragment.context) && !searchFragment.onlyFavorites) searchFragment.runSearch(searchFragment.query, searchFragment.dataType, offset, false)
         }
     }
 
