@@ -11,22 +11,18 @@ import android.content.Intent
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import android.widget.ImageView
-import androidx.activity.viewModels
 import com.squareup.picasso.Picasso
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import isthisstuff.practice.marvellisimohdd.R
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.viewModels
 import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.checkFavorite
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.ui.activeusers.ActiveUsersActivity
 import isthisstuff.practice.marvellisimohdd.convertMarvelObjectToMarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
-import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
 import kotlinx.android.synthetic.main.activity_details.*
-import kotlinx.android.synthetic.main.fragment_search.*
 
 class DetailsActivity : AppCompatActivity() {
 
@@ -55,8 +51,19 @@ class DetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
         setSupportActionBar(findViewById(R.id.toolbar))
-        item = (intent.getSerializableExtra("item") as MarvelObject)
 
+        /* TODO
+        val f = Fade()
+        val decor = window.decorView
+        f.excludeTarget(decor.findViewById<ActionBarContainer>(R.id.action_bar_container),true)
+        f.excludeTarget(android.R.id.statusBarBackground,true)
+        f.excludeTarget(android.R.id.navigationBarBackground,true)
+        f.excludeTarget(R.layout.activity_details,true)
+        window.enterTransition = f
+        window.exitTransition = f
+        */
+
+        item = (intent.getSerializableExtra("item") as MarvelObject)
         detailsName = findViewById<TextView>(R.id.details_name)
         detailsImage = findViewById<ImageView>(R.id.details_image)
         detailsText = findViewById<TextView>(R.id.details_text)
@@ -69,7 +76,9 @@ class DetailsActivity : AppCompatActivity() {
         detailsFavStar.setOnClickListener { setFavorite() }
         detailsBackArrow.setOnClickListener { onBackPressed() }
         detailsMessage.setOnClickListener { sendToFriend(item) }
-        buttonShowMore.setOnClickListener{ getRelatedData() }
+        buttonShowMore.setOnClickListener { getRelatedData() }
+
+        detailsImage.transitionName = "img_transition_${item.id}"
 
         details_link_more.setOnClickListener {
             val animation = AnimationUtils.loadAnimation(this, R.anim.bounce)
@@ -104,7 +113,11 @@ class DetailsActivity : AppCompatActivity() {
                 }
 
                 detailsFavStar.setImageResource(R.drawable.ic_baseline_star_border_24)
-                Toast.makeText(this, name+" "+getString(R.string.favorites_removed), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    name + " " + getString(R.string.favorites_removed),
+                    Toast.LENGTH_SHORT
+                ).show()
 
             } else {
                 favorite = true
@@ -118,7 +131,11 @@ class DetailsActivity : AppCompatActivity() {
 
                 detailsFavStar.setImageResource(R.drawable.ic_baseline_star_filled_24)
 
-                Toast.makeText(this,  name+" "+getString(R.string.favorites_added), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    name + " " + getString(R.string.favorites_added),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         } else {
             Toast.makeText(this, getString(R.string.toast_log_in_prompt), Toast.LENGTH_SHORT).show()
@@ -129,7 +146,7 @@ class DetailsActivity : AppCompatActivity() {
     private fun updateDetailsInformation() {
         if (item.name != null) {
             if (item.name.toString().isNotBlank())
-            buttonText = "Series with ${item.name}"
+                buttonText = "Series with ${item.name}"
             buttonShowMore.text = buttonText
             name = item.name.toString().replace("ï¿½", "'")
         } else if (item.title != null) {
@@ -165,9 +182,9 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun getRelatedData() {
-        val returnIntent:Intent = Intent()
+        val returnIntent: Intent = Intent()
         returnIntent.putExtra("query", item.id.toString())
-        when(item.name) {
+        when (item.name) {
             null -> returnIntent.putExtra("dataType", MarvelDatatypes.CHARACTERS)
             else -> returnIntent.putExtra("dataType", MarvelDatatypes.SERIES)
         }
