@@ -83,7 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:text="@string/copyright"
+        android:text="@string/creators"
         android:textColor="@color/secondaryTextColor"
         android:textSize="18sp"
         android:gravity="center"
