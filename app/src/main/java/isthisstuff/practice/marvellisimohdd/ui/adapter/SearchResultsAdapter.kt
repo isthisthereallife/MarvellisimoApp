@@ -1,5 +1,6 @@
 package isthisstuff.practice.marvellisimohdd.ui.adapter
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.ViewCompat
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -32,12 +34,15 @@ class SearchResultsAdapter(private val searchFragment: SearchFragment) : Recycle
     override fun getItemCount() = data.size
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+
         val item = data[position]
 
         val itemTitle: TextView = holder.view.findViewById(R.id.title_text)
         val itemThumbnail: ImageView = holder.view.findViewById(R.id.search_results_image)
-        val itemStar:ImageView = holder.view.findViewById(R.id.search_favstar)
+        itemThumbnail.transitionName= "img_transition_${item.id}"
 
+
+        val itemStar:ImageView = holder.view.findViewById(R.id.search_favstar)
         if(checkIfSaveToCache()) saveSearchResultToCache(item)
 
         when(item.name) {
@@ -55,10 +60,10 @@ class SearchResultsAdapter(private val searchFragment: SearchFragment) : Recycle
         }
 
         holder.view.findViewById<ConstraintLayout>(R.id.search_result_item)
-            .setOnClickListener { openDetails(position) }
+            .setOnClickListener { openDetails(itemThumbnail,position) }
         Log.d("OFFSET",offset.toString())
-        if (position == offset + 10) {
-            offset += 20
+        if (position == offset + 20) {
+            offset += 50
             if(!searchFragment.latestSearchWasCache && isOnline(searchFragment.context) && !searchFragment.onlyFavorites) searchFragment.runSearch(searchFragment.query, searchFragment.dataType, offset, false)
         }
 
@@ -72,10 +77,13 @@ class SearchResultsAdapter(private val searchFragment: SearchFragment) : Recycle
         return MyViewHolder(view)
     }
 
-    private fun openDetails(position: Int) {
+    private fun openDetails(itemImageView: ImageView,position: Int) {
         val intent = Intent(searchFragment.context, DetailsActivity::class.java)
         intent.putExtra("item", this.data[position])
-        searchFragment.startActivityForResult(intent, 1)
+
+        val activityOptions = ActivityOptions.makeSceneTransitionAnimation(searchFragment.activity,itemImageView, ViewCompat.getTransitionName(itemImageView))
+
+        searchFragment.startActivityForResult(intent,1, activityOptions.toBundle())
     }
 
     private fun checkIfSaveToCache(): Boolean {

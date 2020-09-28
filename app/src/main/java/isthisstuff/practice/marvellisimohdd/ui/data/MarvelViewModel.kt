@@ -38,7 +38,7 @@ class MarvelViewModel : ViewModel() {
             MarvelDatatypes.SERIES -> "series"
             else -> "characters"
         }
-        url += "?ts=$ts&apikey=$apiKey&hash=$HASH&offset=$offset"
+        url += "?ts=$ts&apikey=$apiKey&hash=$HASH&limit=50&offset=$offset"
         arguments.forEach {
             url += "&"+it.first+"="+it.second
         }
