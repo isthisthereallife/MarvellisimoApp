@@ -52,17 +52,6 @@ class DetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_details)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        /* TODO
-        val f = Fade()
-        val decor = window.decorView
-        f.excludeTarget(decor.findViewById<ActionBarContainer>(R.id.action_bar_container),true)
-        f.excludeTarget(android.R.id.statusBarBackground,true)
-        f.excludeTarget(android.R.id.navigationBarBackground,true)
-        f.excludeTarget(R.layout.activity_details,true)
-        window.enterTransition = f
-        window.exitTransition = f
-        */
-
         item = (intent.getSerializableExtra("item") as MarvelObject)
         detailsName = findViewById<TextView>(R.id.details_name)
         detailsImage = findViewById<ImageView>(R.id.details_image)
