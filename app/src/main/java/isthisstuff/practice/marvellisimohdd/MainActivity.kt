@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
+        navView.setBackgroundColor(getColor(android.R.color.white))
         val navController = findNavController(R.id.nav_host_fragment)
         navHeader = navView.getHeaderView(0)
 
@@ -81,19 +82,6 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         navHeader.setOnClickListener { login() }
-
-/*
-        val f = Fade()
-        val decor = window.decorView
-        f.excludeTarget(decor.findViewById<ActionBarContainer>(R.id.action_bar_container),true)
-        f.excludeTarget(android.R.id.statusBarBackground,true)
-        f.excludeTarget(android.R.id.navigationBarBackground,true)
-        f.excludeTarget(R.layout.activity_details,true)
-
-        window.enterTransition = f
-        window.exitTransition = f¨
-
- */
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

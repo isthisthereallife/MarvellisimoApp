@@ -2,28 +2,28 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/splash_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="visible"
-    tools:context=".ui.home.HomeFragment"
     android:background="@color/primaryColor"
-    android:id="@+id/splash_screen"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:visibility="visible"
+    tools:context=".ui.home.HomeFragment">
 
     <TextView
         android:id="@+id/text_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="92dp"
         android:fontFamily="@font/marvelfont"
+        android:text="@string/app_name"
         android:textAlignment="center"
+        android:textAllCaps="true"
         android:textColor="@color/secondaryTextColor"
         android:textSize="140sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="92dp"
-        android:text="@string/app_name"
-        android:textAllCaps="true"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/home_buttons_container"
@@ -67,29 +67,53 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    app:layout_constraintBottom_toBottomOf="parent"
-    android:gravity="center"
-    android:orientation="horizontal"
-    android:paddingBottom="20dp"
-    tools:ignore="UseCompoundDrawables">
 
-    <ImageView
-        android:layout_width="31dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:src="@drawable/ic_copyleft_red"
-        android:contentDescription="@string/copyleft" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:text="@string/creators"
-        android:textColor="@color/secondaryTextColor"
-        android:textSize="18sp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:gravity="center"
-        />
-</LinearLayout>
+        android:orientation="horizontal"
+        android:paddingBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:id="@+id/copyleft"
+            android:layout_width="31dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:contentDescription="@string/copyleft"
+            android:src="@drawable/ic_copyleft_red" />
+
+        <TextView
+            android:id="@+id/link_daniel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Daniel |"
+            android:textColor="@color/secondaryTextColor"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/link_magnus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingHorizontal="3dp"
+            android:text="Magnus"
+            android:textColor="@color/secondaryTextColor"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/link_david"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="| David"
+            android:textColor="@color/secondaryTextColor"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
