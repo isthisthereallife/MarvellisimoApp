@@ -17,6 +17,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -33,8 +34,8 @@ class RecommendationsFragment : Fragment() {
 
     private var database = FirebaseDatabase.getInstance()
     private val mAuth = FirebaseAuth.getInstance()
-    private val currentUser = mAuth.currentUser?.email
-    private val currentUserNoDots = currentUser.toString().replace(".", ",")
+    private var currentUser:String? = null
+    private var currentUserNoDots = currentUser.toString().replace(".", ",")
     private lateinit var target: LinearLayout
     private var activeUserMessagesReference = database.getReference("<TO:$currentUserNoDots>")
     private var detachedView = false
@@ -48,29 +49,19 @@ class RecommendationsFragment : Fragment() {
     ): View? {
         root = inflater.inflate(R.layout.fragment_recommendations, container, false)
         target = root.findViewById(R.id.put_reco_items_here)
-        if (currentUser != null) {
-            initiateValueEventListener()
 
-        } else Toast.makeText(
-            this.context,
-            getText(R.string.toast_log_in_prompt),
-            Toast.LENGTH_SHORT
-        )
-            .show()
         return root
     }
 
     override fun onDetach() {
         super.onDetach()
-        Log.d("onDetach", "Detaching...")
+        Log.d("debug_log", "Detaching...")
         detachedView = true
-
     }
 
     private fun initiateValueEventListener() {
         val messageListener = object : ValueEventListener {
             var concurrentMessagesHashMap = HashMap<String, String>()
-
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (detachedView) {
                     activeUserMessagesReference.removeEventListener(this)
@@ -125,6 +116,20 @@ class RecommendationsFragment : Fragment() {
                 target.removeView(view)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        currentUser = mAuth.currentUser?.email
+        currentUserNoDots = currentUser.toString().replace(".", ",")
+        activeUserMessagesReference = database.getReference("<TO:$currentUserNoDots>")
+        if (currentUser != null) {
+            initiateValueEventListener()
+        } else Toast.makeText(
+            this.context,
+            getText(R.string.toast_log_in_prompt),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
