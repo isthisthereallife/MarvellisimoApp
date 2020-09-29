@@ -76,7 +76,11 @@ class RecommendationsFragment : Fragment() {
             }
             Log.d("Inflating fragment", "ATTACHING VALUE EVENT LISTENER")
             activeUserMessagesReference.addValueEventListener(messageListener)
-        } else Toast.makeText(this.context, getText(R.string.toast_log_in_prompt), Toast.LENGTH_SHORT)
+        } else Toast.makeText(
+            this.context,
+            getText(R.string.toast_log_in_prompt),
+            Toast.LENGTH_SHORT
+        )
             .show()
         return root
     }
@@ -86,23 +90,26 @@ class RecommendationsFragment : Fragment() {
         Log.d("onDetach", "Detaching...")
         detachedView = true
 
-      }
+    }
 
 
     fun printMessages(toList: List<Pair<String, String>>) {
+        target.removeAllViews()
         toList.forEach { it ->
-            val sender = "Recommended by "+it.second.substringAfter("<SENDER>").substringBefore("</SENDER>")
+            val view = inflate(this.context, R.layout.search_item_view, null)
+            val msgReference = it.first
+            val sender = "Recommended by " + it.second.substringAfter("<SENDER>")
+                .substringBefore("</SENDER>")
             val type = it.second.substringAfter("<MARVELTYPE>").substringBefore("</MARVELTYPE>")
             val name = it.second.substringAfter("<MARVELOBJECTNAME>")
                 .substringBefore("</MARVELOBJECTNAME>")
             val payload = it.second.substringAfter("<PAYLOAD>").substringBefore("</PAYLOAD")
-
             val marvelObject = makeMarvelObjectFromPayload(payload, type)
-
-            val view =  inflate(this.context,R.layout.search_item_view,null)
             val img = view.findViewById<ImageView>(R.id.search_results_image)
-            Picasso.get().load(marvelObject.thumbnail.path+"."+marvelObject.thumbnail.extension).into(img)
-            val innerConstraint = view.findViewById<ConstraintLayout>(R.id.search_result_inner_constraint)
+            Picasso.get().load(marvelObject.thumbnail.path + "." + marvelObject.thumbnail.extension)
+                .into(img)
+            val innerConstraint =
+                view.findViewById<ConstraintLayout>(R.id.search_result_inner_constraint)
             innerConstraint.findViewById<TextView>(R.id.title_text).text = name
             innerConstraint.findViewById<TextView>(R.id.info_text).text = sender
             val xImage = innerConstraint.findViewById<ImageView>(R.id.search_favstar)
@@ -112,17 +119,15 @@ class RecommendationsFragment : Fragment() {
             intent.putExtra("item", marvelObject)
             view.setOnClickListener { startActivityForResult(intent, 2) }
             xImage.setOnClickListener {
-
+                activeUserMessagesReference.child(msgReference).removeValue()
                 target.removeView(view)
-                //TODO ta bort från databasen också
-
-                }
+            }
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        when(resultCode) {
+        when (resultCode) {
             1 -> {
                 val relatedData: Bundle = bundleOf(
                     "query" to data!!.extras!!.get("query"),
