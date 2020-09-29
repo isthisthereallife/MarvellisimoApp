@@ -1,5 +1,6 @@
 package isthisstuff.practice.marvellisimohdd.ui.recommendations
 
+import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -14,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -34,7 +36,7 @@ class RecommendationsFragment : Fragment() {
 
     private var database = FirebaseDatabase.getInstance()
     private val mAuth = FirebaseAuth.getInstance()
-    private var currentUser:String? = null
+    private var currentUser: String? = null
     private var currentUserNoDots = currentUser.toString().replace(".", ",")
     private lateinit var target: LinearLayout
     private var activeUserMessagesReference = database.getReference("<TO:$currentUserNoDots>")
@@ -98,7 +100,8 @@ class RecommendationsFragment : Fragment() {
                 .substringBefore("</MARVELOBJECTNAME>")
             val payload = it.second.substringAfter("<PAYLOAD>").substringBefore("</PAYLOAD")
             val marvelObject = makeMarvelObjectFromPayload(payload, type)
-            val img = view.findViewById<ImageView>(R.id.search_results_image)
+            val img: ImageView = view.findViewById(R.id.search_results_image)
+            img.transitionName = "img_transition_${marvelObject.id}"
             Picasso.get().load(marvelObject.thumbnail.path + "." + marvelObject.thumbnail.extension)
                 .into(img)
             val innerConstraint =
@@ -110,7 +113,14 @@ class RecommendationsFragment : Fragment() {
             target.addView(view)
             val intent = Intent(this.context, DetailsActivity::class.java)
             intent.putExtra("item", marvelObject)
-            view.setOnClickListener { startActivityForResult(intent, 2) }
+            view.setOnClickListener {
+                val activityOptions = ActivityOptions.makeSceneTransitionAnimation(
+                    this.activity,
+                    img,
+                    ViewCompat.getTransitionName(img)
+                )
+                startActivityForResult(intent, 2, activityOptions.toBundle())
+            }
             xImage.setOnClickListener {
                 activeUserMessagesReference.child(msgReference).removeValue()
                 target.removeView(view)
