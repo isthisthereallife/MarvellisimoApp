@@ -1,12 +1,12 @@
 package isthisstuff.practice.marvellisimohdd
 
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -14,8 +14,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -34,7 +32,6 @@ import io.realm.kotlin.where
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.ui.settings.MySettingsActivity
-import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navHeader: View
@@ -100,9 +97,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        Log.d("onOptionsItemSelected: ", "CLICKED ITEM ${item.title}")
         if (id == R.id.action_settings) {
-            //kicka settings-aktiviteten
             startActivity(Intent(this@MainActivity, MySettingsActivity::class.java))
             return true
         } else if (id == R.id.action_log_out) {
@@ -175,7 +170,16 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun logOut() {
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val checkIfHomeFragmentInflated = this.window.findViewById<ImageView>(R.id.copyleft)
+        if(checkIfHomeFragmentInflated!=null) {
+            logOut()
+            realm.close()
+        }
+    }
+
+    private fun logOut() {
         if (FirebaseAuth.getInstance().currentUser != null) {
             databaseCurrentUsersReference.child(
                 FirebaseAuth.getInstance().currentUser?.email!!.replace(
@@ -190,14 +194,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        logOut()
-        realm.close()
-        Log.d("onDestroy", "FirebaseAuth signed out, realm closed")
-    }
-
 
     private fun updateLoginDisplay() {
         Log.d("updateLoginDisplay()", "currentUser = ${FirebaseAuth.getInstance().currentUser}")
