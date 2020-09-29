@@ -185,6 +185,7 @@ class MainActivity : AppCompatActivity() {
             ).removeValue()
             FirebaseAuth.getInstance().signOut()
             updateLoginDisplay()
+            navController.navigate(R.id.nav_home)
             Toast.makeText(this, getString(R.string.toast_logout), Toast.LENGTH_SHORT).show()
         }
 
@@ -196,6 +197,7 @@ class MainActivity : AppCompatActivity() {
         realm.close()
         Log.d("onDestroy", "FirebaseAuth signed out, realm closed")
     }
+
 
     private fun updateLoginDisplay() {
         Log.d("updateLoginDisplay()", "currentUser = ${FirebaseAuth.getInstance().currentUser}")
