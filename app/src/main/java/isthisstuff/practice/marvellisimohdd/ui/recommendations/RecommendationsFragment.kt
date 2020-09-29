@@ -1,5 +1,6 @@
 package isthisstuff.practice.marvellisimohdd.ui.recommendations
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -48,34 +49,8 @@ class RecommendationsFragment : Fragment() {
         root = inflater.inflate(R.layout.fragment_recommendations, container, false)
         target = root.findViewById(R.id.put_reco_items_here)
         if (currentUser != null) {
+            initiateValueEventListener()
 
-            //FIREBASE database
-            val messageListener = object : ValueEventListener {
-                var concurrentMessagesHashMap = HashMap<String, String>()
-
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    if (detachedView) {
-                        Log.d("isDetached == true", "DETATCHING VALUE EVENT LISTENER")
-                        activeUserMessagesReference.removeEventListener(this)
-                        return
-                    }
-                    val messages = dataSnapshot.value
-                    if (messages != null) {
-                        concurrentMessagesHashMap = messages as HashMap<String, String>
-                        printMessages(concurrentMessagesHashMap.toList())
-                    }
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Log.e(
-                        "userListener -> onCancelled",
-                        databaseError.toException().printStackTrace().toString()
-                    )
-                    //do something here? nah
-                }
-            }
-            Log.d("Inflating fragment", "ATTACHING VALUE EVENT LISTENER")
-            activeUserMessagesReference.addValueEventListener(messageListener)
         } else Toast.makeText(
             this.context,
             getText(R.string.toast_log_in_prompt),
@@ -90,6 +65,33 @@ class RecommendationsFragment : Fragment() {
         Log.d("onDetach", "Detaching...")
         detachedView = true
 
+    }
+
+    private fun initiateValueEventListener() {
+        val messageListener = object : ValueEventListener {
+            var concurrentMessagesHashMap = HashMap<String, String>()
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (detachedView) {
+                    activeUserMessagesReference.removeEventListener(this)
+                    return
+                }
+                val messages = dataSnapshot.value
+                if (messages != null) {
+                    concurrentMessagesHashMap = messages as HashMap<String, String>
+                    printMessages(concurrentMessagesHashMap.toList())
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(
+                    "userListener -> onCancelled",
+                    databaseError.toException().printStackTrace().toString()
+                )
+                //do something here? nah
+            }
+        }
+        activeUserMessagesReference.addValueEventListener(messageListener)
     }
 
 
