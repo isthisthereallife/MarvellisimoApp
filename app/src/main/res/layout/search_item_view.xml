@@ -23,6 +23,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/search_result_inner_constraint"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="5dp"
@@ -45,7 +46,8 @@
             app:layout_constraintEnd_toStartOf="@id/search_favstar"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:maxLines="2"/>
+            android:maxLines="2"
+            tools:text="TITEL HÄR PÅ SERIE eller karaktären (dessa kan vara lååånga!)"/>
 
         <ImageView
             android:id="@+id/search_favstar"
@@ -58,16 +60,20 @@
             android:layout_marginEnd="15dp"
             android:contentDescription="@string/fav"/>
 
-        <!--
+
         <TextView
+            android:id="@+id/info_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/info_text"
-            android:text="Lite Information"
+            android:maxLines="2"
             android:textColor="@color/secondaryTextColor"
-            android:textSize="18sp"
-            android:layout_margin="5dp"/>
-        -->
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title_text"
+            app:layout_constraintVertical_bias="1.0"
+            tools:text="Lite Information" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
