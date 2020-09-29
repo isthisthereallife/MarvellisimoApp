@@ -148,6 +148,10 @@ class SearchFragment : Fragment() {
         loadingSpinner.visibility = View.VISIBLE
         nothingFound.visibility = View.INVISIBLE
 
+        if(onlyFavorites || !isOnline(context)) {
+            loadingSpinner.visibility = View.INVISIBLE
+        }
+
         onlyFavorites = sharedPreferences.getBoolean("only_favorites", false)
         this.query = query
 
