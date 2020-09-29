@@ -111,11 +111,6 @@ class SearchFragment : Fragment() {
             runSearch(query, dataType)
         }
 
-        runSearch(query, dataType)
-        if(onlyFavorites || !isOnline(context)) {
-            latestSearchWasCache = true
-        }
-
         return root
     }
 

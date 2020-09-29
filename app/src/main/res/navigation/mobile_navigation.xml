@@ -9,7 +9,17 @@
         android:id="@+id/nav_home"
         android:name="isthisstuff.practice.marvellisimohdd.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_nav_character"
+            app:destination="@id/nav_character" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_series"
+            app:destination="@id/nav_series" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_reco"
+            app:destination="@id/nav_reco" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_character"
@@ -27,5 +37,9 @@
         android:id="@+id/nav_reco"
         android:name="isthisstuff.practice.marvellisimohdd.ui.recommendations.RecommendationsFragment"
         android:label="Recommendations"
-        tools:layout="@layout/fragment_recommendations"/>
+        tools:layout="@layout/fragment_recommendations">
+        <action
+            android:id="@+id/action_nav_reco_to_nav_series"
+            app:destination="@id/nav_series" />
+    </fragment>
 </navigation>
