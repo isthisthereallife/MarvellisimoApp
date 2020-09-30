@@ -16,6 +16,8 @@ class MySettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d("INNE I MySettingsActivity: ","Nu ska vi försöka köra fragmentet!")
 
+        setTheme(R.style.SettingStyle)
+
         supportFragmentManager
             .beginTransaction()
             .replace(android.R.id.content, MySettingsFragment())

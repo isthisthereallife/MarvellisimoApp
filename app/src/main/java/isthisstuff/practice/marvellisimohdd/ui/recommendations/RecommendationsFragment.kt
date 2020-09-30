@@ -31,6 +31,7 @@ import isthisstuff.practice.marvellisimohdd.entities.Thumbnail
 import isthisstuff.practice.marvellisimohdd.entities.Urls
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
 import isthisstuff.practice.marvellisimohdd.ui.details.DetailsActivity
+import kotlinx.android.synthetic.main.fragment_recommendations.*
 
 class RecommendationsFragment : Fragment() {
 

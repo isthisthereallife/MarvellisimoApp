@@ -3,6 +3,7 @@
 
     <PreferenceCategory app:title="@string/messages_header">
 
+
         <EditTextPreference
             app:key="signature"
             app:title="@string/signature_title"
