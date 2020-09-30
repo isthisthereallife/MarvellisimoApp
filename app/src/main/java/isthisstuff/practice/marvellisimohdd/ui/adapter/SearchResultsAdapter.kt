@@ -1,19 +1,19 @@
 package isthisstuff.practice.marvellisimohdd.ui.adapter
 
-import android.app.ActivityOptions
-import android.content.Intent
+import io.realm.Realm
 import android.util.Log
-import android.view.LayoutInflater
+import android.content.Intent
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.ImageView
+import android.view.LayoutInflater
+import android.app.ActivityOptions
+import com.squareup.picasso.Picasso
 import androidx.core.view.ViewCompat
 import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
-import io.realm.Realm
 import isthisstuff.practice.marvellisimohdd.*
+import androidx.recyclerview.widget.RecyclerView
+import androidx.constraintlayout.widget.ConstraintLayout
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.ui.details.DetailsActivity
 import isthisstuff.practice.marvellisimohdd.ui.search.SearchFragment

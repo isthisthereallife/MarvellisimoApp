@@ -30,7 +30,7 @@
     <string name="fcm_message">FCM Message</string>
     <string name="default_notification_channel_id" />
     <string name="recommendations">Recommendations</string>
-    <string name="your_recommendations">Your recommendations:</string>
+    <string name="your_recommendations">My Marvel recommendations:</string>
     <string name="log_out">Log Out</string>
     <string name="toast_logout">You have been logged out from Murvel</string>
     <string name="toast_log_in_prompt">Please log in first.</string>

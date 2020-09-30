@@ -1,14 +1,14 @@
 package isthisstuff.practice.marvellisimohdd.retrofit
 
-import io.reactivex.Single
-import isthisstuff.practice.marvellisimohdd.entities.MarvelDataWrapper
 import retrofit2.http.GET
 import retrofit2.http.Url
+import io.reactivex.Single
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import isthisstuff.practice.marvellisimohdd.entities.MarvelDataWrapper
 
-const val apiKey = "b86c9b29de66b43245e33fa2c4be3784"
 const val ts = "1"
+const val apiKey = "b86c9b29de66b43245e33fa2c4be3784"
 const val privateKey = "a517e2142e39da03e49f617637f61a8eda5bddcc"
 
 const val MARVEL_API_BASE_URL = "https://gateway.marvel.com/v1/public/"

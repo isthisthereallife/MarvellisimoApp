@@ -1,37 +1,34 @@
 package isthisstuff.practice.marvellisimohdd.ui.recommendations
 
-import android.app.ActivityOptions
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.View.inflate
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.os.Bundle
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.content.Intent
+import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.ImageView
 import androidx.core.os.bundleOf
+import android.view.View.inflate
+import android.app.ActivityOptions
+import android.view.LayoutInflater
+import android.widget.LinearLayout
+import com.squareup.picasso.Picasso
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import isthisstuff.practice.marvellisimohdd.R
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.database.ValueEventListener
-import com.squareup.picasso.Picasso
-import isthisstuff.practice.marvellisimohdd.R
-import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
-import isthisstuff.practice.marvellisimohdd.entities.Thumbnail
+import androidx.constraintlayout.widget.ConstraintLayout
 import isthisstuff.practice.marvellisimohdd.entities.Urls
+import isthisstuff.practice.marvellisimohdd.entities.Thumbnail
+import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
 import isthisstuff.practice.marvellisimohdd.ui.details.DetailsActivity
-import kotlinx.android.synthetic.main.fragment_recommendations.*
 
 class RecommendationsFragment : Fragment() {
 

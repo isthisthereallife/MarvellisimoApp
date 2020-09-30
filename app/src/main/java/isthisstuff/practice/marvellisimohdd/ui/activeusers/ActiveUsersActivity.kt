@@ -1,14 +1,14 @@
 package isthisstuff.practice.marvellisimohdd.ui.activeusers
 
-import android.os.Bundle
 import android.util.Log
+import android.os.Bundle
+import isthisstuff.practice.marvellisimohdd.R
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import isthisstuff.practice.marvellisimohdd.R
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.ui.adapter.ActiveUsersAdapter
 

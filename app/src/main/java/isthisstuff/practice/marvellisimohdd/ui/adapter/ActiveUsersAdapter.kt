@@ -1,22 +1,19 @@
 package isthisstuff.practice.marvellisimohdd.ui.adapter
 
-import android.os.Parcel
-import android.os.Parcelable
+import java.util.*
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.widget.Button
-import android.widget.LinearLayout
+import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
+import java.time.LocalDateTime
+import android.widget.LinearLayout
+import android.view.LayoutInflater
+import isthisstuff.practice.marvellisimohdd.R
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.FirebaseDatabase
-import isthisstuff.practice.marvellisimohdd.MyActiveUsersViewHolder
-import isthisstuff.practice.marvellisimohdd.R
-import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.isCharacter
-import java.time.LocalDateTime
-import java.util.*
+import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
+import isthisstuff.practice.marvellisimohdd.MyActiveUsersViewHolder
 
 class ActiveUsersAdapter(_sender: String, _marvelObject: MarvelObject) :
     RecyclerView.Adapter<MyActiveUsersViewHolder>() {

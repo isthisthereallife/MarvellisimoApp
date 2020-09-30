@@ -1,29 +1,29 @@
 package isthisstuff.practice.marvellisimohdd
 
-import android.app.Activity
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
+import io.realm.Realm
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.InputMethodManager
+import android.app.Activity
+import io.realm.kotlin.where
+import android.widget.TextView
+import android.content.Context
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import com.google.firebase.auth.FirebaseUser
-import io.realm.Realm
-import io.realm.kotlin.where
+import com.google.firebase.auth.FirebaseAuth
+import androidx.recyclerview.widget.RecyclerView
+import android.view.inputmethod.InputMethodManager
+import androidx.constraintlayout.widget.ConstraintLayout
+import isthisstuff.practice.marvellisimohdd.entities.Urls
+import isthisstuff.practice.marvellisimohdd.database.User
+import isthisstuff.practice.marvellisimohdd.entities.Thumbnail
+import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
+import isthisstuff.practice.marvellisimohdd.database.UrlsRealmObject
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.database.ThumbnailRealmObject
-import isthisstuff.practice.marvellisimohdd.database.UrlsRealmObject
-import isthisstuff.practice.marvellisimohdd.database.User
-import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
-import isthisstuff.practice.marvellisimohdd.entities.Thumbnail
-import isthisstuff.practice.marvellisimohdd.entities.Urls
 
 
 class MyViewHolder(val view: ConstraintLayout) : RecyclerView.ViewHolder(view) {
@@ -77,7 +77,7 @@ fun convertMarvelRealmObjectToMarvelObject(marvelRealmObject: MarvelRealmObject)
         urls = urls.plus(urlsObject)
     }
 
-    var marvelObject = MarvelObject(
+    return MarvelObject(
         marvelRealmObject.id,
         marvelRealmObject.name,
         marvelRealmObject.title,
@@ -85,7 +85,6 @@ fun convertMarvelRealmObjectToMarvelObject(marvelRealmObject: MarvelRealmObject)
         marvelRealmObject.description,
         Thumbnail(marvelRealmObject.thumbnail!!.path, marvelRealmObject.thumbnail!!.extension)
     )
-    return marvelObject
 }
 
 fun checkFavorite(itemId: Int?):Boolean {

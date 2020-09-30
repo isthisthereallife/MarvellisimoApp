@@ -1,32 +1,31 @@
 package isthisstuff.practice.marvellisimohdd.ui.search
 
-import android.content.Intent
-import android.content.SharedPreferences
-import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ProgressBar
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.navigation.NavigationView
 import io.realm.Case
 import io.realm.Realm
+import android.os.Bundle
+import android.view.View
 import io.realm.kotlin.where
+import android.view.ViewGroup
+import android.content.Intent
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.ProgressBar
+import android.widget.ImageButton
+import android.view.LayoutInflater
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import android.content.SharedPreferences
+import android.view.inputmethod.EditorInfo
+import androidx.preference.PreferenceManager
 import isthisstuff.practice.marvellisimohdd.*
-import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.navigation.NavigationView
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
-import isthisstuff.practice.marvellisimohdd.ui.adapter.SearchResultsAdapter
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
 import isthisstuff.practice.marvellisimohdd.ui.data.MarvelViewModel
+import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
+import isthisstuff.practice.marvellisimohdd.ui.adapter.SearchResultsAdapter
 
 class SearchFragment : Fragment() {
     lateinit var root: View
@@ -65,7 +64,7 @@ class SearchFragment : Fragment() {
             searchResultsAdapter.data = it
         })
 
-        var skipFirstObserve:Int = 0
+        var skipFirstObserve = 0
         marvelViewModel.itemsFound.observe(viewLifecycleOwner, {
             if(skipFirstObserve==1){
                 loadingSpinner.visibility = View.INVISIBLE

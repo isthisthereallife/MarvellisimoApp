@@ -1,6 +1,5 @@
 package isthisstuff.practice.marvellisimohdd.ui.details
 
-import android.annotation.SuppressLint
 import io.realm.Realm
 import android.net.Uri
 import android.os.Bundle
@@ -8,21 +7,22 @@ import android.widget.Toast
 import android.widget.Button
 import io.realm.kotlin.where
 import android.content.Intent
-import android.view.animation.AnimationUtils
 import android.widget.TextView
 import android.widget.ImageView
 import com.squareup.picasso.Picasso
+import android.annotation.SuppressLint
+import android.view.animation.AnimationUtils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import isthisstuff.practice.marvellisimohdd.R
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_details.*
 import isthisstuff.practice.marvellisimohdd.database.User
 import isthisstuff.practice.marvellisimohdd.checkFavorite
 import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
+import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
 import isthisstuff.practice.marvellisimohdd.ui.activeusers.ActiveUsersActivity
 import isthisstuff.practice.marvellisimohdd.convertMarvelObjectToMarvelRealmObject
-import isthisstuff.practice.marvellisimohdd.ui.data.MarvelDatatypes
-import kotlinx.android.synthetic.main.activity_details.*
 
 class DetailsActivity : AppCompatActivity() {
 
@@ -171,7 +171,7 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun getRelatedData() {
-        val returnIntent: Intent = Intent()
+        val returnIntent = Intent()
         returnIntent.putExtra("query", item.id.toString())
         when (item.name) {
             null -> returnIntent.putExtra("dataType", MarvelDatatypes.CHARACTERS)

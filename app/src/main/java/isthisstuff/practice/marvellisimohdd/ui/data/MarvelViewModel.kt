@@ -1,22 +1,17 @@
 package isthisstuff.practice.marvellisimohdd.ui.data
 
-import android.annotation.SuppressLint
 import android.util.Log
-import android.view.View
-import android.widget.ProgressBar
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
-import isthisstuff.practice.marvellisimohdd.retrofit.*
-import isthisstuff.practice.marvellisimohdd.ui.adapter.SearchResultsAdapter
-import isthisstuff.practice.marvellisimohdd.ui.search.SearchFragment
-import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import okhttp3.OkHttpClient
+import androidx.lifecycle.ViewModel
+import android.annotation.SuppressLint
+import io.reactivex.schedulers.Schedulers
+import androidx.lifecycle.MutableLiveData
 import retrofit2.converter.gson.GsonConverterFactory
+import isthisstuff.practice.marvellisimohdd.retrofit.*
+import io.reactivex.android.schedulers.AndroidSchedulers
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 
 class MarvelViewModel() : ViewModel() {
     var itemsList = MutableLiveData<List<MarvelObject>>()

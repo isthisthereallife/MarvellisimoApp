@@ -1,7 +1,7 @@
 package isthisstuff.practice.marvellisimohdd.database
 
-import android.app.Application
 import io.realm.Realm
+import android.app.Application
 import io.realm.RealmConfiguration
 
 class RealmApp : Application() {

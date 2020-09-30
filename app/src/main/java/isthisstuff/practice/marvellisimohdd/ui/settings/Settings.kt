@@ -1,13 +1,10 @@
 package isthisstuff.practice.marvellisimohdd.ui.settings
 
-import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.os.Bundle
+import isthisstuff.practice.marvellisimohdd.R
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
-import isthisstuff.practice.marvellisimohdd.R
 
 
 //basically just a container for the PreferenceFragmentCompat-class MySettingsFragment
