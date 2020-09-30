@@ -150,6 +150,8 @@ class DetailsActivity : AppCompatActivity() {
                 description = item.description.toString()
                     .replace("ï¿½", "'")
                     .replace("â€™", "'")
+        } else {
+            description = "*NO DESCRIPTION AVAILABLE*"
         }
 
         if (item.urls[0].url.isNotBlank()) {
