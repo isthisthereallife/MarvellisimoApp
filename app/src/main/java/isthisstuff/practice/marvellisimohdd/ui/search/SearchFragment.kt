@@ -174,6 +174,7 @@ class SearchFragment : Fragment() {
                                 results = favoriteResults
                             }
                             results = results.sortedBy { it.name }
+                            if(results.isEmpty()) nothingFound.visibility = View.VISIBLE
                             marvelViewModel.itemsList.value = results
                         } else marvelViewModel.getData(dataType, offset, Pair("nameStartsWith", "%$query"))
                     }
@@ -192,6 +193,7 @@ class SearchFragment : Fragment() {
                                 results = favoriteResults
                             }
                             results = results.sortedBy { it.title }
+                            if(results.isEmpty()) nothingFound.visibility = View.VISIBLE
                             marvelViewModel.itemsList.value = results
                         } else marvelViewModel.getData(dataType, offset, Pair("titleStartsWith", "%$query"))
                     }
@@ -214,6 +216,7 @@ class SearchFragment : Fragment() {
                                 results = favoriteResults
                             }
                             results = results.sortedBy { it.name }
+                            if(results.isEmpty()) nothingFound.visibility = View.VISIBLE
                             marvelViewModel.itemsList.value = results
                         } else marvelViewModel.getData(dataType, offset, Pair("nameStartsWith", query))
                     }
@@ -232,6 +235,7 @@ class SearchFragment : Fragment() {
                                 results = favoriteResults
                             }
                             results = results.sortedBy { it.title }
+                            if(results.isEmpty()) nothingFound.visibility = View.VISIBLE
                             marvelViewModel.itemsList.value = results
                         } else marvelViewModel.getData(dataType, offset, Pair("titleStartsWith", query))
                     }
@@ -254,6 +258,7 @@ class SearchFragment : Fragment() {
                                 results = favoriteResults
                             }
                             results = results.sortedBy { it.name }
+                            if(results.isEmpty()) nothingFound.visibility = View.VISIBLE
                             marvelViewModel.itemsList.value = results
                         } else marvelViewModel.getData(dataType, offset, Pair("name", query))
                     }
@@ -272,6 +277,7 @@ class SearchFragment : Fragment() {
                                 results = favoriteResults
                             }
                             results = results.sortedBy { it.title }
+                            if(results.isEmpty()) nothingFound.visibility = View.VISIBLE
                             marvelViewModel.itemsList.value = results
                         } else marvelViewModel.getData(dataType, offset, Pair("title", query))
                     }
