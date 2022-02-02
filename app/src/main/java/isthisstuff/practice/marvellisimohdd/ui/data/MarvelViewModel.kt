@@ -27,7 +27,7 @@ class MarvelViewModel() : ViewModel() {
         .build()
         .create(MarvelService::class.java)
 
-    init {
+        init {
         itemsList.value = listOf()
     }
 

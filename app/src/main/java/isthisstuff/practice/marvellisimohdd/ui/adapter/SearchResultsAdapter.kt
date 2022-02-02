@@ -18,7 +18,8 @@ import isthisstuff.practice.marvellisimohdd.entities.MarvelObject
 import isthisstuff.practice.marvellisimohdd.ui.details.DetailsActivity
 import isthisstuff.practice.marvellisimohdd.ui.search.SearchFragment
 
-class SearchResultsAdapter(private val searchFragment: SearchFragment) : RecyclerView.Adapter<MyViewHolder>() {
+class SearchResultsAdapter(private val searchFragment: SearchFragment)
+    : RecyclerView.Adapter<MyViewHolder>() {
 
     private var offset: Int = 0
     private val realm: Realm = Realm.getDefaultInstance()
