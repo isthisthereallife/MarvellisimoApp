@@ -11,6 +11,7 @@ class RealmApp : Application() {
         Realm.init(this)
         val configuration =
             RealmConfiguration.Builder().schemaVersion(1).deleteRealmIfMigrationNeeded()
+                .allowWritesOnUiThread(true)
                 .name("marveldatabase").build()
         Realm.setDefaultConfiguration(configuration)
     }

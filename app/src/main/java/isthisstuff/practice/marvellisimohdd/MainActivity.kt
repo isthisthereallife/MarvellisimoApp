@@ -23,13 +23,14 @@ import com.google.firebase.auth.FirebaseUser
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.ui.AppBarConfiguration
-import com.google.firebase.iid.FirebaseInstanceId
 import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.database.FirebaseDatabase
 import com.google.android.gms.tasks.OnCompleteListener
 import isthisstuff.practice.marvellisimohdd.database.User
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.google.firebase.messaging.FirebaseMessaging
+import io.realm.RealmConfiguration
 import isthisstuff.practice.marvellisimohdd.database.MarvelRealmObject
 import isthisstuff.practice.marvellisimohdd.ui.settings.MySettingsActivity
 
@@ -50,29 +51,26 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
         drawerLayout = findViewById(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
         navView.setBackgroundColor(getColor(android.R.color.white))
         navController = findNavController(R.id.nav_host_fragment)
         navHeader = navView.getHeaderView(0)
 
-        //FIREBASE cloud messaging
-        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
+        // updated FIREBASE CLOUD MESSAGING
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener{ task ->
+            if(!task.isSuccessful){
                 Log.w(
-                    "FAILURE! Tried to get a FirebaseInstanceID.getInstance().instanceID",
-                    "getInstanceID failed",
-                    task.exception
-                )
-                return@OnCompleteListener
-            }
-            val token = task.result?.token
-
+                    "FAILURE! Tried to get a FirebaseMessaging instance token", "Fetching FCM registration token FAILED", task.exception)
+                    return@OnCompleteListener
+                }
+            val token = task.result
+            // logging and toasting
             val msg = getString(R.string.msg_token_fmt, token)
-            Log.d("Got a token", "Token is: $msg")
+            Log.d("That went well! Got a token!","Token is: $msg")
+            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+
         })
-        //end of FIREBASE cloud messaging
 
         //PURGE all null users
         realm.executeTransaction {

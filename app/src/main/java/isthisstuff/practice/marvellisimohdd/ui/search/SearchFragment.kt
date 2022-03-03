@@ -56,7 +56,7 @@ class SearchFragment : Fragment() {
     ): View? {
         root = inflater.inflate(R.layout.fragment_search, container, false)
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.requireContext())
 
         searchMethod = sharedPreferences.getString("list_search_mode", "contains").toString()
 

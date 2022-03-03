@@ -84,7 +84,7 @@ class SearchResultsAdapter(private val searchFragment: SearchFragment)
     }
 
     private fun checkIfSaveToCache(): Boolean {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.searchFragment.context)
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.searchFragment.requireContext())
         val saveToCacheBoolean = sharedPreferences.getBoolean("cache", false)
         return saveToCacheBoolean
     }
