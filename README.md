@@ -2,4 +2,4 @@ Projektarbete # MarvellisimoApp
 
 | kitqeb -- David             |  
 | Dafali 9012 -- Daniel       |  
-| isthisthereallife --  |  
+| isthisthereallife -- Magnus |  
